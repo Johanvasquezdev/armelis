@@ -162,11 +162,47 @@ export default function App() {
     setBusy(true);
     setError('');
     try {
-      const response = await invoke<ScanResult>('scan_local_repository', {
-        target,
-        scanners: selected,
-        trivyExecutable: 'trivy'
-      });
+      let response: ScanResult;
+      if (typeof window !== 'undefined' && (window as any).__TAURI_INTERNALS__) {
+        response = await invoke<ScanResult>('scan_local_repository', {
+          target,
+          scanners: selected,
+          trivyExecutable: 'trivy'
+        });
+      } else {
+        // Browser development preview mode
+        await new Promise((r) => setTimeout(r, 600));
+        response = {
+          status: 'SUCCESS',
+          exit_code: 0,
+          stdout: JSON.stringify({
+            Results: [
+              {
+                Target: target || 'storefront-api/package-lock.json',
+                Vulnerabilities: [
+                  {
+                    VulnerabilityID: 'CVE-2025-4128',
+                    PkgName: 'jsonwebtoken',
+                    InstalledVersion: '8.5.1',
+                    FixedVersion: '9.0.2',
+                    Severity: 'CRITICAL',
+                    Title: 'Remote Code Execution in jsonwebtoken'
+                  },
+                  {
+                    VulnerabilityID: 'CVE-2024-21508',
+                    PkgName: 'express-session',
+                    InstalledVersion: '1.17.2',
+                    FixedVersion: '1.18.0',
+                    Severity: 'HIGH',
+                    Title: 'Session Fixation Vulnerability'
+                  }
+                ]
+              }
+            ]
+          }),
+          stderr: ''
+        };
+      }
 
       if (response.stdout) {
         try {
