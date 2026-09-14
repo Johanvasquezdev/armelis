@@ -1,7 +1,7 @@
 # CyberScan
 
 <p align="center">
-  <img src="apps/web/public/cyberscan-logo.png" alt="CyberScan Logo" width="160" />
+  <img src="cyberscan-logo.png" alt="CyberScan Logo" width="120" />
 </p>
 
 <h3 align="center">Application Security Intelligence for AI-Assisted Teams & SOC Analysts</h3>
@@ -11,13 +11,18 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/Johanvasquezdev/CyberScan/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge" alt="License: MIT" /></a>
-  <a href="#"><img src="https://img.shields.io/badge/Next.js-15.2.0-000000.svg?style=for-the-badge&logo=nextdotjs&logoColor=white" alt="Next.js 15" /></a>
-  <a href="#"><img src="https://img.shields.io/badge/Tauri-2.0-24C8D8.svg?style=for-the-badge&logo=tauri&logoColor=white" alt="Tauri 2" /></a>
-  <a href="#"><img src="https://img.shields.io/badge/TypeScript-5.0-3178C6.svg?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript" /></a>
-  <a href="#"><img src="https://img.shields.io/badge/MITRE-ATT%26CK-ED1C24.svg?style=for-the-badge" alt="MITRE ATT&CK" /></a>
-  <a href="#"><img src="https://img.shields.io/badge/SIEM-CEF%20%7C%20ECS-10B981.svg?style=for-the-badge" alt="SIEM Export" /></a>
-  <a href="#"><img src="https://img.shields.io/badge/Privacy-Air--Gapped%20%2F%20Local-8B5CF6.svg?style=for-the-badge" alt="Air-Gapped" /></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License: MIT" /></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/Open%20Source-100%25%20Free-34d399.svg" alt="Open Source: 100% Free" /></a>
+  <a href="#"><img src="https://img.shields.io/badge/Platform-Web%20%7C%20Tauri%202%20Desktop-00e5ff.svg" alt="Platform: Web | Tauri 2 Desktop" /></a>
+  <a href="#"><img src="https://img.shields.io/badge/Standards-OWASP%20Top%2010%20%7C%20MITRE%20ATT%26CK-f59e0b.svg" alt="Standards: OWASP | MITRE" /></a>
+  <a href="#"><img src="https://img.shields.io/badge/Privacy-Air--Gapped%20%2F%20Local-8b5cf6.svg" alt="Privacy: Air-Gapped / Local" /></a>
+</p>
+
+<p align="center">
+  <a href="#"><img src="https://img.shields.io/badge/Next.js-15.2-000000.svg?logo=nextdotjs&logoColor=white" alt="Next.js 15" /></a>
+  <a href="#"><img src="https://img.shields.io/badge/Tauri-2.0-24c8d8.svg?logo=tauri&logoColor=white" alt="Tauri 2" /></a>
+  <a href="#"><img src="https://img.shields.io/badge/TypeScript-5.0-3178c6.svg?logo=typescript&logoColor=white" alt="TypeScript" /></a>
+  <a href="#"><img src="https://img.shields.io/badge/SIEM-CEF%20%7C%20ECS%20%7C%20Syslog-10b981.svg" alt="SIEM: CEF | ECS | Syslog" /></a>
 </p>
 
 ---
