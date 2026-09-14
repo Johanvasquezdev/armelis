@@ -1,0 +1,176 @@
+# CyberScan
+
+<p align="center">
+  <img src="apps/web/public/cyberscan-logo.png" alt="CyberScan Logo" width="160" />
+</p>
+
+<h3 align="center">Application Security Intelligence for AI-Assisted Teams & SOC Analysts</h3>
+
+<p align="center">
+  <em>Connect your code, dependencies, containers, and configuration to show what could actually happen—and what to fix first.</em>
+</p>
+
+<p align="center">
+  <a href="https://github.com/Johanvasquezdev/CyberScan/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge" alt="License: MIT" /></a>
+  <a href="#"><img src="https://img.shields.io/badge/Next.js-15.2.0-000000.svg?style=for-the-badge&logo=nextdotjs&logoColor=white" alt="Next.js 15" /></a>
+  <a href="#"><img src="https://img.shields.io/badge/Tauri-2.0-24C8D8.svg?style=for-the-badge&logo=tauri&logoColor=white" alt="Tauri 2" /></a>
+  <a href="#"><img src="https://img.shields.io/badge/TypeScript-5.0-3178C6.svg?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript" /></a>
+  <a href="#"><img src="https://img.shields.io/badge/MITRE-ATT%26CK-ED1C24.svg?style=for-the-badge" alt="MITRE ATT&CK" /></a>
+  <a href="#"><img src="https://img.shields.io/badge/SIEM-CEF%20%7C%20ECS-10B981.svg?style=for-the-badge" alt="SIEM Export" /></a>
+  <a href="#"><img src="https://img.shields.io/badge/Privacy-Air--Gapped%20%2F%20Local-8B5CF6.svg?style=for-the-badge" alt="Air-Gapped" /></a>
+</p>
+
+---
+
+## Overview
+
+**CyberScan** is a **100% Free and Open Source (FOSS)** security intelligence platform architected and developed by **Johan Vasquez**. Published under the permissive **MIT License**, it transforms raw, disjointed vulnerability scanner output (Trivy, Semgrep, Gitleaks) into cohesive, actionable attack path models and prioritized remediation workflows.
+
+Instead of overwhelming security and development teams with an unfiltered wall of 200 medium-severity alerts, CyberScan maps the full exploitation route:
+$$\text{Public Entry Point} \longrightarrow \text{Vulnerability / Exploit} \longrightarrow \text{Privilege Escalation} \longrightarrow \text{Crown-Jewel Asset}$$
+
+By isolating the critical single fix that severs the chain, developers and SOC analysts resolve root risks in minutes.
+
+---
+
+## Why CyberScan for AI-Assisted Teams?
+
+AI coding assistants (Cursor, GitHub Copilot, Devin, Claude Code) generate code at unprecedented speeds, but frequently introduce subtle security risks:
+* **Missing Ownership & Tenant Isolation (IDOR):** Boilerplate CRUD endpoints generated without verifying authenticated user identity against requested resources.
+* **Committed Cloud Secrets:** Plaintext credentials and IAM keys inadvertently committed in generated Terraform or Docker compose files.
+* **Supply Chain Hallucinations:** Imports of non-existent, abandoned, or typo-squatted dependencies.
+
+CyberScan provides:
+1. **Deterministic Reachability Analysis:** Validates whether an alert is actually exposed to public internet attack surfaces.
+2. **1-Click AI Fix Prompts:** Synthesizes context-aware, deterministic remediation prompts engineered for instant, 1-turn resolution in Cursor, Copilot, or Claude Code.
+3. **Rescan Verification:** Deterministically verifies that the applied patch broke the attack path and eliminated exposure.
+
+---
+
+## Key Capabilities
+
+* **Unified Multi-Scanner Normalization:** Ingests Trivy (vulnerabilities, misconfigs, secrets, licenses), Semgrep (SAST), and Gitleaks evidence into a canonical, strict JSON Schema (`packages/finding-model`).
+* **Automated Secret Redaction:** Deep recursive sanitization permanently masks sensitive keys (`secret`, `token`, `password`, `key`, `plaintext`) as `[REDACTED]` before persistence, display, or SIEM streaming.
+* **Adversary Framework Mapping:** Automatically cross-references findings to **MITRE ATT&CK Enterprise Tactics & Techniques** (e.g. T1190, T1552.001, T1068, T1195.002) and **OWASP Top 10 (2021)**.
+* **Native SIEM Exporter:** Out-of-the-box streaming and batch exports in **CEF** (Splunk, ArcSight, QRadar), **ECS / NDJSON** (Elasticsearch, Kibana, Wazuh), and **RFC 5424 Syslog**.
+* **Air-Gapped & Local-First:** Runs 100% locally on your machine. Zero telemetry, zero analytics tracking, and zero source code exfiltration.
+* **Dual-Client Architecture:**
+  * **Web Client (`apps/web`):** Next.js 15 App Router, React 19, GSAP, Anime.js, and Tailwind CSS.
+  * **Desktop Client (`apps/desktop`):** Secure workstation runner powered by Tauri 2 (Rust native command bridge) for offline repository analysis.
+
+---
+
+## Architecture Pipeline
+
+```text
+┌────────────────┐     ┌────────────────┐     ┌────────────────┐
+│     Trivy      │     │    Semgrep     │     │    Gitleaks    │
+│  (CVEs / IaC)  │     │     (SAST)     │     │   (Secrets)    │
+└────────┬───────┘     └────────┬───────┘     └────────┬───────┘
+         │                      │                      │
+         └──────────────────────┼──────────────────────┘
+                                ▼
+         ┌──────────────────────────────────────────────┐
+         │  Recursive Sanitizer (Secret Redaction)      │
+         └──────────────────────┬───────────────────────┘
+                                ▼
+         ┌──────────────────────────────────────────────┐
+         │  Canonical Finding Schema (Draft 2020-12)    │
+         │  + MITRE ATT&CK & OWASP Top 10 Correlation   │
+         └──────────────────────┬───────────────────────┘
+                                ▼
+         ┌──────────────────────────────────────────────┐
+         │  Graph Reachability & Attack Path Synthesizer│
+         └──────────────────────┬───────────────────────┘
+                                ▼
+         ┌──────────────────────────────────────────────┐
+         │  CyberScan Security Console                  │
+         │  ├── Visual Kill-Chain Inspector             │
+         │  ├── 1-Click AI Fix Prompts (Cursor/Copilot) │
+         │  └── SIEM Exporter (CEF / ECS / Syslog)      │
+         └──────────────────────────────────────────────┘
+```
+
+---
+
+## Monorepo Layout
+
+```text
+CyberScan/
+├── apps/
+│   ├── web/                     # Web dashboard & portal (Next.js 15+, React 19, GSAP)
+│   └── desktop/                 # Workstation client (Tauri 2 + Vite + React + Rust)
+├── packages/
+│   ├── finding-model/           # Canonical JSON Schema for normalized findings
+│   └── scanner-adapters/        # Provider ingestion modules
+│       └── trivy/               # Trivy runner, normalizer, and SIEM exporter
+├── docs/                        # Architecture decision records, threat models & specifications
+├── DESIGN.md                    # CyberScan Design System & Anti-Vibecoding Standards
+├── APPLE_DESIGN.md              # Apple HIG and macOS design specification
+├── POLITICS.md                  # Project governance, Terms of Use & Privacy Policy
+├── SECURITY.md                  # Hardening, secure coding & threat model standards
+└── LICENSE                      # MIT License (Copyright 2026 Johan Vasquez)
+```
+
+---
+
+## Quickstart
+
+### 1. Clone & Install
+```bash
+git clone https://github.com/Johanvasquezdev/CyberScan.git
+cd CyberScan
+```
+
+### 2. Launch Web Console
+```bash
+cd apps/web
+npm install
+npm run dev
+```
+Visit **`http://localhost:3000`** for the landing page or **`http://localhost:3000/dashboard`** for the live security console.
+
+### 3. Run Trivy Adapter CLI & SIEM Exporter
+```bash
+# Run unit & integration test suite
+cd packages/scanner-adapters/trivy
+node test/trivy-adapter.test.js
+node test/runner.test.js
+node test/siem-exporter.test.js
+
+# Execute local repository scan
+node scan.js --target /path/to/repo --format json
+```
+
+### 4. Launch Desktop Client (Tauri 2)
+```bash
+cd apps/desktop
+npm install
+npm run tauri dev
+```
+
+---
+
+## Standards & Framework Readiness
+
+CyberScan maps scanner evidence against leading industry security controls to accelerate audit readiness:
+* **SOC 2 Type II:** Trust Services Criteria (CC6.1 Logical Access, CC6.6 Vulnerability Management, CC7.1 Threat Detection).
+* **ISO/IEC 27001:2022:** Annex A.8.8 Management of Technical Vulnerabilities, A.8.12 Data Leakage Prevention, A.8.28 Secure Coding.
+* **OWASP Top 10 (2021):** Direct tagging for Broken Access Control (A01), Cryptographic Failures (A02), Injection (A03), and Vulnerable Components (A06).
+
+*(Note: CyberScan provides evidence correlation and audit preparedness workflows; it does not issue automated compliance certifications).*
+
+---
+
+## Acceptable Use & Privacy
+
+* **Authorized Testing Only:** Operators must only scan repositories and systems they own or have documented permission to audit.
+* **Zero Telemetry:** CyberScan does not collect telemetry, analytics, or user metrics. All scan payloads and source code remain strictly local.
+
+---
+
+## License
+
+This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for details.
+
+Copyright (c) 2026 **Johan Vasquez**. Free for personal, open source, academic, and commercial use.

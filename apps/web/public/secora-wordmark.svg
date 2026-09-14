@@ -1,0 +1,14 @@
+<svg width="1120" height="220" viewBox="0 0 1120 220" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Secora</title>
+  <desc id="desc">Secora security intelligence wordmark in white and electric blue.</desc>
+  <defs>
+    <filter id="blueGlow" x="-20%" y="-80%" width="140%" height="260%"><feGaussianBlur stdDeviation="5" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  </defs>
+  <text x="56" y="130" fill="#F4F8FF" font-family="Rajdhani, Arial Narrow, sans-serif" font-size="143" font-weight="700" letter-spacing="-2">SECO<tspan fill="#1988FF">RA</tspan></text>
+  <g filter="url(#blueGlow)" stroke="#1988FF" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M105 171H480L505 188H535"/>
+    <path d="M1015 171H640L615 188H585"/>
+    <circle cx="560" cy="188" r="27"/>
+    <circle cx="560" cy="188" r="9" fill="#1988FF"/>
+  </g>
+</svg>

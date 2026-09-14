@@ -1,0 +1,9 @@
+{
+  "name": "@cyberscan/trivy-adapter",
+  "private": true,
+  "type": "commonjs",
+  "scripts": {
+    "test": "node test/trivy-adapter.test.js && node test/runner.test.js && node test/scan.test.js && node test/siem-exporter.test.js",
+    "scan": "node scan.js"
+  }
+}

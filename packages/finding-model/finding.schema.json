@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cyberscan.local/schemas/finding.schema.json",
+  "title": "CyberScan Normalized Finding",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "title", "severity", "confidence", "source", "category", "status", "provenance", "evidence"],
+  "properties": {
+    "id": { "type": "string", "minLength": 1 },
+    "title": { "type": "string", "minLength": 1 },
+    "description": { "type": "string" },
+    "severity": { "enum": ["INFO", "LOW", "MEDIUM", "HIGH", "CRITICAL", "UNKNOWN"] },
+    "confidence": { "enum": ["LOW", "MEDIUM", "HIGH", "CONFIRMED", "UNKNOWN"] },
+    "source": { "type": "string", "minLength": 1 },
+    "category": { "type": "string", "minLength": 1 },
+    "finding_type": { "enum": ["CODE", "DEPENDENCY", "CONTAINER", "IAC", "SECRET", "LICENSE", "API", "CONFIGURATION", "OTHER"] },
+    "owasp_top10": { "type": "array", "items": { "type": "string", "pattern": "^A(0[1-9]|10):2021$" }, "uniqueItems": true },
+    "mitre_attack": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["technique_id", "technique_name", "tactic"],
+        "properties": {
+          "tactic": { "type": "string" },
+          "technique_id": { "type": "string", "pattern": "^T[0-9]{4}(\\.[0-9]{3})?$" },
+          "technique_name": { "type": "string" },
+          "url": { "type": "string", "format": "uri" }
+        }
+      },
+      "uniqueItems": true
+    },
+    "package": { "type": "string" },
+    "installed_version": { "type": "string" },
+    "fixed_version": { "type": "string" },
+    "resource": { "type": "string" },
+    "target_type": { "enum": ["REPOSITORY", "FILE", "PACKAGE", "IMAGE", "CONTAINER", "KUBERNETES_RESOURCE", "CLOUD_RESOURCE", "ENDPOINT", "OTHER"] },
+    "cwe": { "type": "string" },
+    "cve": { "type": "string" },
+    "file": { "type": "string" },
+    "line": { "type": "integer", "minimum": 1 },
+    "status": { "enum": ["OPEN", "CONFIRMED", "FALSE_POSITIVE", "ACCEPTED_RISK", "IN_PROGRESS", "RESOLVED", "REOPENED"] },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["scanner", "scanner_version"],
+      "properties": {
+        "scanner": { "type": "string", "minLength": 1 },
+        "scanner_version": { "type": "string", "minLength": 1 },
+        "rule_id": { "type": "string" },
+        "raw_finding_id": { "type": "string" }
+      }
+    },
+    "evidence": { "type": "object", "additionalProperties": true },
+    "remediation": { "type": "string" },
+    "references": { "type": "array", "items": { "type": "string", "format": "uri" } }
+  }
+}

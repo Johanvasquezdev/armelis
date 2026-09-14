@@ -1,0 +1,11 @@
+# CyberScan
+
+CyberScan is a security intelligence platform for understanding application and infrastructure risk.
+
+CyberScan is the current product name. ThreatGraph is the former project name.
+
+CyberScan connects scanner evidence to application components, identities, resources, sensitive assets, attack paths, blast radius, and remediation priorities.
+
+Scanner evidence and CyberScan analysis are distinct. Findings must be supported by evidence, and unknown relationships must remain explicitly uncertain.
+
+Public website: /
