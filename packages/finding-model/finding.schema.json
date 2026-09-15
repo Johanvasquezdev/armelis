@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://cyberscan.local/schemas/finding.schema.json",
-  "title": "CyberScan Normalized Finding",
+  "$id": "https://hopchain.dev/schemas/finding.schema.json",
+  "title": "Hopchain Normalized Finding",
   "type": "object",
   "additionalProperties": false,
   "required": ["id", "title", "severity", "confidence", "source", "category", "status", "provenance", "evidence"],

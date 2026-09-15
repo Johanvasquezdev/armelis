@@ -1,0 +1,25 @@
+{
+  "name": "hopchain",
+  "version": "0.1.0",
+  "description": "Application Security Intelligence for AI-Assisted Teams & SOC Analysts",
+  "main": "src/index.js",
+  "bin": {
+    "hopchain": "./bin/hopchain.js"
+  },
+  "author": "Johan Vasquez",
+  "license": "MIT",
+  "keywords": [
+    "security",
+    "appsec",
+    "devsecops",
+    "attack-paths",
+    "graph",
+    "trivy",
+    "siem",
+    "mitre-attack",
+    "owasp"
+  ],
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

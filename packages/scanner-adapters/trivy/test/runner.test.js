@@ -4,7 +4,7 @@ const os = require('node:os');
 const path = require('node:path');
 const { buildTrivyArgs, validateTarget } = require('../runner');
 
-const root = fs.mkdtempSync(path.join(os.tmpdir(), 'cyberscan-trivy-'));
+const root = fs.mkdtempSync(path.join(os.tmpdir(), 'hopchain-trivy-'));
 const repo = path.join(root, 'repo');
 fs.mkdirSync(repo);
 

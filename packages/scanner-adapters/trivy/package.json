@@ -1,5 +1,6 @@
 {
-  "name": "@cyberscan/trivy-adapter",
+  "name": "@hopchain/trivy-adapter",
+  "version": "0.1.0",
   "private": true,
   "type": "commonjs",
   "scripts": {

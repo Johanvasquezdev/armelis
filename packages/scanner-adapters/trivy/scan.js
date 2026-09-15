@@ -33,7 +33,7 @@ function parseArgs(argv) {
 
 function usage() {
   return [
-    'CyberScan Trivy Scan & SIEM Exporter',
+    'Hopchain Trivy Scan & SIEM Exporter',
     '',
     'Usage:',
     '  node packages/scanner-adapters/trivy/scan.js --target <path> [options]',
@@ -41,7 +41,7 @@ function usage() {
     'Options:',
     '  --target <path>          Local repository path, required',
     '  --workspace-root <path>  Allowed path boundary, defaults to current directory',
-    '  --output <path>          Report path, defaults to .cyberscan/scans/<timestamp>.<ext>',
+    '  --output <path>          Report path, defaults to .hopchain/scans/<timestamp>.<ext>',
     '  --format <type>          Output format: json, cef, ecs, ndjson, syslog (default: json)',
     '  --stdout                 Output results directly to stdout',
     '  --trivy <path>           Trivy executable, defaults to trivy',
@@ -53,7 +53,7 @@ function usage() {
 
 function outputPath(workspaceRoot, requested, format = 'json') {
   const ext = format === 'cef' ? 'cef' : format === 'syslog' ? 'log' : 'json';
-  const relative = requested || path.join('.cyberscan', 'scans', `${new Date().toISOString().replaceAll(':', '-')}.${ext}`);
+  const relative = requested || path.join('.hopchain', 'scans', `${new Date().toISOString().replaceAll(':', '-')}.${ext}`);
   const resolved = path.resolve(workspaceRoot, relative);
   const relativeToRoot = path.relative(workspaceRoot, resolved);
   if (relativeToRoot.startsWith('..') || path.isAbsolute(relativeToRoot)) {
@@ -74,7 +74,7 @@ async function main(argv = process.argv.slice(2)) {
   const result = await runTrivy({ ...options, workspaceRoot });
 
   const report = {
-    product: 'CyberScan',
+    product: 'Hopchain',
     generated_at: new Date().toISOString(),
     target: result.target,
     scanner: result.scanner,

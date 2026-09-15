@@ -102,10 +102,12 @@ Hopchain provides:
 
 ```text
 Hopchain/
+├── bin/                         # Global executable launcher (node bin/hopchain.js)
 ├── apps/
 │   ├── web/                     # Web dashboard & portal (Next.js 15+, React 19, GSAP)
 │   └── desktop/                 # Workstation client (Tauri 2 + Vite + React + Rust)
 ├── packages/
+│   ├── cli/                     # Zero-dependency Hopchain CLI (scan, trace, break, export)
 │   ├── finding-model/           # Canonical JSON Schema for normalized findings
 │   └── scanner-adapters/        # Provider ingestion modules
 │       └── trivy/               # Trivy runner, normalizer, and SIEM exporter
@@ -127,25 +129,30 @@ git clone https://github.com/Johanvasquezdev/Hopchain.git
 cd Hopchain
 ```
 
-### 2. Launch Web Console
+### 2. Hopchain CLI (Zero Dependencies)
+Run security intelligence, graph traversal, and chain severance directly from your terminal:
+
+```bash
+# Scan repository and normalize multi-scanner findings
+node bin/hopchain.js scan .
+
+# Trace reachability attack paths (hops) from public entry points to crown jewels
+node bin/hopchain.js trace .
+
+# Find the single critical link that breaks the attack chain + get 1-click AI fix prompt
+node bin/hopchain.js break .
+
+# Stream normalized findings to SIEM (CEF / ECS / Syslog)
+node bin/hopchain.js export . --format cef
+```
+
+### 3. Launch Web Console
 ```bash
 cd apps/web
 npm install
 npm run dev
 ```
 Visit **`http://localhost:3000`** for the landing page or **`http://localhost:3000/dashboard`** for the live security console.
-
-### 3. Run Trivy Adapter CLI & SIEM Exporter
-```bash
-# Run unit & integration test suite
-cd packages/scanner-adapters/trivy
-node test/trivy-adapter.test.js
-node test/runner.test.js
-node test/siem-exporter.test.js
-
-# Execute local repository scan
-node scan.js --target /path/to/repo --format json
-```
 
 ### 4. Launch Desktop Client (Tauri 2)
 ```bash

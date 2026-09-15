@@ -1,0 +1,20 @@
+{
+  "name": "hopchain-monorepo",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Application Security Intelligence for AI-Assisted Teams & SOC Analysts",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "hopchain": "node bin/hopchain.js",
+    "scan": "node bin/hopchain.js scan",
+    "trace": "node bin/hopchain.js trace",
+    "break": "node bin/hopchain.js break",
+    "test": "npm --prefix packages/scanner-adapters/trivy test",
+    "build:web": "npm --prefix apps/web run build"
+  },
+  "author": "Johan Vasquez",
+  "license": "MIT"
+}

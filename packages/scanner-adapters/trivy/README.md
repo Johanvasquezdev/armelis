@@ -1,6 +1,6 @@
-# CyberScan Trivy Adapter
+# Hopchain Trivy Adapter
 
-This package converts Trivy JSON into CyberScan normalized findings and provides a controlled local repository runner.
+This package converts Trivy JSON into Hopchain normalized findings and provides a controlled local repository runner.
 
 ## Run a scan from Node.js
 
@@ -20,10 +20,10 @@ Scanner failures and invalid output are returned as errors and must be recorded 
 
 ## Automated scan command
 
-From the CyberScan repository root:
+From the Hopchain repository root:
 
 ```powershell
 node packages/scanner-adapters/trivy/scan.js --target test-targets/example-service
 ```
 
-The command writes a timestamped normalized report below `.cyberscan/scans/`. Reports are created with an exclusive write so an existing report is never overwritten accidentally.
+The command writes a timestamped normalized report below `.hopchain/scans/`. Reports are created with an exclusive write so an existing report is never overwritten accidentally.

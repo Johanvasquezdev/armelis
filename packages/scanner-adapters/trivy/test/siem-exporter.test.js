@@ -53,7 +53,7 @@ const sampleFinding = {
 };
 
 const report = {
-  product: 'CyberScan',
+  product: 'Hopchain',
   generated_at: '2026-09-14T12:00:00.000Z',
   target: 'my-service',
   findings: [sampleFinding]
@@ -61,7 +61,7 @@ const report = {
 
 // 4. Test toCEF
 const cef = toCEF(sampleFinding, { target: 'my-service' });
-assert.ok(cef.startsWith('CEF:0|CyberScan|CyberScan|1.0.0|DEPENDENCY|CVE-2025-1337 Vulnerability in lodash|10|'));
+assert.ok(cef.startsWith('CEF:0|Hopchain|Hopchain|1.0.0|DEPENDENCY|CVE-2025-1337 Vulnerability in lodash|10|'));
 assert.ok(cef.includes('externalId=trivy-abc1234567890'));
 assert.ok(cef.includes('cs1=T1190'));
 assert.ok(cef.includes('cs1Label=mitre_technique_id'));
@@ -73,7 +73,7 @@ assert.ok(cef.includes('deviceCustomString4=lodash'));
 // 5. Test toECS
 const ecs = toECS(sampleFinding, { target: 'my-service', created_at: report.generated_at });
 assert.equal(ecs['@timestamp'], '2026-09-14T12:00:00.000Z');
-assert.equal(ecs.event.dataset, 'cyberscan.findings');
+assert.equal(ecs.event.dataset, 'hopchain.findings');
 assert.equal(ecs.event.severity, 10);
 assert.equal(ecs.vulnerability.id, 'CVE-2025-1337');
 assert.equal(ecs.threat.framework, 'MITRE ATT&CK');
@@ -85,20 +85,20 @@ assert.equal(ecs.file.line, 42);
 // 6. Test toSyslog
 const syslog = toSyslog(sampleFinding, { target: 'my-service' });
 assert.ok(syslog.startsWith('<130>1 ')); // facility 16*8 + CRITICAL 2 = 130
-assert.ok(syslog.includes('CyberScan'));
+assert.ok(syslog.includes('Hopchain'));
 assert.ok(syslog.includes('trivy-abc1234567890'));
-assert.ok(syslog.includes('CEF:0|CyberScan'));
+assert.ok(syslog.includes('CEF:0|Hopchain'));
 
 // 7. Test exportReport
 const exportedJson = exportReport(report, 'json');
 assert.ok(JSON.parse(exportedJson).findings.length === 1);
 
 const exportedCEF = exportReport(report, 'cef');
-assert.ok(exportedCEF.startsWith('CEF:0|CyberScan'));
+assert.ok(exportedCEF.startsWith('CEF:0|Hopchain'));
 
 const exportedECS = exportReport(report, 'ecs');
 const parsedECS = JSON.parse(exportedECS);
-assert.equal(parsedECS.observer.vendor, 'CyberScan');
+assert.equal(parsedECS.observer.vendor, 'Hopchain');
 
 const exportedSyslog = exportReport(report, 'syslog');
 assert.ok(exportedSyslog.includes('<130>1 '));
