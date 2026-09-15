@@ -14,6 +14,7 @@ const colors = {
   red: isColorSupported ? '\x1b[31m' : '',
   magenta: isColorSupported ? '\x1b[35m' : '',
   gray: isColorSupported ? '\x1b[90m' : '',
+  brightBlue: isColorSupported ? '\x1b[94m' : '',
   brightRed: isColorSupported ? '\x1b[91m' : '',
   brightCyan: isColorSupported ? '\x1b[96m' : '',
   bgCyan: isColorSupported ? '\x1b[46m\x1b[30m' : '',
@@ -22,14 +23,18 @@ const colors = {
 };
 
 function banner() {
+  const blue = `${colors.brightBlue}${colors.bold}`;
+  const red = `${colors.brightRed}${colors.bold}`;
+  const reset = colors.reset;
+
   return [
-    `${colors.cyan}${colors.bold}  _  _  _____  ____   ___ _  _   _   ___ _  _ `,
-    ` | || |/ _ \\ \\|  _ \\ / __| || | /_\\ |_ _| \\| |`,
-    ` | __ | (_) ) | |_) | (__| __ |/ _ \\ | || .\` |`,
-    ` |_||_|\\___/ /| .__/ \\___|_||_/_/ \\_\\___|_|\\_|`,
-    `            /_|_|${colors.reset}`,
-    ` ${colors.dim}Application Security Intelligence for AI-Assisted Teams & SOC Analysts${colors.reset}`,
-    ` ${colors.dim}See every hop. Break the chain.${colors.reset}`,
+    `${blue}  _  _  _____  ____   ${red}___ _  _   _   ___ _  _ ${reset}`,
+    `${blue} | || |/ _ \\ \\|  _ \\ ${red}/ __| || | /_\\ |_ _| \\| |${reset}`,
+    `${blue} | __ | (_) ) | |_) ${red}| (__| __ |/ _ \\ | || .\` |${reset}`,
+    `${blue} |_||_|\\___/ /| .__/ ${red}\\___|_||_/_/ \\_\\___|_|\\_|${reset}`,
+    `${blue}            /_|_|    ${reset}`,
+    ` ${colors.dim}Application Security Intelligence for AI-Assisted Teams & SOC Analysts${reset}`,
+    ` ${colors.dim}See every hop. Break the chain.${reset}`,
     ''
   ].join('\n');
 }
