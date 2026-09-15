@@ -13,25 +13,25 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: 'CyberScan | Security intelligence for modern applications',
-    template: '%s | CyberScan'
+    default: 'Hopchain | Application Security Intelligence for AI-Assisted Teams & SOC Analysts',
+    template: '%s | Hopchain'
   },
-  description: 'Turn security findings into context, attack paths, impact, and remediation priorities.',
-  applicationName: 'CyberScan',
-  keywords: ['application security', 'security graph', 'attack paths', 'DevSecOps', 'vulnerability management'],
+  description: 'See every hop from public entry point to crown-jewel asset — then fix the one link that breaks the chain.',
+  applicationName: 'Hopchain',
+  keywords: ['application security', 'reachability graph', 'attack paths', 'lateral movement', 'DevSecOps', 'vulnerability management', 'AI security'],
   alternates: { canonical: '/' },
   openGraph: {
     type: 'website',
-    siteName: 'CyberScan',
-    title: 'CyberScan | Security intelligence for modern applications',
-    description: 'Map the attack paths. Find the real risks. Secure what matters.',
+    siteName: 'Hopchain',
+    title: 'Hopchain | Application Security Intelligence for AI-Assisted Teams & SOC Analysts',
+    description: 'See every hop from public entry point to crown-jewel asset — then fix the one link that breaks the chain.',
     url: siteUrl,
-    images: [{ url: '/opengraph-image', width: 1200, height: 630, alt: 'CyberScan security intelligence' }]
+    images: [{ url: '/opengraph-image', width: 1200, height: 630, alt: 'Hopchain application security intelligence' }]
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'CyberScan | Security intelligence for modern applications',
-    description: 'Map the attack paths. Find the real risks. Secure what matters.',
+    title: 'Hopchain | Application Security Intelligence for AI-Assisted Teams & SOC Analysts',
+    description: 'See every hop from public entry point to crown-jewel asset — then fix the one link that breaks the chain.',
     images: ['/opengraph-image']
   },
   robots: { index: true, follow: true }

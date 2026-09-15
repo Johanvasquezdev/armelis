@@ -1,8 +1,8 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "CyberScan Local",
+  "productName": "Hopchain",
   "version": "0.1.0",
-  "identifier": "com.cyberscan.local",
+  "identifier": "dev.johanvasquez.hopchain",
   "build": {
     "beforeDevCommand": "npm run dev",
     "beforeBuildCommand": "npm run build",
@@ -11,7 +11,7 @@
   },
   "app": {
     "windows": [{
-      "title": "CyberScan Local",
+      "title": "Hopchain Local",
       "width": 1100,
       "height": 800,
       "minWidth": 360,

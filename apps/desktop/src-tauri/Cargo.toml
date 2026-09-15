@@ -1,5 +1,5 @@
 [package]
-name = "cyberscan_desktop"
+name = "hopchain_desktop"
 version = "0.1.0"
 edition = "2021"
 

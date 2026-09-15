@@ -12,15 +12,15 @@ const findings = [
   ['03', 'Customer data', 'Orders database']
 ];
 
-function CyberScanWordmark({ large = false }: { large?: boolean }) {
+function HopchainWordmark({ large = false }: { large?: boolean }) {
   return (
     <span
       className={`cyberscan-wordmark${large ? ' cyberscan-wordmark-large' : ''}`}
       role="img"
-      aria-label="CyberScan"
+      aria-label="Hopchain"
     >
-      <span>CYBER</span>
-      <b>SCAN</b>
+      <span>HOP</span>
+      <b>CHAIN</b>
       <svg viewBox="0 0 420 48" aria-hidden="true">
         <path d="M8 12H172L187 29H202M412 12H248L233 29H218" />
         <circle cx="210" cy="29" r="15" />
@@ -63,8 +63,8 @@ export default function HomePage() {
       
       {/* Site Header */}
       <header className="site-header shell">
-        <Link className="brand-lockup" href="/" aria-label="CyberScan home">
-          <CyberScanWordmark />
+        <Link className="brand-lockup" href="/" aria-label="Hopchain home">
+          <HopchainWordmark />
         </Link>
         <nav aria-label="Primary navigation">
           <Link href="/dashboard" style={{ color: '#00e5ff', fontWeight: 700 }}>
@@ -75,7 +75,7 @@ export default function HomePage() {
           <Link href="#quickstart">Quickstart</Link>
           <Button asChild size="sm">
             <a
-              href="https://github.com/Johanvasquezdev/CyberScan"
+              href="https://github.com/Johanvasquezdev/Hopchain"
               target="_blank"
               rel="noreferrer"
               style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}
@@ -100,7 +100,7 @@ export default function HomePage() {
             <em>Fix the risk.</em>
           </h1>
           <p className="hero-lede">
-            CyberScan connects your code, dependencies, containers, and configuration to show what could actually happen—and what to fix first.
+            Hopchain connects your code, dependencies, containers, and configuration to show what could actually happen—and what to fix first.
           </p>
           <div className="hero-actions">
             <Button asChild>
@@ -110,7 +110,7 @@ export default function HomePage() {
             </Button>
             <a
               className="text-link"
-              href="https://github.com/Johanvasquezdev/CyberScan"
+              href="https://github.com/Johanvasquezdev/Hopchain"
               target="_blank"
               rel="noreferrer"
             >
@@ -124,7 +124,7 @@ export default function HomePage() {
         </div>
 
         {/* 3D Console Perspective (Blender Motion Style) */}
-        <div className="hero-visual" aria-label="Sample CyberScan attack path visualization">
+        <div className="hero-visual" aria-label="Sample Hopchain attack path visualization">
           <div className="console-orbit orbit-a" />
           <div className="console-orbit orbit-b" />
           <div className="radar-sweep" />
@@ -179,7 +179,7 @@ export default function HomePage() {
             <em>Start with the one that matters.</em>
           </h2>
           <p>
-            CyberScan connects code, dependencies, containers, and configuration—then turns disconnected alerts into a concrete risk path your team can understand and remediate.
+            Hopchain connects code, dependencies, containers, and configuration—then turns disconnected alerts into a concrete risk path your team can understand and remediate.
           </p>
         </div>
         <div className="steps">
@@ -296,7 +296,7 @@ export default function HomePage() {
             <em>100% Open Source.</em>
           </h2>
           <p style={{ color: '#94a3b8', fontSize: '15px', marginTop: '8px' }}>
-            No paywalls, no seat limits, and no vendor lock-in. CyberScan is published under the permissive MIT License for developers, security researchers, and SOC analysts worldwide.
+            No paywalls, no seat limits, and no vendor lock-in. Hopchain is published under the permissive MIT License for developers, security researchers, and SOC analysts worldwide.
           </p>
         </div>
         <div className="price-grid">
@@ -328,7 +328,7 @@ export default function HomePage() {
               <span style={{ fontSize: '11px', color: '#94a3b8' }}>✓ PostgreSQL + pgvector Ready</span>
             </div>
             <a
-              href="https://github.com/Johanvasquezdev/CyberScan"
+              href="https://github.com/Johanvasquezdev/Hopchain"
               target="_blank"
               rel="noreferrer"
               style={{ marginTop: '16px', color: '#38bdf8', fontWeight: 700 }}
@@ -341,14 +341,14 @@ export default function HomePage() {
 
       {/* Quickstart Section (Replaces Commercial Waitlist) */}
       <section id="quickstart" className="waitlist shell">
-        <CyberScanWordmark large />
+        <HopchainWordmark large />
         <p className="eyebrow" style={{ marginTop: '18px' }}>Developer Quickstart</p>
         <h2>
           Clone, Scan, and<br />
           <em>Map Your Risks.</em>
         </h2>
         <p style={{ maxWidth: '540px', margin: '16px auto 24px', color: '#94a3b8', fontSize: '15px' }}>
-          Get started in 30 seconds. Run CyberScan against your own repository without signing up or submitting credentials.
+          Get started in 30 seconds. Run Hopchain against your own repository without signing up or submitting credentials.
         </p>
 
         {/* Nano-Banana Style Compact Terminal Snippet */}
@@ -373,8 +373,8 @@ export default function HomePage() {
             <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#f59e0b' }} />
             <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#10b981' }} />
           </div>
-          <code>git clone https://github.com/Johanvasquezdev/CyberScan.git</code><br />
-          <code>cd cyberscan && npm install && npm run dev</code>
+          <code>git clone https://github.com/Johanvasquezdev/Hopchain.git</code><br />
+          <code>cd hopchain && npm install && npm run dev</code>
         </div>
 
         <div style={{ display: 'flex', gap: '14px', flexWrap: 'wrap', justifyContent: 'center' }}>
@@ -385,7 +385,7 @@ export default function HomePage() {
           </Button>
           <Button asChild variant="ghost">
             <a
-              href="https://github.com/Johanvasquezdev/CyberScan"
+              href="https://github.com/Johanvasquezdev/Hopchain"
               target="_blank"
               rel="noreferrer"
             >
@@ -397,7 +397,7 @@ export default function HomePage() {
 
       {/* Site Footer */}
       <footer className="site-footer shell">
-        <span>CYBERSCAN</span>
+        <span>HOPCHAIN</span>
         <span>100% FREE & OPEN SOURCE • MIT LICENSE</span>
         <span>DEVELOPED BY JOHAN VASQUEZ</span>
       </footer>
