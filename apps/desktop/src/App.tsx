@@ -143,6 +143,8 @@ export default function App() {
   const [target, setTarget] = useState('');
   const [selected, setSelected] = useState(scanners);
   const [busy, setBusy] = useState(false);
+  const [scanProgress, setScanProgress] = useState(0);
+  const [scanPhaseMessage, setScanPhaseMessage] = useState('');
   const [error, setError] = useState('');
   const [findings, setFindings] = useState<Finding[]>(DEMO_FINDINGS);
   const [filterSeverity, setFilterSeverity] = useState<string>('ALL');
@@ -161,6 +163,27 @@ export default function App() {
   async function runScan() {
     setBusy(true);
     setError('');
+    setScanProgress(10);
+    setScanPhaseMessage('Initializing isolated sandbox runner…');
+
+    // Progressive phase ticker
+    let currentPct = 10;
+    const progressInterval = setInterval(() => {
+      currentPct += Math.floor(Math.random() * 8) + 4;
+      if (currentPct > 92) currentPct = 92;
+      setScanProgress(currentPct);
+
+      if (currentPct > 78) {
+        setScanPhaseMessage('Synthesizing reachability graph & attack hops…');
+      } else if (currentPct > 58) {
+        setScanPhaseMessage('Cross-referencing MITRE ATT&CK & OWASP Top 10…');
+      } else if (currentPct > 36) {
+        setScanPhaseMessage('Executing vulnerability, secret & misconfig heuristics…');
+      } else if (currentPct > 18) {
+        setScanPhaseMessage('Parsing workspace AST & dependency manifests…');
+      }
+    }, 280);
+
     try {
       let response: ScanResult;
       if (typeof window !== 'undefined' && (window as any).__TAURI_INTERNALS__) {
@@ -171,7 +194,7 @@ export default function App() {
         });
       } else {
         // Browser development preview mode
-        await new Promise((r) => setTimeout(r, 600));
+        await new Promise((r) => setTimeout(r, 1500));
         response = {
           status: 'SUCCESS',
           exit_code: 0,
@@ -203,6 +226,11 @@ export default function App() {
           stderr: ''
         };
       }
+
+      clearInterval(progressInterval);
+      setScanProgress(100);
+      setScanPhaseMessage('Scan Complete — Normalizing Findings');
+      await new Promise((r) => setTimeout(r, 380));
 
       if (response.stdout) {
         try {
@@ -249,6 +277,7 @@ export default function App() {
         }
       }
     } catch (scanError) {
+      clearInterval(progressInterval);
       setError(String(scanError));
     } finally {
       setBusy(false);
@@ -270,7 +299,7 @@ export default function App() {
   function generateCEF(f: Finding) {
     const sevScore = f.severity === 'CRITICAL' ? 10 : f.severity === 'HIGH' ? 8 : f.severity === 'MEDIUM' ? 6 : 3;
     const mitre = f.mitre_attack?.[0];
-    return `CEF:0|CyberScan|CyberScan|1.0.0|${f.finding_type}|${f.title}|${sevScore}|src=${target || 'local-repo'} filePath=${f.file || ''} fileId=${f.line || ''} cs1=${mitre?.technique_id || ''} cs1Label=mitre_technique_id cs2=${mitre?.technique_name || ''} cs2Label=mitre_technique_name cs3=${f.owasp_top10?.[0] || ''} cs3Label=owasp_category cve=${f.cve || ''}`;
+    return `CEF:0|Hopchain|Hopchain|1.0.0|${f.finding_type}|${f.title}|${sevScore}|src=${target || 'local-repo'} filePath=${f.file || ''} fileId=${f.line || ''} cs1=${mitre?.technique_id || ''} cs1Label=mitre_technique_id cs2=${mitre?.technique_name || ''} cs2Label=mitre_technique_name cs3=${f.owasp_top10?.[0] || ''} cs3Label=owasp_category cve=${f.cve || ''}`;
   }
 
   function generateECS(f: Finding) {
@@ -280,10 +309,10 @@ export default function App() {
         event: {
           kind: 'alert',
           category: ['vulnerability'],
-          dataset: 'cyberscan.findings',
+          dataset: 'hopchain.findings',
           severity: f.severity === 'CRITICAL' ? 10 : 8
         },
-        observer: { vendor: 'CyberScan', product: 'CyberScan' },
+        observer: { vendor: 'Hopchain', product: 'Hopchain' },
         vulnerability: { id: f.cve || f.id, severity: f.severity, description: f.description },
         threat: f.mitre_attack?.map((m: MitreTechnique) => ({
           framework: 'MITRE ATT&CK',
@@ -300,7 +329,7 @@ export default function App() {
 
   function generateSyslog(f: Finding) {
     const pri = f.severity === 'CRITICAL' ? 130 : 131;
-    return `<${pri}>1 ${new Date().toISOString()} localhost CyberScan ${f.id} - ${generateCEF(f)}`;
+    return `<${pri}>1 ${new Date().toISOString()} localhost Hopchain ${f.id} - ${generateCEF(f)}`;
   }
 
   async function copyToClipboard(text: string, format: string) {
@@ -316,7 +345,7 @@ export default function App() {
         <div className="brand-mark" aria-hidden="true">⌁</div>
         <div>
           <p className="eyebrow">SECURITY INTELLIGENCE COMMAND</p>
-          <h1>Cyber<span>Scan</span></h1>
+          <h1>Hop<span>chain</span></h1>
         </div>
         <p className="status"><i></i> Local Worker Active</p>
       </header>
@@ -389,21 +418,49 @@ export default function App() {
           </div>
         </fieldset>
 
-        <div className="button-row">
-          <button
-            className="primary-pill"
-            disabled={busy || selected.length === 0}
-            onClick={runScan}
-          >
-            {busy ? 'Analyzing Workspace…' : 'Start Sandboxed Scan'}
-          </button>
-          <button
-            className="secondary-pill"
-            onClick={() => setFindings(DEMO_FINDINGS)}
-          >
-            Reset Demo Findings
-          </button>
-        </div>
+        {busy ? (
+          <div className="scan-progress-box" role="status" aria-live="polite">
+            <div className="scan-progress-header">
+              <div className="scan-phase-indicator">
+                <span className="pulsing-radar-dot" />
+                <span className="scan-phase-text">{scanPhaseMessage}</span>
+              </div>
+              <span className="scan-progress-pct">{scanProgress}%</span>
+            </div>
+
+            <div className="scan-progress-track">
+              <div
+                className="scan-progress-fill"
+                style={{ width: `${scanProgress}%` }}
+              />
+            </div>
+
+            <div className="scan-progress-footer">
+              <span>
+                Target: <strong>{target || 'Local Workspace'}</strong>
+              </span>
+              <span>
+                Providers: <strong>{selected.join(', ')}</strong>
+              </span>
+            </div>
+          </div>
+        ) : (
+          <div className="button-row">
+            <button
+              className="primary-pill"
+              disabled={selected.length === 0}
+              onClick={runScan}
+            >
+              Start Sandboxed Scan
+            </button>
+            <button
+              className="secondary-pill"
+              onClick={() => setFindings(DEMO_FINDINGS)}
+            >
+              Reset Demo Findings
+            </button>
+          </div>
+        )}
 
         {error && <p className="error" role="alert">{error}</p>}
       </section>
