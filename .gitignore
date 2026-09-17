@@ -50,6 +50,7 @@ pnpm-debug.log*
 .turbo/
 .eslintcache
 *.tsbuildinfo
+*.tgz
 
 # Editor, IDE & AI Agent Files
 .vscode/
