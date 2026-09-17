@@ -51,7 +51,19 @@ pnpm-debug.log*
 .eslintcache
 *.tsbuildinfo
 
-# Editor & OS Files
+# Editor, IDE & AI Agent Files
+.vscode/
+**/.vscode/
+.claude/
+**/.claude/
+.codex/
+**/.codex/
+.cursor/
+**/.cursor/
+.grok/
+**/.grok/
+AGENTS.md
+CLAUDE.md
 .DS_Store
 *.suo
 *.ntvs*
