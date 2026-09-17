@@ -47,15 +47,16 @@ async function main() {
   }
 
   const nonFlags = argv.filter((a) => !a.startsWith('-'));
+
+  if (argv.includes('--version') || argv.includes('-v') || nonFlags[0] === 'version') {
+    console.log(`Armelis v${pkg.version} (MIT License) - by Johan Vasquez`);
+    return 0;
+  }
+
   const command = nonFlags[0] || (argv.includes('-h') || argv.includes('--help') ? 'help' : undefined);
 
   if (!command || command === 'help') {
     printHelp(theme);
-    return 0;
-  }
-
-  if (command === '--version' || command === '-v' || command === 'version') {
-    console.log(`Armelis v${pkg.version} (MIT License) - by Johan Vasquez`);
     return 0;
   }
 

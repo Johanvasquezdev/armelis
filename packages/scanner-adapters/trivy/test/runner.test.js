@@ -15,4 +15,9 @@ assert.equal(validateTarget('repo', root).resolvedTarget, repo);
 assert.throws(() => validateTarget('../outside', root), /outside/);
 assert.throws(() => validateTarget('https://example.com/repo', root), /local repository/);
 assert.throws(() => buildTrivyArgs(repo, ['vuln', 'bad-value']), /simple names/);
+
+assert.deepEqual(buildTrivyArgs(repo, undefined, [], { skipDirs: ['node_modules', '.next', 'target'] }), [
+  'repo', '--format', 'json', '--scanners', 'vuln,misconfig,secret,license',
+  '--skip-dirs', 'node_modules', '--skip-dirs', '.next', '--skip-dirs', 'target', repo
+]);
 console.log('trivy runner tests: passed');

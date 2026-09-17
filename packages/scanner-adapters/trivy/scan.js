@@ -46,7 +46,7 @@ function usage() {
     '  --stdout                 Output results directly to stdout',
     '  --trivy <path>           Trivy executable, defaults to trivy',
     '  --scanners <list>        Comma-separated scanner list (vuln,misconfig,secret,license)',
-    '  --timeout-ms <number>    Scan timeout, defaults to 120000',
+    '  --timeout-ms <number>    Scan timeout, defaults to 600000',
     '  --help                   Show this help'
   ].join('\n');
 }

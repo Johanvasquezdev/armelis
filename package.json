@@ -13,7 +13,9 @@
     "trace": "node bin/armelis.js trace",
     "break": "node bin/armelis.js break",
     "test": "npm --prefix packages/scanner-adapters/trivy test",
-    "build:web": "npm --prefix apps/web run build"
+    "build:web": "npm --prefix apps/web run build",
+    "pack:cli": "npm pack --workspace=armelis",
+    "publish:cli": "npm publish --workspace=armelis --access public"
   },
   "author": "Johan Vasquez",
   "license": "MIT",
@@ -24,5 +26,9 @@
   "homepage": "https://github.com/Johanvasquezdev/armelis#readme",
   "bugs": {
     "url": "https://github.com/Johanvasquezdev/armelis/issues"
+  },
+  "engines": {
+    "node": ">=20",
+    "npm": ">=10"
   }
 }

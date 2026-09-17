@@ -6,6 +6,15 @@
   "bin": {
     "armelis": "./bin/armelis.js"
   },
+  "files": [
+    "bin",
+    "src",
+    "README.md",
+    "LICENSE"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
   "author": "Johan Vasquez",
   "license": "MIT",
   "repository": {

@@ -1,7 +1,7 @@
 'use strict';
 
 const path = require('node:path');
-const { runTrivy, DEFAULT_SCANNERS } = require('../../../scanner-adapters/trivy/runner');
+const { runTrivy, DEFAULT_SCANNERS } = require('../adapters/trivy/runner');
 const { buildAttackGraph, computeBreak } = require('../graph');
 const { colors, banner, box } = require('../formatter');
 

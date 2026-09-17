@@ -128,7 +128,30 @@ Armelis/
 ```bash
 git clone https://github.com/Johanvasquezdev/armelis.git
 cd armelis
+npm install
 ```
+
+
+### Scan guidance (Trivy)
+
+Prefer a **small target** first so cold Trivy DB downloads and filesystem walks stay within budget:
+
+```bash
+# Fixture-first (fast smoke)
+node bin/armelis.js scan packages/scanner-adapters/trivy/test/fixture
+
+# Explicit subdirectory
+node bin/armelis.js scan apps/web
+
+# Full monorepo (skips node_modules, .git, dist, build, .next, target, .venv; 10m default timeout)
+node bin/armelis.js scan .
+```
+
+If a root scan still times out on OneDrive/network drives, pass a narrower `--target` (via the adapter CLI) or raise `--timeout-ms`.
+
+### Install notes
+
+From the monorepo root (`npm install`) uses `.npmrc` `legacy-peer-deps=true` to avoid npm 10 arborist peer crashes (`matches` / `edgesOut`) seen with Next/SWC optional peers and `class-variance-authority` on Node 22.
 
 ### 2. Armelis CLI (Zero Dependencies)
 Run security intelligence, graph traversal, and chain severance directly from your terminal:

@@ -1,8 +1,8 @@
 'use strict';
 
 const path = require('node:path');
-const { runTrivy, DEFAULT_SCANNERS } = require('../../../scanner-adapters/trivy/runner');
-const { exportReport } = require('../../../scanner-adapters/trivy/siem-exporter');
+const { runTrivy, DEFAULT_SCANNERS } = require('../adapters/trivy/runner');
+const { exportReport } = require('../adapters/trivy/siem-exporter');
 const { colors, banner, severityBadge } = require('../formatter');
 
 async function executeScan(args = {}) {
