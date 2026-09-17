@@ -1,0 +1,48 @@
+{
+  "product": "Armelis",
+  "findings": [
+    {
+      "id": "armelis-cve-fixture-0001",
+      "title": "Outdated example package",
+      "description": "Example dependency finding used only as an embedding fixture.",
+      "severity": "HIGH",
+      "confidence": "HIGH",
+      "source": "Trivy",
+      "category": "Vulnerability",
+      "finding_type": "DEPENDENCY",
+      "cve": "CVE-2025-0001",
+      "cwe": "CWE-937",
+      "status": "OPEN",
+      "provenance": {
+        "scanner": "Trivy",
+        "scanner_version": "unknown"
+      },
+      "evidence": {
+        "target": "package-lock.json",
+        "package": "example-package",
+        "match": "should-not-be-embedded"
+      }
+    },
+    {
+      "id": "armelis-secret-fixture-0002",
+      "title": "Example credential finding",
+      "description": "Secret finding fixture with redacted evidence.",
+      "severity": "CRITICAL",
+      "confidence": "HIGH",
+      "source": "Trivy",
+      "category": "Secret",
+      "finding_type": "SECRET",
+      "status": "OPEN",
+      "provenance": {
+        "scanner": "Trivy",
+        "scanner_version": "unknown"
+      },
+      "evidence": {
+        "item": {
+          "RuleID": "aws-access-key-id",
+          "Match": "AKIA-DO-NOT-EMBED"
+        }
+      }
+    }
+  ]
+}

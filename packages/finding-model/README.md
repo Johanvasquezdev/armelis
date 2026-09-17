@@ -10,4 +10,4 @@ Required principles:
 - Use explicit lifecycle states.
 - Treat relationships and exploitability as evidence-based claims.
 
-The initial fields are defined in `finding.schema.json`.
+The initial fields are defined in `finding.schema.json`. Derived similarity vectors use the sibling contract `embedding.schema.json` and must not be stored on the finding object.

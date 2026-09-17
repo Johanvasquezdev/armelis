@@ -919,6 +919,39 @@ legend {
   color: #cbd5e1;
 }
 
+.embed-status {
+  margin-top: 14px;
+  font-size: 12px;
+  line-height: 1.45;
+  color: #94a3b8;
+}
+
+.embed-status-label {
+  display: inline-block;
+  margin-right: 8px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  border: 1px solid var(--hud-border);
+  color: var(--accent-primary);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.embed-status-succeeded {
+  color: #86efac;
+}
+
+.embed-status-failed {
+  color: var(--sev-critical);
+}
+
+.embed-status-pending,
+.embed-status-skipped {
+  color: #94a3b8;
+}
+
 /* Findings Matrix */
 .findings-container {
   margin-top: 36px;

@@ -151,6 +151,8 @@ export default function App() {
   const [scanProgress, setScanProgress] = useState(0);
   const [scanPhaseMessage, setScanPhaseMessage] = useState('');
   const [error, setError] = useState('');
+  const [embedStatus, setEmbedStatus] = useState<'idle' | 'skipped' | 'pending' | 'succeeded' | 'failed'>('idle');
+  const [embedMessage, setEmbedMessage] = useState('');
   const [findings, setFindings] = useState<Finding[]>(DEMO_FINDINGS);
   const [hasScanned, setHasScanned] = useState(false);
   const [filterSeverity, setFilterSeverity] = useState<string>('ALL');
@@ -206,6 +208,8 @@ export default function App() {
   async function runScan() {
     setBusy(true);
     setError('');
+    setEmbedStatus('idle');
+    setEmbedMessage('');
     setHasScanned(true);
     setIsPathSevered(false);
 
@@ -219,11 +223,13 @@ export default function App() {
 
       await progressPromise;
 
-      if (result.status === 'SUCCESS' || result.status === 'DEMO') {
+      const scanSucceeded = result.status === 'SUCCESS' || result.status === 'DEMO' || result.status === 'COMPLETED';
+      if (scanSucceeded) {
+        let normalized: Finding[] = [];
         try {
           const parsed = JSON.parse(result.stdout);
           const rawFindings = Array.isArray(parsed) ? parsed : (parsed.findings || []);
-          const normalized: Finding[] = rawFindings.map((f: Record<string, unknown>, idx: number) => ({
+          normalized = rawFindings.map((f: Record<string, unknown>, idx: number) => ({
             id: String(f.id || `f-${idx}`),
             title: String(f.title || f.name || 'Security Finding'),
             description: String(f.description || ''),
@@ -245,10 +251,33 @@ export default function App() {
             is_reachable: idx === 0 || f.finding_type === 'DEPENDENCY' || f.category === 'Vulnerability',
             evidence: (f.evidence as Record<string, unknown>) || {}
           }));
-
-          setFindings(normalized.length > 0 ? normalized : []);
         } catch {
-          setFindings([]);
+          normalized = [];
+        }
+
+        setFindings(normalized);
+
+        if (normalized.length === 0) {
+          setEmbedStatus('skipped');
+          setEmbedMessage('No findings to embed.');
+        } else {
+          setEmbedStatus('pending');
+          try {
+            const embedResult = await invoke<ScanResult>('embed_findings', {
+              workspace: target.trim(),
+              findingsJson: JSON.stringify({ product: 'Armelis', findings: normalized })
+            });
+            if (embedResult.status === 'SUCCEEDED') {
+              setEmbedStatus('succeeded');
+              setEmbedMessage('Local similarity vectors stored. Similarity is not confirmed evidence.');
+            } else {
+              setEmbedStatus('failed');
+              setEmbedMessage(embedResult.stderr || embedResult.stdout || 'Embedding worker failed.');
+            }
+          } catch (embedError: unknown) {
+            setEmbedStatus('failed');
+            setEmbedMessage(embedError instanceof Error ? embedError.message : String(embedError));
+          }
         }
       } else {
         setError(`Scanner failed (Exit ${result.exit_code}): ${result.stderr || result.stdout}`);
@@ -667,6 +696,8 @@ export default function App() {
                 setHasScanned(false);
                 setIsPathSevered(false);
                 setError('');
+                setEmbedStatus('idle');
+                setEmbedMessage('');
               }}
             >
               Reset Demo Baseline
@@ -675,6 +706,19 @@ export default function App() {
         )}
 
         {error && <p className="error" role="alert">{error}</p>}
+        {embedStatus !== 'idle' && (
+          <p
+            className={`embed-status embed-status-${embedStatus}`}
+            role="status"
+            aria-live="polite"
+          >
+            <span className="embed-status-label">Local embeddings</span>
+            {embedStatus === 'pending' && 'Running local MiniLM worker…'}
+            {embedStatus === 'succeeded' && embedMessage}
+            {embedStatus === 'failed' && `Failed — ${embedMessage}`}
+            {embedStatus === 'skipped' && embedMessage}
+          </p>
+        )}
       </section>
 
       {/* Findings Matrix with Filtering */}

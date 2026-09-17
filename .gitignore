@@ -54,3 +54,10 @@ pnpm-debug.log*
 *.sln
 *.sw?
 Thumbs.db
+
+# Python embedding pipeline (desktop-local Hugging Face worker)
+apps/desktop/embedding-pipeline/.venv/
+apps/desktop/embedding-pipeline/.cache/
+**/__pycache__/
+*.py[cod]
+*.egg-info/

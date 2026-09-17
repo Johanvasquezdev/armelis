@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "armelis-embeddings"
+version = "0.1.0"
+description = "Local Hugging Face embedding pipeline for Armelis desktop scans"
+requires-python = ">=3.11"
+dependencies = [
+  "sentence-transformers==3.4.1",
+  "numpy>=1.26,<3"
+]
+
+[project.scripts]
+armelis-embed = "armelis_embeddings.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]

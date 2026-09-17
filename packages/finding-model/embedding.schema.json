@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://armelis.dev/schemas/embedding.schema.json",
+  "title": "Armelis Finding Embedding",
+  "description": "Derived similarity vector for a normalized finding. Not scanner evidence and not a confidence claim.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "finding_id",
+    "model_id",
+    "model_revision",
+    "embedding_dim",
+    "text_hash",
+    "source_fields",
+    "status",
+    "created_at"
+  ],
+  "properties": {
+    "id": { "type": "string", "minLength": 1 },
+    "finding_id": { "type": "string", "minLength": 1 },
+    "model_id": { "type": "string", "minLength": 1 },
+    "model_revision": { "type": "string", "minLength": 1 },
+    "embedding_dim": { "type": "integer", "minimum": 1 },
+    "vector": {
+      "type": "array",
+      "items": { "type": "number" }
+    },
+    "text_hash": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "source_fields": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "uniqueItems": true
+    },
+    "status": { "enum": ["PENDING", "SUCCEEDED", "FAILED"] },
+    "error": { "type": ["string", "null"] },
+    "created_at": { "type": "string", "format": "date-time" }
+  }
+}

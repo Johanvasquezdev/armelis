@@ -1,0 +1,7 @@
+# Install into the project-local venv only:
+#   python -m venv .venv
+#   .\.venv\Scripts\python.exe -m pip install -r requirements.txt
+# Do not pip install globally. Torch wheels are platform-specific; this file
+# pins the Hugging Face wrapper and lets pip resolve a CPU torch build.
+sentence-transformers==3.4.1
+numpy>=1.26,<3
