@@ -1,300 +1,28 @@
 'use client';
 
 import Link from 'next/link';
-import { useState, useMemo } from 'react';
-
-type MitreTechnique = {
-  tactic: string;
-  technique_id: string;
-  technique_name: string;
-  url?: string;
-};
-
-type Finding = {
-  id: string;
-  title: string;
-  description: string;
-  severity: 'CRITICAL' | 'HIGH' | 'MEDIUM' | 'LOW' | 'INFO';
-  confidence: string;
-  source: string;
-  category: string;
-  finding_type: string;
-  owasp_top10?: string[];
-  mitre_attack?: MitreTechnique[];
-  package?: string;
-  installed_version?: string;
-  fixed_version?: string;
-  file?: string;
-  line?: number;
-  cve?: string;
-  remediation?: string;
-  ai_prompt?: string;
-  status: string;
-  evidence?: Record<string, unknown>;
-};
-
-const DEMO_FINDINGS: Finding[] = [
-  {
-    id: 'cs-finding-01',
-    title: 'CVE-2025-4128: Signature Forgery in jsonwebtoken',
-    description: 'Improper algorithm verification allows unauthenticated attackers to forge arbitrary JWT tokens and access private customer orders without credentials.',
-    severity: 'CRITICAL',
-    confidence: 'CONFIRMED',
-    source: 'Trivy',
-    category: 'Vulnerability',
-    finding_type: 'DEPENDENCY',
-    owasp_top10: ['A06:2021'],
-    mitre_attack: [
-      {
-        tactic: 'Initial Access',
-        technique_id: 'T1190',
-        technique_name: 'Exploit Public-Facing Application',
-        url: 'https://attack.mitre.org/techniques/T1190/'
-      },
-      {
-        tactic: 'Initial Access',
-        technique_id: 'T1195.002',
-        technique_name: 'Supply Chain Compromise: Dependencies',
-        url: 'https://attack.mitre.org/techniques/T1195/002/'
-      }
-    ],
-    package: 'jsonwebtoken',
-    installed_version: '8.5.1',
-    fixed_version: '9.0.2',
-    file: 'package-lock.json',
-    line: 88,
-    cve: 'CVE-2025-4128',
-    remediation: 'Upgrade jsonwebtoken to >= 9.0.2 in package.json to enforce explicit signature algorithm whitelisting.',
-    ai_prompt: 'Upgrade dependency jsonwebtoken to version 9.0.2 in package.json and update package-lock.json. Enforce algorithms: ["HS256"] in jwt.verify calls.',
-    status: 'OPEN',
-    evidence: {
-      package: 'jsonwebtoken',
-      installed: '8.5.1',
-      fixed: '9.0.2',
-      cve: 'CVE-2025-4128',
-      match: '[REDACTED_PACKAGE_SPEC]'
-    }
-  },
-  {
-    id: 'cs-finding-02',
-    title: 'Production AWS Secret Key in Git Commit History',
-    description: 'A 40-character AWS IAM secret access key was committed to the repository in an infrastructure deployment manifest.',
-    severity: 'HIGH',
-    confidence: 'HIGH',
-    source: 'Gitleaks',
-    category: 'Secret',
-    finding_type: 'SECRET',
-    owasp_top10: ['A07:2021'],
-    mitre_attack: [
-      {
-        tactic: 'Credential Access',
-        technique_id: 'T1552.001',
-        technique_name: 'Unsecured Credentials: In Files',
-        url: 'https://attack.mitre.org/techniques/T1552/001/'
-      }
-    ],
-    file: 'infra/deploy.tf',
-    line: 14,
-    remediation: 'Rotate the AWS access key immediately in IAM, invalidate old sessions, and rewrite git history using git-filter-repo.',
-    ai_prompt: 'Remove hardcoded AWS credentials from infra/deploy.tf and replace with AWS_SECRET_ACCESS_KEY environment variable reference via data.aws_secretsmanager or var.aws_secret_key.',
-    status: 'OPEN',
-    evidence: {
-      rule_id: 'aws-secret-access-key',
-      target: 'infra/deploy.tf',
-      match: '[REDACTED_AWS_SECRET_KEY]'
-    }
-  },
-  {
-    id: 'cs-finding-03',
-    title: 'Missing Authorization Check on /api/orders/:id',
-    description: 'Endpoint lacks tenant ownership validation, allowing any authenticated user to view arbitrary customer records (IDOR). Common when AI generates boilerplate CRUD routes.',
-    severity: 'HIGH',
-    confidence: 'HIGH',
-    source: 'Semgrep',
-    category: 'Code Vulnerability',
-    finding_type: 'CODE',
-    owasp_top10: ['A01:2021'],
-    mitre_attack: [
-      {
-        tactic: 'Privilege Escalation',
-        technique_id: 'T1068',
-        technique_name: 'Exploitation for Privilege Escalation',
-        url: 'https://attack.mitre.org/techniques/T1068/'
-      }
-    ],
-    file: 'src/routes/orders.ts',
-    line: 42,
-    remediation: 'Verify order.user_id === session.user.id before serializing record into JSON response.',
-    ai_prompt: 'In src/routes/orders.ts line 42, add an authorization guard: if (order.user_id !== session.user.id) { return res.status(403).json({ error: "Forbidden" }); }',
-    status: 'OPEN',
-    evidence: {
-      rule_id: 'owasp.idor.missing-owner-check',
-      file: 'src/routes/orders.ts'
-    }
-  },
-  {
-    id: 'cs-finding-04',
-    title: 'Docker Container Root Execution Allowed',
-    description: 'No USER directive declared in Dockerfile, resulting in containers running with root host permissions.',
-    severity: 'MEDIUM',
-    confidence: 'HIGH',
-    source: 'Trivy',
-    category: 'Security Misconfiguration',
-    finding_type: 'IAC',
-    owasp_top10: ['A05:2021'],
-    mitre_attack: [
-      {
-        tactic: 'Defense Evasion',
-        technique_id: 'T1562.001',
-        technique_name: 'Impair Defenses: Disable or Modify Tools',
-        url: 'https://attack.mitre.org/techniques/T1562/001/'
-      }
-    ],
-    file: 'Dockerfile',
-    line: 18,
-    remediation: 'Define a dedicated non-privileged user (e.g. USER node or USER nonroot) before running the application process.',
-    ai_prompt: 'In Dockerfile, add "USER node" before the CMD instruction so the container process does not run as root.',
-    status: 'OPEN',
-    evidence: {
-      rule_id: 'DS-0001',
-      file: 'Dockerfile'
-    }
-  }
-];
-
-const ARMELIS_FINDINGS: Finding[] = [
-  {
-    id: 'armelis-zero-trust-01',
-    title: 'Zero-Trust Boundary Validation Active',
-    description: 'Strict path confinement and argument vector enforcement prevent arbitrary shell expansion across all scanner adapters.',
-    severity: 'INFO',
-    confidence: 'CONFIRMED',
-    source: 'Armelis Core',
-    category: 'Architecture',
-    finding_type: 'CONFIGURATION',
-    owasp_top10: ['A04:2021'],
-    mitre_attack: [
-      {
-        tactic: 'Defense Evasion',
-        technique_id: 'T1562.001',
-        technique_name: 'Impair Defenses: Execution Guardrails Verified',
-        url: 'https://attack.mitre.org/techniques/T1562/001/'
-      }
-    ],
-    file: 'packages/scanner-adapters/trivy/runner.js',
-    line: 12,
-    remediation: 'Boundary validation is permanently enforced by architecture design.',
-    ai_prompt: 'No remediation needed. Architecture conforms to air-gapped security specifications.',
-    status: 'CONFIRMED',
-    evidence: {
-      confinement: 'Enforced (Least Privilege)',
-      shell_expansion: 'Disabled'
-    }
-  },
-  {
-    id: 'armelis-secret-sanitizer-02',
-    title: 'Automated Deep Secret Redaction Verified',
-    description: 'All sensitive tokens, private keys, and plaintext secrets are automatically masked to [REDACTED] prior to log persistence or SIEM export.',
-    severity: 'INFO',
-    confidence: 'CONFIRMED',
-    source: 'Armelis Core',
-    category: 'Privacy',
-    finding_type: 'SECRET',
-    owasp_top10: ['A07:2021'],
-    mitre_attack: [
-      {
-        tactic: 'Credential Access',
-        technique_id: 'T1552.001',
-        technique_name: 'Unsecured Credentials: Deep Sanitizer Active',
-        url: 'https://attack.mitre.org/techniques/T1552/001/'
-      }
-    ],
-    file: 'packages/scanner-adapters/trivy/index.js',
-    line: 45,
-    remediation: 'Sanitizer runs on all raw evidence streams.',
-    ai_prompt: 'No action required. Credential leakage protection active.',
-    status: 'CONFIRMED',
-    evidence: {
-      redaction_status: 'Active',
-      leaks_detected: 0
-    }
-  },
-  {
-    id: 'armelis-schema-compliance-03',
-    title: 'Canonical Finding Schema Draft 2020-12 Conformance',
-    description: 'All scanner ingestion outputs pass strict JSON Schema validation with additionalProperties: false.',
-    severity: 'LOW',
-    confidence: 'CONFIRMED',
-    source: 'Schema Validator',
-    category: 'Integrity',
-    finding_type: 'OTHER',
-    file: 'packages/finding-model/finding.schema.json',
-    line: 1,
-    remediation: 'Strict typing enforced across all scanner adapters.',
-    status: 'RESOLVED',
-    evidence: {
-      schema_id: 'https://armelis.dev/schemas/finding.schema.json',
-      validation: 'Passed'
-    }
-  }
-];
-
-const JUICESHOP_FINDINGS: Finding[] = [
-  {
-    id: 'js-finding-01',
-    title: 'SQL Injection in User Login Endpoint',
-    description: 'Unsanitized user input concatenated into SQLite query allows authentication bypass and complete database takeover.',
-    severity: 'CRITICAL',
-    confidence: 'CONFIRMED',
-    source: 'Semgrep',
-    category: 'Code Vulnerability',
-    finding_type: 'CODE',
-    owasp_top10: ['A03:2021'],
-    mitre_attack: [
-      {
-        tactic: 'Initial Access',
-        technique_id: 'T1190',
-        technique_name: 'Exploit Public-Facing Application',
-        url: 'https://attack.mitre.org/techniques/T1190/'
-      }
-    ],
-    file: 'routes/login.js',
-    line: 28,
-    remediation: 'Use parameterized queries with prepared statements instead of string concatenation.',
-    ai_prompt: 'In routes/login.js line 28, rewrite the query to use parameterized query models: models.sequelize.query("SELECT * FROM Users WHERE email = :email", { replacements: { email: req.body.email } })',
-    status: 'OPEN',
-    evidence: {
-      cve: 'CWE-89',
-      match: 'models.sequelize.query(`SELECT * FROM Users WHERE email = \'${req.body.email}\'`'
-    }
-  },
-  {
-    id: 'js-finding-02',
-    title: 'Cross-Site Scripting (Reflected) in Search Field',
-    description: 'User-supplied query parameters are echoed back into the DOM without HTML entity encoding.',
-    severity: 'HIGH',
-    confidence: 'HIGH',
-    source: 'Semgrep',
-    category: 'Code Vulnerability',
-    finding_type: 'CODE',
-    owasp_top10: ['A03:2021'],
-    file: 'routes/search.js',
-    line: 52,
-    remediation: 'Sanitize user input using DOMPurify before inserting into the DOM.',
-    ai_prompt: 'In routes/search.js, escape the search parameter with DOMPurify.sanitize(req.query.q) before rendering.',
-    status: 'OPEN'
-  }
-];
+import { useState, useMemo, useRef } from 'react';
+import {
+  type Finding,
+  type FindingsDataSource,
+  extractFindingsFromJson,
+  dataSourceLabel,
+  dataSourceBadgeColor
+} from '../../lib/findings';
 
 export default function DashboardPage() {
-  const [findings, setFindings] = useState<Finding[]>(DEMO_FINDINGS);
+  const [findings, setFindings] = useState<Finding[]>([]);
+  const [dataSource, setDataSource] = useState<FindingsDataSource>('empty');
+  const [importError, setImportError] = useState<string>('');
+  const [analyzeHint, setAnalyzeHint] = useState<string>('');
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [repoInput, setRepoInput] = useState<string>('https://github.com/retail-corp/storefront-api');
-  const [activeRepo, setActiveRepo] = useState<string>('github.com/retail-corp/storefront-api');
+  const [activeRepo, setActiveRepo] = useState<string>('no-scan-loaded');
   const [activeBranch, setActiveBranch] = useState<string>('main');
-  const [activeCommit, setActiveCommit] = useState<string>('8f3e1a9');
-  const [scanDuration, setScanDuration] = useState<string>('3.42s');
-  const [repoStars, setRepoStars] = useState<number | null>(142);
-  const [repoLang, setRepoLang] = useState<string>('TypeScript');
+  const [activeCommit, setActiveCommit] = useState<string>('—');
+  const [scanDuration, setScanDuration] = useState<string>('—');
+  const [repoStars, setRepoStars] = useState<number | null>(null);
+  const [repoLang, setRepoLang] = useState<string>('—');
   const [isAnalyzing, setIsAnalyzing] = useState<boolean>(false);
   const [scanStep, setScanStep] = useState<string>('');
   const [showGithubModal, setShowGithubModal] = useState<boolean>(false);
@@ -372,12 +100,12 @@ export default function DashboardPage() {
     if (!hasSevereExposure) {
       return {
         hasAttackPath: false,
-        title: 'DEFENSIVE PERIMETER INTEGRITY • ZERO REACHABLE ATTACK PATHS',
-        subtitle: 'AST reachability and dependency validation confirm no active exploit chains reaching crown jewels.',
+        title: 'HYPOTHESIZED PATH • NO HIGH/CRITICAL FINDINGS LOADED',
+        subtitle: 'Hypothesized (heuristic — not confirmed reachability). Empty or low-severity set; no AST-proven paths.',
         nodes: [
           {
             stepLabel: 'BARRIER 1 • INGRESS',
-            source: 'AST Gate',
+            source: 'Heuristic',
             color: '#10b981',
             title: 'Route Boundaries Enforced',
             description: 'All public endpoints validate tenant context and authorization headers.',
@@ -393,9 +121,9 @@ export default function DashboardPage() {
           },
           {
             stepLabel: 'BARRIER 3 • SECRETS HYGIENE',
-            source: 'Gitleaks',
+            source: 'Heuristic',
             color: '#10b981',
-            title: 'Git History Sanitized',
+            title: 'No high/critical secrets in loaded set',
             description: 'Zero plaintext cloud access keys or credentials detected in commits.',
             finding: findings[2] || findings[0]
           },
@@ -416,8 +144,8 @@ export default function DashboardPage() {
 
     return {
       hasAttackPath: true,
-      title: 'SYNTHESIZED EXPLOITATION PATH (AI AGENT & HUMAN AUDIT)',
-      subtitle: 'Correlated lateral trajectory demonstrating reachability to crown jewel data assets.',
+      title: 'HYPOTHESIZED ATTACK PATH (HEURISTIC — NOT CONFIRMED REACHABILITY)',
+      subtitle: 'Hypothesized (heuristic — not confirmed reachability). Ordered from loaded findings; not AST-proven.',
       nodes: [
         {
           stepLabel: 'STEP 1 • ENTRY POINT',
@@ -497,12 +225,138 @@ export default function DashboardPage() {
     setTimeout(() => setCopiedFormat(''), 2000);
   }
 
+  function applyLoadedFindings(
+    next: Finding[],
+    source: FindingsDataSource,
+    meta?: { target?: string; durationMs?: number }
+  ) {
+    setFindings(next);
+    setDataSource(source);
+    setImportError('');
+    setSelectedFinding(null);
+    if (meta?.target) {
+      setActiveRepo(meta.target.replace(/^https?:\/\//, ''));
+    }
+    if (typeof meta?.durationMs === 'number') {
+      setScanDuration((meta.durationMs / 1000).toFixed(2) + 's');
+    }
+  }
+
+  async function handleLoadFixture() {
+    setIsAnalyzing(true);
+    setScanStep('Loading Trivy sample fixture...');
+    setImportError('');
+    setAnalyzeHint('');
+    const started = performance.now();
+    try {
+      const res = await fetch('/fixtures/trivy-sample-findings.json');
+      if (!res.ok) throw new Error(`Fixture HTTP ${res.status}`);
+      const json = await res.json();
+      const { findings: next, target, scanner } = extractFindingsFromJson(json);
+      applyLoadedFindings(next, 'trivy-fixture', {
+        target: target ? `fixture/${target}` : 'fixture/trivy-sample-findings',
+        durationMs: performance.now() - started
+      });
+      setActiveBranch('fixture');
+      setActiveCommit('sample');
+      setRepoLang(scanner || 'Trivy');
+      setRepoStars(null);
+      setAnalyzeHint(`Loaded ${next.length} Trivy-normalized finding(s) from fixture.`);
+    } catch (err) {
+      setImportError(err instanceof Error ? err.message : String(err));
+    } finally {
+      setIsAnalyzing(false);
+      setScanStep('');
+    }
+  }
+
+  async function handleImportFile(file: File) {
+    setIsAnalyzing(true);
+    setScanStep(`Importing ${file.name}...`);
+    setImportError('');
+    setAnalyzeHint('');
+    const started = performance.now();
+    try {
+      const textPayload = await file.text();
+      const json = JSON.parse(textPayload);
+      const { findings: next, target, scanner } = extractFindingsFromJson(json);
+      if (next.length === 0) {
+        throw new Error('JSON contained zero findings. Export with armelis scan --format json or scripts/scan-to-json.js.');
+      }
+      applyLoadedFindings(next, 'trivy-import', {
+        target: target || file.name,
+        durationMs: performance.now() - started
+      });
+      setActiveBranch('import');
+      setActiveCommit(file.name.slice(0, 12));
+      setRepoLang(scanner || 'Trivy');
+      setRepoStars(null);
+      setAnalyzeHint(`Imported ${next.length} finding(s) from ${file.name}.`);
+    } catch (err) {
+      setImportError(err instanceof Error ? err.message : String(err));
+    } finally {
+      setIsAnalyzing(false);
+      setScanStep('');
+    }
+  }
+
+  async function handleLocalScan(absolutePath: string) {
+    setIsAnalyzing(true);
+    setScanStep('Requesting local Trivy scan via /api/scan...');
+    setImportError('');
+    setAnalyzeHint('');
+    const started = performance.now();
+    try {
+      const res = await fetch('/api/scan', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ target: absolutePath })
+      });
+      const json = await res.json();
+      if (!res.ok || !json.ok) {
+        throw new Error(json.error || `Scan failed (${res.status})`);
+      }
+      const { findings: next, target } = extractFindingsFromJson(json);
+      applyLoadedFindings(next, 'trivy-local-scan', {
+        target: target || absolutePath,
+        durationMs: performance.now() - started
+      });
+      setActiveBranch('local');
+      setActiveCommit('trivy');
+      setRepoLang('Trivy');
+      setRepoStars(null);
+      setAnalyzeHint(`Local Trivy scan returned ${next.length} finding(s).`);
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : String(err);
+      setImportError(msg);
+      setAnalyzeHint(
+        'Local scan unavailable. Run `node scripts/scan-to-json.js <path> -o scan.json` then Import scan JSON.'
+      );
+    } finally {
+      setIsAnalyzing(false);
+      setScanStep('');
+    }
+  }
+
   async function handleAnalyzeRepo(targetUrl?: string) {
     const url = (targetUrl || repoInput).trim();
     if (!url) return;
 
+    // Absolute local path → optional /api/scan (secure defaults)
+    const looksLocal =
+      /^[A-Za-z]:[\\/]/.test(url) ||
+      url.startsWith('\\\\') ||
+      (url.startsWith('/') && !url.startsWith('//'));
+
+    if (looksLocal) {
+      await handleLocalScan(url);
+      return;
+    }
+
     setIsAnalyzing(true);
-    setScanStep('Connecting to GitHub API...');
+    setScanStep('Connecting to GitHub API (metadata only)...');
+    setImportError('');
+    setAnalyzeHint('');
 
     let cleaned = url.replace(/^https?:\/\/github\.com\//, '').replace(/\.git$/, '').replace(/\/$/, '');
     if (!cleaned.includes('/')) {
@@ -512,16 +366,15 @@ export default function DashboardPage() {
     const [owner, repo] = cleaned.split('/');
 
     try {
-      setScanStep(`Fetching ${owner}/${repo} manifest via GitHub REST API...`);
-      await new Promise((r) => setTimeout(r, 450));
+      setScanStep(`Fetching ${owner}/${repo} metadata via GitHub REST API...`);
 
       let fetchedStars: number | null = null;
       let fetchedBranch = 'main';
-      let fetchedLang = 'TypeScript';
+      let fetchedLang = 'Unknown';
 
       try {
         const headers: HeadersInit = {
-          'Accept': 'application/vnd.github.v3+json'
+          Accept: 'application/vnd.github.v3+json'
         };
         if (githubPat) {
           headers['Authorization'] = `token ${githubPat}`;
@@ -531,73 +384,25 @@ export default function DashboardPage() {
           const data = await res.json();
           fetchedStars = data.stargazers_count ?? null;
           fetchedBranch = data.default_branch || 'main';
-          fetchedLang = data.language || 'TypeScript';
+          fetchedLang = data.language || 'Unknown';
         }
       } catch {
-        // Fallback gracefully on rate limit / offline
+        // rate limit / offline — metadata optional
       }
-
-      setScanStep('Correlating Trivy CVEs, Semgrep AST & Gitleaks secret feeds...');
-      await new Promise((r) => setTimeout(r, 600));
-
-      setScanStep('Mapping reachability graph from public endpoints to crown jewels...');
-      await new Promise((r) => setTimeout(r, 450));
 
       setActiveRepo(`github.com/${owner}/${repo}`);
       setActiveBranch(fetchedBranch);
-      setActiveCommit(Math.random().toString(16).substring(2, 9));
-      setScanDuration((1.8 + Math.random() * 1.9).toFixed(2) + 's');
+      setActiveCommit('—');
+      setScanDuration('0.00s');
       setRepoStars(fetchedStars);
       setRepoLang(fetchedLang);
 
-      if (cleaned.toLowerCase().includes('armelis')) {
-        setFindings(ARMELIS_FINDINGS);
-      } else if (cleaned.toLowerCase().includes('juice')) {
-        setFindings(JUICESHOP_FINDINGS);
-      } else if (cleaned.toLowerCase().includes('storefront')) {
-        setFindings(DEMO_FINDINGS);
-      } else {
-        setFindings([
-          {
-            id: `${repo}-cve-01`,
-            title: `Critical Dependency Vulnerability in ${repo} Core Package`,
-            description: `Vulnerable transitive dependency identified in ${repo} (${fetchedLang}) with proven reachability from public route handlers.`,
-            severity: 'HIGH',
-            confidence: 'HIGH',
-            source: 'Trivy',
-            category: 'Vulnerability',
-            finding_type: 'DEPENDENCY',
-            owasp_top10: ['A06:2021'],
-            file: fetchedLang === 'Rust' ? 'Cargo.lock' : fetchedLang === 'Python' ? 'requirements.txt' : 'package.json',
-            line: 14,
-            remediation: 'Upgrade vulnerable library to the latest patch release in your manifest.',
-            ai_prompt: `In ${repo}, upgrade the vulnerable library identified by Trivy to the latest patched version and test regression.`,
-            status: 'OPEN',
-            evidence: {
-              target_repo: `github.com/${owner}/${repo}`,
-              language: fetchedLang
-            }
-          },
-          {
-            id: `${repo}-secret-02`,
-            title: `Hardcoded API Secret in Configuration`,
-            description: `Potential development API key committed to repository history. Sanitizer masked sensitive contents to [REDACTED].`,
-            severity: 'MEDIUM',
-            confidence: 'HIGH',
-            source: 'Gitleaks',
-            category: 'Secret',
-            finding_type: 'SECRET',
-            owasp_top10: ['A07:2021'],
-            file: 'config/app.env',
-            line: 8,
-            remediation: 'Move key to environment variables or cloud secrets manager.',
-            status: 'OPEN',
-            evidence: {
-              match: '[REDACTED_API_KEY]'
-            }
-          }
-        ]);
-      }
+      // Honesty: do NOT invent findings from GitHub URL analysis
+      setFindings([]);
+      setDataSource('empty');
+      setAnalyzeHint(
+        `Metadata loaded for ${owner}/${repo}. No findings invented. Scan locally with \`node scripts/scan-to-json.js\` (or \`armelis scan --format json\`) then use Import scan JSON, or click Load Trivy fixture.`
+      );
     } finally {
       setIsAnalyzing(false);
       setScanStep('');
@@ -752,7 +557,7 @@ export default function DashboardPage() {
                   GitHub Repository Security Analyzer
                 </h2>
                 <p style={{ margin: '4px 0 0', fontSize: '12px', color: '#94a3b8', lineHeight: 1.4 }}>
-                  Analyze code directly from any public or private GitHub repository to map reachability attack graphs and break lateral chains.
+                  Fetch GitHub metadata only — findings come from Trivy import / fixture / optional local scan (no invented CVEs).
                 </p>
               </div>
             </div>
@@ -880,11 +685,95 @@ export default function DashboardPage() {
             <div style={{ marginTop: '16px', padding: '12px 16px', borderRadius: '8px', background: 'rgba(0, 229, 255, 0.08)', border: '1px solid rgba(0, 229, 255, 0.2)' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', color: '#00e5ff', fontWeight: 600, marginBottom: '6px' }}>
                 <span>{scanStep}</span>
-                <span>Calculating Attack Graph...</span>
+                <span>Fetching metadata...</span>
               </div>
               <div style={{ width: '100%', height: '4px', background: 'rgba(255,255,255,0.1)', borderRadius: '2px', overflow: 'hidden' }}>
                 <div style={{ width: '75%', height: '100%', background: 'linear-gradient(90deg, #0070f3, #00e5ff)', borderRadius: '2px' }} />
               </div>
+            </div>
+          )}
+
+          {/* Trivy import / fixture — primary findings path */}
+          <div
+            style={{
+              marginTop: '16px',
+              padding: '14px 16px',
+              borderRadius: '10px',
+              background: 'rgba(56, 189, 248, 0.06)',
+              border: '1px solid rgba(56, 189, 248, 0.22)',
+              display: 'flex',
+              flexWrap: 'wrap',
+              gap: '10px',
+              alignItems: 'center'
+            }}
+          >
+            <span style={{ fontSize: '11px', color: '#38bdf8', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+              Findings source
+            </span>
+            <button
+              type="button"
+              disabled={isAnalyzing}
+              onClick={() => fileInputRef.current?.click()}
+              style={{
+                padding: '8px 14px',
+                borderRadius: '8px',
+                background: '#0f1b33',
+                border: '1px solid rgba(56, 189, 248, 0.4)',
+                color: '#e0f2fe',
+                fontSize: '12px',
+                fontWeight: 700,
+                cursor: isAnalyzing ? 'wait' : 'pointer'
+              }}
+            >
+              Import scan JSON
+            </button>
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="application/json,.json"
+              style={{ display: 'none' }}
+              onChange={(e) => {
+                const file = e.target.files?.[0];
+                if (file) void handleImportFile(file);
+                e.target.value = '';
+              }}
+            />
+            <button
+              type="button"
+              disabled={isAnalyzing}
+              onClick={() => void handleLoadFixture()}
+              style={{
+                padding: '8px 14px',
+                borderRadius: '8px',
+                background: 'linear-gradient(135deg, #0070f3, #00e5ff)',
+                border: 'none',
+                color: '#040711',
+                fontSize: '12px',
+                fontWeight: 800,
+                cursor: isAnalyzing ? 'wait' : 'pointer'
+              }}
+            >
+              Load Trivy fixture
+            </button>
+            <span style={{ fontSize: '11px', color: '#94a3b8', flex: '1 1 220px' }}>
+              Prefer real scans: <code style={{ color: '#cbd5e1' }}>node scripts/scan-to-json.js . -o scan.json</code> then Import.
+            </span>
+          </div>
+
+          {(importError || analyzeHint) && (
+            <div
+              style={{
+                marginTop: '12px',
+                padding: '12px 14px',
+                borderRadius: '8px',
+                background: importError ? 'rgba(239, 68, 68, 0.1)' : 'rgba(16, 185, 129, 0.08)',
+                border: importError ? '1px solid rgba(239, 68, 68, 0.35)' : '1px solid rgba(16, 185, 129, 0.3)',
+                color: importError ? '#fca5a5' : '#6ee7b7',
+                fontSize: '12px',
+                lineHeight: 1.5
+              }}
+            >
+              {importError || analyzeHint}
             </div>
           )}
 
@@ -895,7 +784,7 @@ export default function DashboardPage() {
             </span>
             {[
               { name: 'Johanvasquezdev/armelis', badge: 'Audited Core', color: '#38bdf8' },
-              { name: 'retail-corp/storefront-api', badge: 'Attack Path Demo', color: '#f97316' },
+              { name: 'retail-corp/storefront-api', badge: 'Metadata only', color: '#94a3b8' },
               { name: 'juice-shop/juice-shop', badge: 'OWASP Benchmark', color: '#facc15' },
               { name: 'expressjs/express', badge: 'Dependency Map', color: '#a78bfa' }
             ].map((preset) => (
@@ -992,10 +881,20 @@ export default function DashboardPage() {
             </div>
           </div>
 
-          <div style={{ display: 'flex', gap: '6px' }}>
-            <span style={{ fontSize: '11px', padding: '3px 8px', borderRadius: '4px', background: '#0f1b33', color: '#38bdf8', border: '1px solid rgba(255,255,255,0.06)' }}>Trivy</span>
-            <span style={{ fontSize: '11px', padding: '3px 8px', borderRadius: '4px', background: '#0f1b33', color: '#c084fc', border: '1px solid rgba(255,255,255,0.06)' }}>Semgrep</span>
-            <span style={{ fontSize: '11px', padding: '3px 8px', borderRadius: '4px', background: '#0f1b33', color: '#facc15', border: '1px solid rgba(255,255,255,0.06)' }}>Gitleaks</span>
+          <div style={{ display: 'flex', gap: '6px', alignItems: 'center', flexWrap: 'wrap' }}>
+            {(() => {
+              const badge = dataSourceBadgeColor(dataSource);
+              return (
+                <span style={{ fontSize: '11px', padding: '3px 8px', borderRadius: '4px', background: badge.bg, color: badge.color, border: `1px solid ${badge.border}`, fontWeight: 700 }}>
+                  Source: {dataSourceLabel(dataSource)}
+                </span>
+              );
+            })()}
+            <span style={{ fontSize: '11px', padding: '3px 8px', borderRadius: '4px', background: dataSource === 'empty' ? '#0f1b33' : 'rgba(56, 189, 248, 0.15)', color: '#38bdf8', border: '1px solid rgba(56,189,248,0.35)', fontWeight: 700 }}>
+              Trivy{dataSource === 'empty' ? '' : ' · active'}
+            </span>
+            <span style={{ fontSize: '11px', padding: '3px 8px', borderRadius: '4px', background: '#0a1224', color: '#64748b', border: '1px solid rgba(255,255,255,0.06)' }}>Semgrep · Soon</span>
+            <span style={{ fontSize: '11px', padding: '3px 8px', borderRadius: '4px', background: '#0a1224', color: '#64748b', border: '1px solid rgba(255,255,255,0.06)' }}>Gitleaks · Soon</span>
           </div>
         </div>
 
@@ -1006,10 +905,10 @@ export default function DashboardPage() {
               SECURITY FOR AI-ASSISTED TEAMS & DEVELOPERS
             </span>
             <h1 style={{ fontSize: '30px', fontWeight: 800, letterSpacing: '-0.6px', margin: '6px 0 10px' }}>
-              Correlated Attack Paths & Risk Triage
+              Trivy Findings & Hypothesized Paths
             </h1>
             <p style={{ color: '#94a3b8', fontSize: '14px', maxWidth: '640px', lineHeight: 1.6, margin: 0 }}>
-              AI code generation accelerates development, but can inadvertently introduce unauthenticated IDOR endpoints, hallucinated packages, or committed cloud secrets. Armelis proves what is reachable and provides exact prompts to fix it.
+              Import Trivy-normalized findings (or load the sample fixture). Attack paths shown below are hypothesized heuristics — not confirmed reachability. Semgrep and Gitleaks are not wired yet.
             </p>
           </div>
 
