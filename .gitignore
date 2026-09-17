@@ -1,7 +1,7 @@
-# Hide all markdown files from public repo except root README
+# Documentation: Ignore all markdown files across repo except the root README
 *.md
 **/*.md
-!README.md
+!/README.md
 
 # Dependencies
 node_modules/
@@ -66,8 +66,3 @@ apps/desktop/embedding-pipeline/.cache/
 **/__pycache__/
 *.py[cod]
 *.egg-info/
-
-# Ignore all markdown documentation from public repo except root README
-*.md
-**/*.md
-!README.md
