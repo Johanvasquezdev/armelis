@@ -66,3 +66,8 @@ apps/desktop/embedding-pipeline/.cache/
 **/__pycache__/
 *.py[cod]
 *.egg-info/
+
+# Ignore all markdown documentation from public repo except root README
+*.md
+**/*.md
+!README.md
