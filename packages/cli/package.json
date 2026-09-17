@@ -1,6 +1,6 @@
 {
   "name": "armelis",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "description": "Application Security Intelligence for AI-Assisted Teams & SOC Analysts",
   "main": "src/index.js",
   "bin": {

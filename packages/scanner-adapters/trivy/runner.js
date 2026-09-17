@@ -1,14 +1,26 @@
-const fs = require('node:fs');
+﻿const fs = require('node:fs');
 const path = require('node:path');
 const { spawn } = require('node:child_process');
 const { parseTrivyJson } = require('./index');
 
 const DEFAULT_SCANNERS = ['vuln', 'misconfig', 'secret', 'license'];
 
-/** Heavy/generated dirs skipped by default so monorepo root scans finish. */
-const DEFAULT_SKIP_DIRS = ['node_modules', '.git', 'dist', 'build', '.next', 'target', '.venv'];
+/**
+ * Glob skips so nested trees are ignored (e.g. apps/web/.next), not only repo-root names.
+ * Trivy --skip-dirs accepts glob patterns.
+ */
+const DEFAULT_SKIP_DIRS = [
+  '**/node_modules',
+  '**/.git',
+  '**/dist',
+  '**/build',
+  '**/.next',
+  '**/target',
+  '**/.venv',
+  '**/embedding-pipeline/.cache'
+];
 
-/** Default Trivy wall-clock budget (10m). Override via timeoutMs / --timeout-ms. */
+/** Node wall-clock budget (10m). Also passed to Trivy as --timeout. */
 const DEFAULT_TIMEOUT_MS = 600000;
 
 function isWithinRoot(target, root) {
@@ -41,6 +53,11 @@ function validateTarget(target, workspaceRoot) {
   return { root: root || resolvedTarget, resolvedTarget };
 }
 
+function formatTrivyTimeout(timeoutMs) {
+  const seconds = Math.max(60, Math.ceil(Number(timeoutMs) / 1000));
+  return `${seconds}s`;
+}
+
 function buildTrivyArgs(target, scanners = DEFAULT_SCANNERS, extraArgs = [], options = {}) {
   if (!Array.isArray(scanners) || scanners.length === 0 || scanners.some((item) => !/^[a-z]+$/.test(item))) {
     throw new Error('Scanner names must be a non-empty list of simple names');
@@ -55,7 +72,12 @@ function buildTrivyArgs(target, scanners = DEFAULT_SCANNERS, extraArgs = [], opt
       skipArgs.push('--skip-dirs', dir.trim());
     }
   }
-  return ['repo', '--format', 'json', '--scanners', scanners.join(','), ...skipArgs, ...extraArgs, target];
+  const timeoutMs = options.timeoutMs;
+  const timeoutArgs =
+    Number.isInteger(timeoutMs) && timeoutMs >= 1000
+      ? ['--timeout', formatTrivyTimeout(timeoutMs)]
+      : [];
+  return ['repo', '--format', 'json', '--scanners', scanners.join(','), ...timeoutArgs, ...skipArgs, ...extraArgs, target];
 }
 
 function runTrivy(options) {
@@ -73,7 +95,7 @@ function runTrivy(options) {
   if (!Number.isInteger(timeoutMs) || timeoutMs < 1000) throw new Error('timeoutMs must be at least 1000ms');
 
   const { resolvedTarget } = validateTarget(target, workspaceRoot);
-  const args = buildTrivyArgs(resolvedTarget, scanners, extraArgs, { skipDirs });
+  const args = buildTrivyArgs(resolvedTarget, scanners, extraArgs, { skipDirs, timeoutMs });
 
   return new Promise((resolve, reject) => {
     const child = spawn(executable, args, { shell: false, windowsHide: true });
@@ -108,4 +130,12 @@ function runTrivy(options) {
   });
 }
 
-module.exports = { DEFAULT_SCANNERS, DEFAULT_SKIP_DIRS, DEFAULT_TIMEOUT_MS, buildTrivyArgs, validateTarget, runTrivy };
+module.exports = {
+  DEFAULT_SCANNERS,
+  DEFAULT_SKIP_DIRS,
+  DEFAULT_TIMEOUT_MS,
+  buildTrivyArgs,
+  formatTrivyTimeout,
+  validateTarget,
+  runTrivy
+};

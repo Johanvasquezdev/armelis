@@ -1,1 +1,1 @@
-module.exports = { ok: true };
+﻿module.exports = { name: 'armelis-trivy-fixture' };

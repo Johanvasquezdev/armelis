@@ -12,6 +12,8 @@
 </p>
 
 <p align="center">
+  <a href="https://www.npmjs.com/package/armelis"><img src="https://img.shields.io/npm/v/armelis.svg?color=cb3837&logo=npm" alt="npm version" /></a>
+  <a href="https://www.npmjs.com/package/armelis"><img src="https://img.shields.io/npm/dm/armelis.svg?color=blue&logo=npm" alt="npm downloads" /></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License: MIT" /></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/Open%20Source-100%25%20Free-34d399.svg" alt="Open Source: 100% Free" /></a>
   <a href="#"><img src="https://img.shields.io/badge/Platform-Web%20%7C%20Tauri%202%20Desktop-00e5ff.svg" alt="Platform: Web | Tauri 2 Desktop" /></a>
@@ -122,13 +124,48 @@ Armelis/
 
 ---
 
-## Quickstart
+## Installation & Quick Start
 
-### 1. Clone & Install
+### 1. Global CLI via npm (Recommended)
+Install Armelis globally across macOS, Linux, or Windows with Node 18+:
+
+```bash
+npm install -g armelis
+```
+
+Verify your installation:
+```bash
+armelis --version
+armelis --help
+```
+
+---
+
+### 2. Zero-Install Instant Execution (`npx`)
+Run scans, trace lateral attack reachability, or break exploit chains without installing:
+
+```bash
+# Scan local repository or directory
+npx armelis scan .
+
+# Trace attack reachability graph
+npx armelis trace .
+
+# Pinpoint minimal choke-point cut
+npx armelis break .
+
+# Stream telemetry to SIEM (CEF / Syslog)
+npx armelis export . --format cef
+```
+
+---
+
+### 3. Clone from Source (Monorepo)
 ```bash
 git clone https://github.com/Johanvasquezdev/armelis.git
 cd armelis
 npm install
+node bin/armelis.js scan .
 ```
 
 
