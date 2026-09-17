@@ -1,8 +1,8 @@
-# CyberScan Scanner Strategy
+# Armelis Scanner Strategy
 
-## What CyberScan adapts
+## What Armelis adapts
 
-CyberScan uses established scanners as evidence providers. It does not copy proprietary scoring, databases, or product behavior.
+Armelis uses established scanners as evidence providers. It does not copy proprietary scoring, databases, or product behavior.
 
 ### Snyk-inspired patterns
 
@@ -40,7 +40,7 @@ Initial mappings:
 
 ### MITRE ATT&CK-inspired patterns
 
-CyberScan maps normalized findings to MITRE ATT&CK enterprise tactics and techniques to enable SOC analysts, threat hunters, and detection engineers to understand the adversary playbook associated with each exposure:
+Armelis maps normalized findings to MITRE ATT&CK enterprise tactics and techniques to enable SOC analysts, threat hunters, and detection engineers to understand the adversary playbook associated with each exposure:
 
 | Finding Type | Primary Tactic | Primary Technique ID | Technique Name |
 |---|---|---|---|
@@ -51,7 +51,7 @@ CyberScan maps normalized findings to MITRE ATT&CK enterprise tactics and techni
 
 ### SIEM Export Formats
 
-CyberScan supports industry-standard SIEM ingestion formats to integrate directly with SOC pipelines:
+Armelis supports industry-standard SIEM ingestion formats to integrate directly with SOC pipelines:
 
 - **CEF (Common Event Format):** Compatible with Splunk, ArcSight, AlienVault USM, and IBM QRadar. Maps severity (0–10 scale), source paths, CVEs, and MITRE IDs via custom string extensions (`cs1`, `cs2`).
 - **ECS (Elastic Common Schema) / NDJSON:** Compatible with Elasticsearch, Logstash, Kibana, and Wazuh SIEM. Populates `threat.framework`, `vulnerability.id`, `package`, and `file` blocks natively.
@@ -59,7 +59,7 @@ CyberScan supports industry-standard SIEM ingestion formats to integrate directl
 
 ## Provider matrix
 
-| Provider | Initial role | CyberScan adds |
+| Provider | Initial role | Armelis adds |
 | --- | --- | --- |
 | Semgrep | Source-code rules | component mapping and evidence correlation |
 | Gitleaks | Secret detection | secret exposure context and affected data paths |
@@ -69,7 +69,7 @@ CyberScan supports industry-standard SIEM ingestion formats to integrate directl
 
 ## Important boundary
 
-CyberScan must not claim that a dependency is reachable, a secret is valid, a resource is internet-exposed, or an attack path is exploitable unless the available evidence supports that claim. Unknown reachability remains unknown.
+Armelis must not claim that a dependency is reachable, a secret is valid, a resource is internet-exposed, or an attack path is exploitable unless the available evidence supports that claim. Unknown reachability remains unknown.
 
 ## Planned sequence
 

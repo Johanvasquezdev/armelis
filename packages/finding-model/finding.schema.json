@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://hopchain.dev/schemas/finding.schema.json",
-  "title": "Hopchain Normalized Finding",
+  "$id": "https://armelis.dev/schemas/finding.schema.json",
+  "title": "Armelis Normalized Finding",
   "type": "object",
   "additionalProperties": false,
   "required": ["id", "title", "severity", "confidence", "source", "category", "status", "provenance", "evidence"],

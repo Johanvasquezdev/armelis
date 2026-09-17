@@ -19,16 +19,16 @@ Security engineers, software developers, DevOps practitioners, and systems admin
 
 ## Product Purpose
 
-CyberScan turns disconnected scanner evidence into actionable security understanding. By connecting raw findings to components, identities, sensitive resources, and entry points, it maps concrete risk stories and attack paths, recommending the smallest meaningful change to eliminate exposure.
+Armelis turns disconnected scanner evidence into actionable security understanding. By connecting raw findings to components, identities, sensitive resources, and entry points, it maps concrete risk stories and attack paths, recommending the smallest meaningful change to eliminate exposure.
 
 ## Positioning
 
-CyberScan is a **100% Free and Open Source (FOSS) security intelligence layer** published under the permissive **MIT License**. It does not compete with or replace scanners like Trivy, Semgrep, or Gitleaks; it integrates them as evidence providers, correlates their outputs, calculates reachability and blast radius, and prioritizes remediation based on actual business risk rather than raw vulnerability totals. There are no paywalls, no tiered feature restrictions, and no commercial locks.
+Armelis is a **100% Free and Open Source (FOSS) security intelligence layer** published under the permissive **MIT License**. It does not compete with or replace scanners like Trivy, Semgrep, or Gitleaks; it integrates them as evidence providers, correlates their outputs, calculates reachability and blast radius, and prioritizes remediation based on actual business risk rather than raw vulnerability totals. There are no paywalls, no tiered feature restrictions, and no commercial locks.
 
 
 ## Operating Context
 
-CyberScan offers a dual-client operating model (the "Discord model"):
+Armelis offers a dual-client operating model (the "Discord model"):
 - **Web Workspace:** Centralized dashboard for collaborative analysis, attack-path visualization, report generation, and compliance readiness tracking.
 - **Tauri Desktop Client:** Secure workstation runner for developers to analyze local repositories directly. Source code remains strictly on the local machine unless the user explicitly configures remote synchronization.
 
@@ -43,13 +43,13 @@ CyberScan offers a dual-client operating model (the "Discord model"):
 
 ## Brand Commitments
 
-- **Product Name:** CyberScan (formerly *ThreatGraph*; legacy prototype name *Secora* is deprecated and removed).
-- **Official Identity:** Precision radar/network mark, bold white **CYBER** lettering, vibrant electric-blue **SCAN** lettering (`#00E5FF`), on a deep dark navy background (`#0A0F1D`).
+- **Product Name:** Armelis (formerly *ThreatGraph*; legacy prototype name *Secora* is deprecated and removed).
+- **Official Identity:** Precision radar/network mark, bold white **ARME** lettering, vibrant electric-blue **LIS** lettering (`#00E5FF`), on a deep dark navy background (`#0A0F1D`).
 - **Product Voice:** Precise, technical, evidence-based, calm, and actionable.
 
 ## Evidence on Hand
 
-- Official CyberScan logo and vector wordmarks in `apps/web/public/`.
+- Official Armelis logo and vector wordmarks in `apps/web/public/`.
 - Validated Trivy scanner adapter and runner test suites (`packages/scanner-adapters/trivy`).
 - Canonical finding model schema specification (`packages/finding-model/finding.schema.json`).
 - Architecture plans for semantic embedding and vector similarity (`ARCHITECTURE_PLAN.md`).

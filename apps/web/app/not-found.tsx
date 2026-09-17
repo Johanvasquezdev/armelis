@@ -7,7 +7,7 @@ export default function NotFound() {
       <h1>That page is outside the graph.</h1>
       <p>The requested location could not be found.</p>
       <Link className="button primary" href="/">
-        Return to CyberScan
+        Return to Armelis
       </Link>
     </main>
   );

@@ -1,17 +1,17 @@
-# CyberScan — Project Context & Architecture Reference
+# Armelis — Project Context & Architecture Reference
 
 > **Document Classification:** Technical Architecture & Personal Project Reference  
 > **Last Updated:** 2026-09-14  
-> **Repository Root:** `CyberScan/`  
+> **Repository Root:** `Armelis/`  
 > **Maintainer / Owner:** Johan Vasquez (Personal Project)
 
 ---
 
 ## 1. Executive Summary & Vision
 
-**CyberScan** (formerly *ThreatGraph*, prototype marketing name *Secora*) is a security intelligence platform designed to transform raw vulnerability and scanner evidence into comprehensive security understanding. 
+**Armelis** (formerly *ThreatGraph*, prototype marketing name *Secora*) is a security intelligence platform designed to transform raw vulnerability and scanner evidence into comprehensive security understanding. 
 
-Rather than overwhelming security engineers and development teams with raw vulnerability counts, CyberScan connects findings across components, identities, sensitive resources, and dependencies to map concrete risk stories, attack paths, and prioritized remediation actions ("find the path, fix the risk").
+Rather than overwhelming security engineers and development teams with raw vulnerability counts, Armelis connects findings across components, identities, sensitive resources, and dependencies to map concrete risk stories, attack paths, and prioritized remediation actions ("find the path, fix the risk").
 
 ### Core Philosophy & Principles
 - **Evidence before inference:** Findings are based strictly on demonstrable scanner data, configurations, or proven paths. Uncertainty is made visible, never obscured.
@@ -24,15 +24,15 @@ Rather than overwhelming security engineers and development teams with raw vulne
 
 ## 2. Project Ownership & Governance (100% Free & Open Source)
 
-**CyberScan** is an independent personal project developed, architected, and maintained solely by **Johan Vasquez**. It is **100% Free and Open Source Software (FOSS)** published under the permissive **MIT License**. It is **not** a Blue Hawk Technologies or Harper project. Enterprise corporate chains of command, hardware custody workflows (`BH-YYYY-XXXX`), and institutional asset matrices do not apply.
+**Armelis** is an independent personal project developed, architected, and maintained solely by **Johan Vasquez**. It is **100% Free and Open Source Software (FOSS)** published under the permissive **MIT License**. It is **not** a Blue Hawk Technologies or Harper project. Enterprise corporate chains of command, hardware custody workflows (`BH-YYYY-XXXX`), and institutional asset matrices do not apply.
 
-Governance for CyberScan centers on developer-first software ethics, defined by the **MIT License**, **Terms of Use**, and **Privacy Policy**:
+Governance for Armelis centers on developer-first software ethics, defined by the **MIT License**, **Terms of Use**, and **Privacy Policy**:
 
 
 ### 2.1 Terms of Use (Acceptable Use & Liability)
 - **Authorized Targets Only:** Operators must only scan repositories, containers, infrastructure, and endpoints that they own or for which they possess explicit, documented authorization to test.
-- **Defensive & Analytical Purpose:** CyberScan is designed strictly for defensive intelligence, vulnerability remediation, and audit preparedness. It must not be weaponized or used for unauthorized reconnaissance or exploitation.
-- **As-Is Provision & Disclaimers:** CyberScan provides security evidence correlation and prioritization "as-is". It does not guarantee zero false positives, complete vulnerability identification, or automated regulatory certification.
+- **Defensive & Analytical Purpose:** Armelis is designed strictly for defensive intelligence, vulnerability remediation, and audit preparedness. It must not be weaponized or used for unauthorized reconnaissance or exploitation.
+- **As-Is Provision & Disclaimers:** Armelis provides security evidence correlation and prioritization "as-is". It does not guarantee zero false positives, complete vulnerability identification, or automated regulatory certification.
 
 ### 2.2 Privacy Policy & Data Handling
 - **Local-First Privacy Architecture:** In local mode (CLI and Tauri desktop), source code, configuration files, and repository metadata remain confined strictly to the operator's machine. No source code or file contents are transmitted to external servers without explicit operator consent.
@@ -49,13 +49,13 @@ Governance for CyberScan centers on developer-first software ethics, defined by 
 ## 3. Monorepo Structure & Codebase Map
 
 ```text
-CyberScan/
+Armelis/
 ├── apps/
 │   ├── web/                     # Web dashboard & marketing portal (Next.js 15+ App Router)
 │   │   ├── app/                 # Next.js App Router routes (layout, page, sitemap, robots, opengraph)
 │   │   ├── components/          # Reusable UI components (Radix UI, Tailwind-compatible styling)
 │   │   ├── lib/                 # Utilities (clsx, tailwind-merge)
-│   │   └── public/              # Static assets (CyberScan logos, llm.txt, brand imagery)
+│   │   └── public/              # Static assets (Armelis logos, llm.txt, brand imagery)
 │   └── desktop/                 # Cross-platform desktop application (Tauri 2 + Vite + React + Rust)
 │       ├── src/                 # React frontend for local scanner control
 │       ├── src-tauri/           # Rust native application core & capabilities
@@ -91,7 +91,7 @@ CyberScan/
 ├── ARCHITECTURE_PLAN.md         # Proposal for Hugging Face embeddings & pgvector pipeline
 ├── PRODUCT.md                   # Product vision, target persona, brand commitments
 ├── README.md                    # Project overview and milestone roadmap
-├── DESIGN.md                    # CyberScan Design System & color/typography tokens
+├── DESIGN.md                    # Armelis Design System & color/typography tokens
 ├── APPLE_DESIGN.md              # Apple Human Interface & System Design Guide
 ├── POLITICS.md                  # Personal project governance, Terms of Use & Privacy Policy
 ├── SECURITY.md                  # Comprehensive cybersecurity, hardening & resilience standard
@@ -103,7 +103,7 @@ CyberScan/
 ## 4. Key Components & Architecture
 
 ### 4.1 Client Strategy: Web-First + Tauri Native Bridge
-CyberScan provides a unified user experience across two synchronized clients (similar to the Discord model):
+Armelis provides a unified user experience across two synchronized clients (similar to the Discord model):
 - **Web Client (`apps/web`):** Built with Next.js App Router, React 19, GSAP, Anime.js, and Radix UI. Serves as the central security portal for review, collaboration, compliance readiness reporting, and attack path visualization. Features full SEO support, `robots.txt`, `llm.txt`, and canonical routing without leaking scan metadata.
 - **Desktop Client (`apps/desktop`):** Built with Tauri 2 and React. Allows developers and security analysts to run local scans directly against repositories on their local workstation without sending source code to remote servers. The Rust bridge executes `trivy` with strict arguments and path validation.
 
@@ -138,7 +138,7 @@ Every scanner integration normalizes its output to conform to `finding.schema.js
 
 ## 5. Security Architecture & Threat Mitigation
 
-| Threat | Impact | Mitigation in CyberScan |
+| Threat | Impact | Mitigation in Armelis |
 |---|---|---|
 | **Command Injection** | Remote code execution on worker or host | All process executions use argument vectors (`spawn(executable, args, { shell: false })` in Node.js, `Command::new().args()` in Rust). Shell expansion is explicitly prohibited. |
 | **Path Traversal** | Unauthorized filesystem access | Strict validation (`validateTarget`) confirming canonical paths remain within the designated `workspaceRoot`. Remote URL schemes (`http://`, `git://`) are blocked in local execution. |
@@ -166,7 +166,7 @@ Every scanner integration normalizes its output to conform to `finding.schema.js
   ```
 - **Execute Local Trivy Scan via CLI:**
   ```powershell
-  node packages/scanner-adapters/trivy/scan.js --target <path-to-repo> --output .cyberscan/scans/test.json
+  node packages/scanner-adapters/trivy/scan.js --target <path-to-repo> --output .armelis/scans/test.json
   ```
 - **Run Web Client (Next.js):**
   ```powershell
@@ -181,4 +181,4 @@ Every scanner integration normalizes its output to conform to `finding.schema.js
 
 ---
 
-*CyberScan is an independent personal project created, developed, and maintained by Johan Vasquez.*
+*Armelis is an independent personal project created, developed, and maintained by Johan Vasquez.*

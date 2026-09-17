@@ -1,5 +1,5 @@
 {
-  "name": "hopchain-monorepo",
+  "name": "armelis-monorepo",
   "version": "0.1.0",
   "private": true,
   "description": "Application Security Intelligence for AI-Assisted Teams & SOC Analysts",
@@ -8,13 +8,21 @@
     "packages/*"
   ],
   "scripts": {
-    "hopchain": "node bin/hopchain.js",
-    "scan": "node bin/hopchain.js scan",
-    "trace": "node bin/hopchain.js trace",
-    "break": "node bin/hopchain.js break",
+    "armelis": "node bin/armelis.js",
+    "scan": "node bin/armelis.js scan",
+    "trace": "node bin/armelis.js trace",
+    "break": "node bin/armelis.js break",
     "test": "npm --prefix packages/scanner-adapters/trivy test",
     "build:web": "npm --prefix apps/web run build"
   },
   "author": "Johan Vasquez",
-  "license": "MIT"
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Johanvasquezdev/armelis.git"
+  },
+  "homepage": "https://github.com/Johanvasquezdev/armelis#readme",
+  "bugs": {
+    "url": "https://github.com/Johanvasquezdev/armelis/issues"
+  }
 }

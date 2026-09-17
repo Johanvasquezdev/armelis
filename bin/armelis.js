@@ -2,7 +2,7 @@
 'use strict';
 
 const path = require('node:path');
-const { main } = require(path.join(__dirname, '..', 'packages', 'cli', 'bin', 'hopchain.js'));
+const { main } = require(path.join(__dirname, '..', 'packages', 'cli', 'bin', 'armelis.js'));
 
 main().then((code) => {
   if (code) process.exit(code);

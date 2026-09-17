@@ -1,13 +1,21 @@
 {
-  "name": "hopchain",
+  "name": "armelis",
   "version": "0.1.0",
   "description": "Application Security Intelligence for AI-Assisted Teams & SOC Analysts",
   "main": "src/index.js",
   "bin": {
-    "hopchain": "./bin/hopchain.js"
+    "armelis": "./bin/armelis.js"
   },
   "author": "Johan Vasquez",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Johanvasquezdev/armelis.git"
+  },
+  "homepage": "https://github.com/Johanvasquezdev/armelis#readme",
+  "bugs": {
+    "url": "https://github.com/Johanvasquezdev/armelis/issues"
+  },
   "keywords": [
     "security",
     "appsec",

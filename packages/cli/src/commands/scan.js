@@ -6,16 +6,17 @@ const { exportReport } = require('../../../scanner-adapters/trivy/siem-exporter'
 const { colors, banner, severityBadge } = require('../formatter');
 
 async function executeScan(args = {}) {
-  const target = args.target || '.';
-  const resolvedTarget = path.resolve(target);
+  const rawTarget = String(args.target || '.').replace(/^["']|["']$/g, '').trim();
+  const resolvedTarget = path.resolve(rawTarget);
   const scanners = args.scanners || DEFAULT_SCANNERS;
   const format = args.format || 'terminal';
 
+  const theme = args.theme || 'cold';
   if (format === 'terminal') {
-    console.log(banner());
+    console.log(banner(theme));
     console.log(`${colors.cyan}● Target:${colors.reset}   ${resolvedTarget}`);
     console.log(`${colors.cyan}● Scanners:${colors.reset} ${scanners.join(', ')}`);
-    console.log(`${colors.gray}Running Hopchain engine...${colors.reset}\n`);
+    console.log(`${colors.gray}Running Armelis ${theme === 'warm' ? 'Protective Shield Engine' : 'Analytical Defense Engine'}...${colors.reset}\n`);
   }
 
   let result;
@@ -63,11 +64,11 @@ async function executeScan(args = {}) {
     }
 
     console.log(`${colors.cyan}Next steps:${colors.reset}`);
-    console.log(`  hopchain trace ${target}   ${colors.dim}# Visualize reachability attack paths${colors.reset}`);
-    console.log(`  hopchain break ${target}   ${colors.dim}# Find the single fix that breaks the chain${colors.reset}\n`);
+    console.log(`  armelis trace ${rawTarget}   ${colors.dim}# Visualize reachability attack paths${colors.reset}`);
+    console.log(`  armelis break ${rawTarget}   ${colors.dim}# Find the single fix that breaks the chain${colors.reset}\n`);
   } else {
     const report = {
-      product: 'Hopchain',
+      product: 'Armelis',
       generated_at: new Date().toISOString(),
       target: resolvedTarget,
       findings

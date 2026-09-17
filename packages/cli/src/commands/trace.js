@@ -6,10 +6,10 @@ const { buildAttackGraph } = require('../graph');
 const { colors, banner, severityBadge } = require('../formatter');
 
 async function executeTrace(args = {}) {
-  const target = args.target || '.';
-  const resolvedTarget = path.resolve(target);
+  const rawTarget = String(args.target || '.').replace(/^["']|["']$/g, '').trim();
+  const resolvedTarget = path.resolve(rawTarget);
 
-  console.log(banner());
+  console.log(banner(args.theme));
   console.log(`${colors.bold}Tracing Lateral Attack Paths (Hops):${colors.reset} ${resolvedTarget}\n`);
 
   let findings = [];
@@ -83,7 +83,7 @@ async function executeTrace(args = {}) {
   });
 
   console.log(`${colors.cyan}To find the single fix that severs all chains:${colors.reset}`);
-  console.log(`  hopchain break ${target}\n`);
+  console.log(`  armelis break ${rawTarget}\n`);
   return 0;
 }
 

@@ -1,7 +1,7 @@
-# Hopchain
+# Armelis
 
 <p align="center">
-  <img src="hopchain-logo.png" alt="Hopchain Logo" width="120" />
+  <img src="armelis-logo.png" alt="Armelis Logo" width="120" />
 </p>
 
 <h3 align="center">Application Security Intelligence for AI-Assisted Teams & SOC Analysts</h3>
@@ -29,23 +29,23 @@
 
 ## Overview
 
-**Hopchain** is a **100% Free and Open Source (FOSS)** security intelligence platform architected and developed by **Johan Vasquez**. Published under the permissive **MIT License**, it transforms raw, disjointed vulnerability scanner output (Trivy, Semgrep, Gitleaks) into cohesive, actionable attack path models and prioritized remediation workflows.
+**Armelis** is a **100% Free and Open Source (FOSS)** security intelligence platform architected and developed by **Johan Vasquez**. Published under the permissive **MIT License**, it transforms raw, disjointed vulnerability scanner output (Trivy, Semgrep, Gitleaks) into cohesive, actionable attack path models and prioritized remediation workflows.
 
-Instead of overwhelming security and development teams with an unfiltered wall of 200 medium-severity alerts, Hopchain maps the full exploitation route:
+Instead of overwhelming security and development teams with an unfiltered wall of 200 medium-severity alerts, Armelis maps the full exploitation route:
 $$\text{Public Entry Point} \xrightarrow{\quad\text{Hop 1}\quad} \text{Vulnerability / Exploit} \xrightarrow{\quad\text{Hop 2}\quad} \text{Privilege Escalation} \xrightarrow{\quad\text{Hop 3}\quad} \text{Crown-Jewel Asset}$$
 
 By isolating the critical single fix that severs the chain, developers and SOC analysts resolve root risks in minutes.
 
 ---
 
-## Why Hopchain for AI-Assisted Teams?
+## Why Armelis for AI-Assisted Teams?
 
 AI coding assistants (Cursor, GitHub Copilot, Devin, Claude Code) generate code at unprecedented speeds, but frequently introduce subtle security risks:
 * **Missing Ownership & Tenant Isolation (IDOR):** Boilerplate CRUD endpoints generated without verifying authenticated user identity against requested resources.
 * **Committed Cloud Secrets:** Plaintext credentials and IAM keys inadvertently committed in generated Terraform or Docker compose files.
 * **Supply Chain Hallucinations:** Imports of non-existent, abandoned, or typo-squatted dependencies.
 
-Hopchain provides:
+Armelis provides:
 1. **Deterministic Reachability Analysis:** Validates whether an alert is actually exposed to public internet attack surfaces.
 2. **1-Click AI Fix Prompts:** Synthesizes context-aware, deterministic remediation prompts engineered for instant, 1-turn resolution in Cursor, Copilot, or Claude Code.
 3. **Rescan Verification:** Deterministically verifies that the applied patch broke the attack path and eliminated exposure.
@@ -89,7 +89,7 @@ Hopchain provides:
          └──────────────────────┬───────────────────────┘
                                 ▼
          ┌──────────────────────────────────────────────┐
-         │  Hopchain Security Console                   │
+         │  Armelis Security Console                   │
          │  ├── Visual Kill-Chain Inspector             │
          │  ├── 1-Click AI Fix Prompts (Cursor/Copilot) │
          │  └── SIEM Exporter (CEF / ECS / Syslog)      │
@@ -101,18 +101,18 @@ Hopchain provides:
 ## Monorepo Layout
 
 ```text
-Hopchain/
-├── bin/                         # Global executable launcher (node bin/hopchain.js)
+Armelis/
+├── bin/                         # Global executable launcher (node bin/armelis.js)
 ├── apps/
 │   ├── web/                     # Web dashboard & portal (Next.js 15+, React 19, GSAP)
 │   └── desktop/                 # Workstation client (Tauri 2 + Vite + React + Rust)
 ├── packages/
-│   ├── cli/                     # Zero-dependency Hopchain CLI (scan, trace, break, export)
+│   ├── cli/                     # Zero-dependency Armelis CLI (scan, trace, break, export)
 │   ├── finding-model/           # Canonical JSON Schema for normalized findings
 │   └── scanner-adapters/        # Provider ingestion modules
 │       └── trivy/               # Trivy runner, normalizer, and SIEM exporter
 ├── docs/                        # Architecture decision records, threat models & specifications
-├── DESIGN.md                    # Hopchain Design System & Anti-Vibecoding Standards
+├── DESIGN.md                    # Armelis Design System & Anti-Vibecoding Standards
 ├── APPLE_DESIGN.md              # Apple HIG and macOS design specification
 ├── POLITICS.md                  # Project governance, Terms of Use & Privacy Policy
 ├── SECURITY.md                  # Hardening, secure coding & threat model standards
@@ -125,25 +125,25 @@ Hopchain/
 
 ### 1. Clone & Install
 ```bash
-git clone https://github.com/Johanvasquezdev/Hopchain.git
-cd Hopchain
+git clone https://github.com/Johanvasquezdev/armelis.git
+cd armelis
 ```
 
-### 2. Hopchain CLI (Zero Dependencies)
+### 2. Armelis CLI (Zero Dependencies)
 Run security intelligence, graph traversal, and chain severance directly from your terminal:
 
 ```bash
 # Scan repository and normalize multi-scanner findings
-node bin/hopchain.js scan .
+node bin/armelis.js scan .
 
 # Trace reachability attack paths (hops) from public entry points to crown jewels
-node bin/hopchain.js trace .
+node bin/armelis.js trace .
 
 # Find the single critical link that breaks the attack chain + get 1-click AI fix prompt
-node bin/hopchain.js break .
+node bin/armelis.js break .
 
 # Stream normalized findings to SIEM (CEF / ECS / Syslog)
-node bin/hopchain.js export . --format cef
+node bin/armelis.js export . --format cef
 ```
 
 ### 3. Launch Web Console
@@ -165,19 +165,19 @@ npm run tauri dev
 
 ## Standards & Framework Readiness
 
-Hopchain maps scanner evidence against leading industry security controls to accelerate audit readiness:
+Armelis maps scanner evidence against leading industry security controls to accelerate audit readiness:
 * **SOC 2 Type II:** Trust Services Criteria (CC6.1 Logical Access, CC6.6 Vulnerability Management, CC7.1 Threat Detection).
 * **ISO/IEC 27001:2022:** Annex A.8.8 Management of Technical Vulnerabilities, A.8.12 Data Leakage Prevention, A.8.28 Secure Coding.
 * **OWASP Top 10 (2021):** Direct tagging for Broken Access Control (A01), Cryptographic Failures (A02), Injection (A03), and Vulnerable Components (A06).
 
-*(Note: Hopchain provides evidence correlation and audit preparedness workflows; it does not issue automated compliance certifications).*
+*(Note: Armelis provides evidence correlation and audit preparedness workflows; it does not issue automated compliance certifications).*
 
 ---
 
 ## Acceptable Use & Privacy
 
 * **Authorized Testing Only:** Operators must only scan repositories and systems they own or have documented permission to audit.
-* **Zero Telemetry:** Hopchain does not collect telemetry, analytics, or user metrics. All scan payloads and source code remain strictly local.
+* **Zero Telemetry:** Armelis does not collect telemetry, analytics, or user metrics. All scan payloads and source code remain strictly local.
 
 ---
 

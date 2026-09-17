@@ -6,10 +6,10 @@ const { buildAttackGraph, computeBreak } = require('../graph');
 const { colors, banner, box } = require('../formatter');
 
 async function executeBreak(args = {}) {
-  const target = args.target || '.';
-  const resolvedTarget = path.resolve(target);
+  const rawTarget = String(args.target || '.').replace(/^["']|["']$/g, '').trim();
+  const resolvedTarget = path.resolve(rawTarget);
 
-  console.log(banner());
+  console.log(banner(args.theme));
   console.log(`${colors.bold}Computing Minimal Attack-Chain Cut:${colors.reset} ${resolvedTarget}\n`);
 
   let findings = [];
@@ -60,7 +60,7 @@ async function executeBreak(args = {}) {
 
   console.log(promptBox);
   console.log(`\n${colors.cyan}After applying fix, verify chain breakage:${colors.reset}`);
-  console.log(`  hopchain scan ${target} --verify\n`);
+  console.log(`  armelis scan ${rawTarget} --verify\n`);
   return 0;
 }
 

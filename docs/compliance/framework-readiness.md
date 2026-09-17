@@ -1,8 +1,8 @@
-# CyberScan Compliance Framework Readiness
+# Armelis Compliance Framework Readiness
 
 ## Scope and wording
 
-CyberScan may help an organization collect evidence, map controls, track remediation, and prepare for independent assessment. It must not claim that CyberScan itself is SOC 2 compliant or ISO/IEC 27001 certified unless the organization has completed the applicable independent examination or certification process.
+Armelis may help an organization collect evidence, map controls, track remediation, and prepare for independent assessment. It must not claim that Armelis itself is SOC 2 compliant or ISO/IEC 27001 certified unless the organization has completed the applicable independent examination or certification process.
 
 Approved product language before assessment:
 
@@ -17,7 +17,7 @@ Prohibited without verified evidence:
 - “SOC 2 certified.”
 - “ISO 27000 certified.”
 - “ISO/IEC 27001 certified.”
-- Any claim that a customer is compliant because CyberScan was used.
+- Any claim that a customer is compliant because Armelis was used.
 
 ## Framework distinction
 
@@ -68,14 +68,14 @@ Each control record should include:
 - VERIFIED
 - NOT_APPLICABLE
 
-CyberScan should never convert a technical scan result directly into a compliance conclusion. A scanner finding is evidence for review, not proof that a control passes or fails by itself.
+Armelis should never convert a technical scan result directly into a compliance conclusion. A scanner finding is evidence for review, not proof that a control passes or fails by itself.
 
 ## Initial roadmap
 
 1. Add framework and control entities to the domain model.
 2. Add evidence attachments with immutable provenance and access control.
 3. Add owners, review dates, exceptions, and approval history.
-4. Map CyberScan findings to candidate control areas with explicit confidence.
+4. Map Armelis findings to candidate control areas with explicit confidence.
 5. Add readiness dashboards and evidence export.
 6. Add auditor/reviewer access with least privilege.
 7. Validate the control scope with a qualified SOC 2 practitioner and ISO/IEC 27001 consultant or certification body.

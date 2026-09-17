@@ -15,7 +15,9 @@ dist/
 
 # Tauri & Rust
 apps/desktop/src-tauri/target/
+apps/desktop/src-tauri/gen/
 **/target/
+**/gen/
 **/*.rs.bk
 
 # Environment Variables & Secrets
@@ -27,9 +29,9 @@ apps/desktop/src-tauri/target/
 *.pem
 *.key
 
-# CyberScan Local Scan Artifacts
-.cyberscan/
-**/.cyberscan/
+# Armelis Local Scan Artifacts
+.armelis/
+**/.armelis/
 
 # Logs
 logs/

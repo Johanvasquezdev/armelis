@@ -88,7 +88,7 @@ function buildAttackGraph(findings) {
 }
 
 /**
- * Computes the "Hopchain Break" — the minimal cut that severs attack chains.
+ * Computes the "Armelis Break" — the minimal cut that severs attack chains.
  */
 function computeBreak(paths, findings) {
   if (!paths || paths.length === 0) {

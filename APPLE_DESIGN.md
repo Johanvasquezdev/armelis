@@ -1,8 +1,8 @@
-# Apple Human Interface & System Design Guide — CyberScan
+# Apple Human Interface & System Design Guide — Armelis
 
 > **Master Specification:** Experience Design, Interaction Tokens & Visual Philosophy  
 > **Inspired by:** Apple Human Interface Guidelines (HIG), iOS 18/macOS Sequoia System Design & SF Symbols  
-> **Target:** CyberScan Security Intelligence Platform (Web & Tauri Desktop)  
+> **Target:** Armelis Security Intelligence Platform (Web & Tauri Desktop)  
 > **Author:** Johan Vasquez  
 > **Version:** 1.0.0 (2026)  
 
@@ -12,16 +12,16 @@
 
 > *"Great interface design in security software is not about making charts look sleek; it is about ruthless cognitive clarity, tactile immediacy, and eliminating human error when evaluating critical risks."*
 
-In **CyberScan**, design is an operational shield:
+In **Armelis**, design is an operational shield:
 - Security engineers and developers routinely suffer alert fatigue from thousands of disconnected vulnerability alerts.
-- By adopting the core principles of Apple's Human Interface Guidelines (HIG), CyberScan transforms chaotic security data into a calm, focused, and intuitive workspace.
+- By adopting the core principles of Apple's Human Interface Guidelines (HIG), Armelis transforms chaotic security data into a calm, focused, and intuitive workspace.
 - Every curvature radius (*squircle*), every micro-spacing unit, every soft shadow, and every millisecond of motion exists to answer a concrete human need: **understanding risk quickly and fixing it immediately**.
 
 ---
 
 ## 2. The 8 Fundamental Principles (Apple HIG Adapted)
 
-| Principle | Core Directive | Application in CyberScan |
+| Principle | Core Directive | Application in Armelis |
 | :--- | :--- | :--- |
 | **1. Purpose (*Purpose*)** | Do something focused and genuinely meaningful. | The application exists to correlate security evidence into understandable attack paths. Showing what to fix first takes precedence over listing hundreds of raw CVEs. |
 | **2. Agency (*Agency*)** | Give the operator control and freedom of action. | The operator decides whether to run scans locally or sync them. Every automated suggestion requires explicit human review and confirmation before applying changes. |
@@ -60,7 +60,7 @@ Headings feature tight tracking to deliver an authoritative, polished command-ce
 
 ### 3.2. Surface Treatment: "Zero Visible Borders"
 
-In enterprise software, repetitive `1px solid #333` borders create visual noise that distracts analysts. CyberScan follows the Apple surface standard: **cards float and separate through light, shadow, and depth**:
+In enterprise software, repetitive `1px solid #333` borders create visual noise that distracts analysts. Armelis follows the Apple surface standard: **cards float and separate through light, shadow, and depth**:
 
 1. **Top Inset Highlight (Simulating Glass Bevel):**
    ```css

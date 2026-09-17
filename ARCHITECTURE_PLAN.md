@@ -7,7 +7,7 @@ Estado: **borrador — no ejecutar hasta APPROVED**
 No existe un directorio `backend/` ni servicios ejecutables. El árbol real es:
 
 ```text
-CyberScan/
+Armelis/
   docs/architecture/          # v0.1, decisions, scanner-strategy
   docs/threat-model/
   packages/finding-model/     # finding.schema.json (contrato único)
@@ -73,12 +73,12 @@ El worker de embeddings es un **consumidor** del finding model, paralelo a persi
 | --- | --- |
 | `workers/embedding-pipeline/` | Worker Python aislado (único sitio con PyTorch/HF) |
 | `workers/embedding-pipeline/pyproject.toml` | Dependencias: `sentence-transformers`, `numpy`; opcional `pgvector` / `psycopg` |
-| `workers/embedding-pipeline/src/cyberscan_embeddings/__init__.py` | Paquete |
-| `workers/embedding-pipeline/src/cyberscan_embeddings/config.py` | Modelo, device (CPU/CUDA), batch size, max tokens, workspace boundary |
-| `workers/embedding-pipeline/src/cyberscan_embeddings/text.py` | Ensambla texto desde finding JSON; redacta secretos |
-| `workers/embedding-pipeline/src/cyberscan_embeddings/embedder.py` | Carga modelo HF local; `encode()` batch; checksum de pesos |
-| `workers/embedding-pipeline/src/cyberscan_embeddings/store.py` | Upsert en `finding_embeddings` |
-| `workers/embedding-pipeline/src/cyberscan_embeddings/cli.py` | CLI: embed scan_id / finding JSONL |
+| `workers/embedding-pipeline/src/armelis_embeddings/__init__.py` | Paquete |
+| `workers/embedding-pipeline/src/armelis_embeddings/config.py` | Modelo, device (CPU/CUDA), batch size, max tokens, workspace boundary |
+| `workers/embedding-pipeline/src/armelis_embeddings/text.py` | Ensambla texto desde finding JSON; redacta secretos |
+| `workers/embedding-pipeline/src/armelis_embeddings/embedder.py` | Carga modelo HF local; `encode()` batch; checksum de pesos |
+| `workers/embedding-pipeline/src/armelis_embeddings/store.py` | Upsert en `finding_embeddings` |
+| `workers/embedding-pipeline/src/armelis_embeddings/cli.py` | CLI: embed scan_id / finding JSONL |
 | `workers/embedding-pipeline/tests/` | Tests con modelo mock (no descargar GB en CI) |
 | `packages/finding-model/embedding.schema.json` | Contrato del registro de embedding (separado del finding) |
 | `docs/architecture/decisions.md` | Nueva ADR: embeddings locales HF, no conclusión |

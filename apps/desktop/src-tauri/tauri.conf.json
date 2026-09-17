@@ -1,19 +1,19 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "Hopchain",
+  "productName": "Armelis",
   "version": "0.1.0",
-  "identifier": "dev.johanvasquez.hopchain",
+  "identifier": "dev.johanvasquez.armelis",
   "build": {
-    "beforeDevCommand": "npm run dev",
-    "beforeBuildCommand": "npm run build",
+    "beforeDevCommand": "cmd /c npm run dev",
+    "beforeBuildCommand": "cmd /c npm run build",
     "devUrl": "http://localhost:1420",
     "frontendDist": "../dist"
   },
   "app": {
     "windows": [{
-      "title": "Hopchain Local",
-      "width": 1100,
-      "height": 800,
+      "title": "Armelis — Application Security Command",
+      "width": 1120,
+      "height": 820,
       "minWidth": 360,
       "minHeight": 600,
       "resizable": true
@@ -23,6 +23,31 @@
     }
   },
   "bundle": {
-    "active": false
+    "active": true,
+    "targets": "all",
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.png",
+      "icons/icon.ico"
+    ],
+    "publisher": "Johan Vasquez",
+    "shortDescription": "Application Security Intelligence & Choke-Point Defense",
+    "longDescription": "Armelis maps reachability attack paths from public entry points to crown-jewel assets, isolating the single choke point that eliminates exposure.",
+    "copyright": "Copyright © 2026 Johan Vasquez. MIT License.",
+    "windows": {
+      "certificateThumbprint": null,
+      "digestAlgorithm": "sha256",
+      "timestampUrl": "",
+      "nsis": {
+        "headerImage": "icons/installer-header.bmp",
+        "sidebarImage": "icons/installer-sidebar.bmp",
+        "installerIcon": "icons/icon.ico",
+        "installMode": "currentUser",
+        "languages": ["en-US", "es-ES"],
+        "displayLanguageSelector": false
+      }
+    }
   }
 }

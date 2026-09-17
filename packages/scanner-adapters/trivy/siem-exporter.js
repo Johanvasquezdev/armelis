@@ -34,8 +34,8 @@ function escapeCEF(value) {
 }
 
 function toCEF(finding, metadata = {}) {
-  const vendor = 'Hopchain';
-  const product = 'Hopchain';
+  const vendor = 'Armelis';
+  const product = 'Armelis';
   const version = '1.0.0';
   const eventClassId = finding.finding_type || finding.category || 'VULNERABILITY';
   const name = finding.title || 'Security Finding';
@@ -81,13 +81,13 @@ function toECS(finding, metadata = {}) {
       kind: 'alert',
       category: ['vulnerability', 'configuration'],
       type: ['info'],
-      dataset: 'hopchain.findings',
+      dataset: 'armelis.findings',
       severity: severityScore,
       outcome: finding.status === 'RESOLVED' ? 'success' : 'failure'
     },
     observer: {
-      vendor: 'Hopchain',
-      product: 'Hopchain',
+      vendor: 'Armelis',
+      product: 'Armelis',
       version: '1.0.0'
     },
     vulnerability: {
@@ -101,7 +101,7 @@ function toECS(finding, metadata = {}) {
       id: finding.provenance?.rule_id,
       name: finding.title
     },
-    hopchain: {
+    armelis: {
       finding_id: finding.id,
       finding_type: finding.finding_type,
       category: finding.category,
@@ -158,7 +158,7 @@ function toSyslog(finding, metadata = {}, options = { format: 'cef' }) {
     ? JSON.stringify(toECS(finding, metadata))
     : toCEF(finding, metadata);
 
-  return `<${pri}>1 ${timestamp} ${hostname} Hopchain ${pid} ${finding.id} - ${payload}`;
+  return `<${pri}>1 ${timestamp} ${hostname} Armelis ${pid} ${finding.id} - ${payload}`;
 }
 
 function exportReport(report, format = 'json') {

@@ -1,5 +1,5 @@
 [package]
-name = "hopchain_desktop"
+name = "armelis_desktop"
 version = "0.1.0"
 edition = "2021"
 

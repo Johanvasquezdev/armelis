@@ -1,14 +1,14 @@
-# CyberScan Web SEO and Sharing
+# Armelis Web SEO and Sharing
 
 ## Goal
 
-CyberScan should have a trustworthy, accessible, indexable web surface without exposing scan data or private repository details.
+Armelis should have a trustworthy, accessible, indexable web surface without exposing scan data or private repository details.
 
 ## Requirements
 
 ### Open Graph images
 
-- Define a default CyberScan Open Graph image with the official dark navy, electric-blue, and white brand direction.
+- Define a default Armelis Open Graph image with the official dark navy, electric-blue, and white brand direction.
 - Use a dedicated image for the landing page and safe generic images for public product pages.
 - Never include repository names, findings, secrets, file paths, or private scan data in generated images.
 - Provide `og:title`, `og:description`, `og:image`, `og:url`, and `og:type`.
@@ -34,7 +34,7 @@ Every public page must define its own:
 Recommended title pattern:
 
 ```text
-Page Name | CyberScan
+Page Name | Armelis
 ```
 
 The root page may use the product title without duplication. Private dashboard pages should use metadata appropriate to authenticated users and should not be indexed.
@@ -77,7 +77,7 @@ Disallow: /dashboard
 Disallow: /scans
 Disallow: /findings
 Disallow: /api
-Sitemap: https://cyberscan.example/sitemap.xml
+Sitemap: https://armelis.example/sitemap.xml
 ```
 
 The production hostname must come from configuration, never from untrusted request input.
@@ -86,10 +86,10 @@ The production hostname must come from configuration, never from untrusted reque
 
 Publish a concise machine-readable guide for AI systems covering:
 
-- What CyberScan is.
+- What Armelis is.
 - Public documentation and product pages.
-- Preferred terminology: CyberScan is the current name; ThreatGraph is the former project name.
-- The difference between scanner evidence and CyberScan analysis.
+- Preferred terminology: Armelis is the current name; ThreatGraph is the former project name.
+- The difference between scanner evidence and Armelis analysis.
 - Public contact or documentation links.
 
 Do not include private routes, credentials, scan results, customer data, internal architecture secrets, or unsupported claims.
@@ -122,7 +122,7 @@ When `apps/web` is created, use the App Router metadata APIs:
 
 - Every public page has a unique title and description.
 - Every public page has exactly one canonical URL.
-- Open Graph previews render with the CyberScan brand.
+- Open Graph previews render with the Armelis brand.
 - 404 responses use the custom page and remain keyboard accessible.
 - Semantic landmarks are present and headings are ordered correctly.
 - Robots excludes private surfaces.

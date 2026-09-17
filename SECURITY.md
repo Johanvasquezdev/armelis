@@ -1,7 +1,7 @@
 # SECURITY.md — Comprehensive Cybersecurity, Hardening & Resilience Standard
 
 > **Document Classification:** Official Security Architecture & Defense Standard  
-> **Project Scope:** CyberScan (Web Workspace, Tauri Desktop & Scanner Adapters)  
+> **Project Scope:** Armelis (Web Workspace, Tauri Desktop & Scanner Adapters)  
 > **Owner & Security Lead:** Johan Vasquez  
 > **Version:** 1.0.0 (Production 2026)  
 
@@ -9,14 +9,14 @@
 
 ## 🏛️ 1. Security Governance & Core Objectives
 
-As a security intelligence platform, **CyberScan must embody the highest security standards it expects of the software it inspects**. Every architectural layer—from local process execution to database persistence and frontend rendering—is fortified to prevent misuse, data leakage, and supply-chain compromise.
+As a security intelligence platform, **Armelis must embody the highest security standards it expects of the software it inspects**. Every architectural layer—from local process execution to database persistence and frontend rendering—is fortified to prevent misuse, data leakage, and supply-chain compromise.
 
 ---
 
 ## 🛡️ 2. Veracity, Authenticity & Information Disclosure
 
 ### 2.1. Zero Fabricated Findings or Fake Metrics
-- **Absolute Authenticity:** CyberScan never fabricates exploitability claims, simulated findings, synthetic customer reviews, or exaggerated risk scores.
+- **Absolute Authenticity:** Armelis never fabricates exploitability claims, simulated findings, synthetic customer reviews, or exaggerated risk scores.
 - **Provable Provenance:** Every finding record displayed in the dashboard is cryptographically anchored to its original scanner execution by a deterministic SHA-256 identity:
   $$\text{ID} = \text{SHA-256}(\text{kind} \parallel \text{target} \parallel \text{rule\_id} \parallel \text{pkg\_name} \parallel \text{line})[0:24]$$
 
@@ -29,7 +29,7 @@ As a security intelligence platform, **CyberScan must embody the highest securit
 
 ## 🔒 3. Authentication, Session Security & Access Control
 
-For multi-user and web-connected deployments of CyberScan:
+For multi-user and web-connected deployments of Armelis:
 
 ### 3.1. Dual JWT Token Architecture & Automatic Rotation
 1. **Short-Lived Access Token:** 
@@ -52,7 +52,7 @@ For multi-user and web-connected deployments of CyberScan:
 ### 3.4. Session Cookie Hardening
 Cookies issued by the application strictly enforce the modern security baseline:
 ```http
-Set-Cookie: __Host-cyberscan_session=token_value; Path=/; Secure; HttpOnly; SameSite=Strict; Max-Age=900
+Set-Cookie: __Host-armelis_session=token_value; Path=/; Secure; HttpOnly; SameSite=Strict; Max-Age=900
 ```
 - `HttpOnly`: Prevents client-side JavaScript access, neutralizing session theft via XSS.
 - `Secure`: Restricts transmission exclusively to encrypted HTTPS channels.
@@ -138,4 +138,4 @@ When integrating LLM explanation models or semantic search:
 
 ---
 
-*To report a security vulnerability in CyberScan, contact Johan Vasquez.*
+*To report a security vulnerability in Armelis, contact Johan Vasquez.*

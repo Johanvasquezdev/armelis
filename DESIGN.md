@@ -1,4 +1,4 @@
-# CyberScan Design System
+# Armelis Design System
 
 > **Document Classification:** Official Product Design System & UI Tokens  
 > **Target Platforms:** Web Dashboard (Next.js) & Desktop Local Shell (Tauri 2)  
@@ -10,7 +10,7 @@
 
 ## 1. Visual Direction & Aesthetic Vision
 
-**CyberScan** is a security intelligence layer designed to transform noisy scanner output into prioritized security understanding. Its visual direction is **precise, technical, calm, and evidence-focused**:
+**Armelis** is a security intelligence layer designed to transform noisy scanner output into prioritized security understanding. Its visual direction is **precise, technical, calm, and evidence-focused**:
 
 - **Cybersecurity Command Center:** Dark-mode first by default, evoking high-tech radar intelligence and tactical precision without tacky visual gimmicks.
 - **Cognitive Clarity:** Elimination of visual clutter. The interface directs the analyst's eye to the critical path that breaks an attack vector, not a wall of 500 equivalent alert badges.
@@ -20,7 +20,7 @@
 
 ## 2. Logo & Brand Mark Guidelines
 
-- **Primary Logo:** The official CyberScan radar and network constellation mark.
+- **Primary Logo:** The official Armelis radar and network constellation mark.
 - **Wordmark:** **CYBER** in crisp, bold white (`#FFFFFF`) followed immediately by **SCAN** in vibrant electric blue (`#00E5FF` or `#38BDF8`).
 - **Aspect & Geometry:** Preserve exact proportions of the radar grid circles and sweeping vector beam.
 - **Desktop Header:** Full horizontal brand lockup (radar mark + CYBER**SCAN** typography + environment indicator).
@@ -38,26 +38,26 @@ All colors are controlled through semantically mapped CSS custom properties:
 ```css
 :root {
   /* Core Brand Identity */
-  --cyberscan-electric: #00e5ff;
-  --cyberscan-blue: #0070f3;
-  --cyberscan-deep-blue: #0c4a6e;
+  --armelis-electric: #00e5ff;
+  --armelis-blue: #0070f3;
+  --armelis-deep-blue: #0c4a6e;
 
   /* Surfaces & Backgrounds (Dark Mode First) */
-  --cyberscan-obsidian: #050811;
-  --cyberscan-navy: #0a0f1d;
-  --cyberscan-surface-dark: #0f172a;
-  --cyberscan-surface-card: #131d35;
-  --cyberscan-surface-highlight: #1e293b;
+  --armelis-obsidian: #050811;
+  --armelis-navy: #0a0f1d;
+  --armelis-surface-dark: #0f172a;
+  --armelis-surface-card: #131d35;
+  --armelis-surface-highlight: #1e293b;
 
   /* Borders & Dividers */
-  --cyberscan-line: rgba(148, 163, 184, 0.12);
-  --cyberscan-line-accent: rgba(0, 229, 255, 0.35);
+  --armelis-line: rgba(148, 163, 184, 0.12);
+  --armelis-line-accent: rgba(0, 229, 255, 0.35);
 
   /* Typography */
-  --cyberscan-text-primary: #ffffff;
-  --cyberscan-text-secondary: #94a3b8;
-  --cyberscan-text-muted: #64748b;
-  --cyberscan-text-link: #00e5ff;
+  --armelis-text-primary: #ffffff;
+  --armelis-text-secondary: #94a3b8;
+  --armelis-text-muted: #64748b;
+  --armelis-text-link: #00e5ff;
 }
 ```
 
@@ -101,7 +101,7 @@ The typography pairs an authoritative geometric display sans-serif for command h
 ## 5. Shape, Surfaces & Control Geometry
 
 ### 5.1. The "Zero Visible Borders" Standard
-Traditional dense enterprise interfaces abuse 1px solid gray borders that fatigue the eyes. CyberScan uses physical layered depth:
+Traditional dense enterprise interfaces abuse 1px solid gray borders that fatigue the eyes. Armelis uses physical layered depth:
 1. **Top-Edge Inset Highlight:**
    ```css
    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
@@ -126,7 +126,7 @@ Traditional dense enterprise interfaces abuse 1px solid gray borders that fatigu
 
 ## 6. Interaction & Motion Principles
 
-CyberScan incorporates fluid, high-frame-rate feedback built with **GSAP** and **Anime.js**:
+Armelis incorporates fluid, high-frame-rate feedback built with **GSAP** and **Anime.js**:
 
 - **Tactile Button Press:** Interactive buttons respond with virtual haptic compression on tap/click:
   ```css
@@ -156,7 +156,7 @@ CyberScan incorporates fluid, high-frame-rate feedback built with **GSAP** and *
 - **Touch Target Minimums:** All interactive controls maintain a minimum touch bounding box of **44×44 pt** on mobile and touch devices.
 - **Focus Rings:** Uncompromising keyboard accessibility. Focused elements display an electric-blue glowing ring:
   ```css
-  outline: 2px solid var(--cyberscan-electric);
+  outline: 2px solid var(--armelis-electric);
   outline-offset: 2px;
   ```
 - **Responsive Layout:**

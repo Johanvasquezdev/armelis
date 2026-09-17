@@ -2,13 +2,13 @@ import type { MetadataRoute } from 'next';
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: 'Hopchain',
-    short_name: 'Hopchain',
+    name: 'Armelis',
+    short_name: 'Armelis',
     description: 'Application Security Intelligence for AI-Assisted Teams & SOC Analysts.',
     start_url: '/',
     display: 'standalone',
-    background_color: '#050811',
-    theme_color: '#050811',
+    background_color: '#040711',
+    theme_color: '#040711',
     icons: []
   };
 }

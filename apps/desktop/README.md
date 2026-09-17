@@ -1,6 +1,6 @@
-# Hopchain Local
+# Armelis Local
 
-The Tauri client is the local-analysis surface for Hopchain. It reuses the JavaScript/React design language while invoking a narrow Rust command for an explicitly selected local directory.
+The Tauri client is the local-analysis surface for Armelis. It reuses the JavaScript/React design language while invoking a narrow Rust command for an explicitly selected local directory.
 
 ## Current slice
 
@@ -23,4 +23,4 @@ npm install
 npm run tauri dev
 ```
 
-This first slice is intentionally local-only. The target architecture links the desktop client to the Hopchain web service using the same account, projects, normalized finding contracts, reports, and graph data. Local scan synchronization will be added only after explicit project selection and user confirmation.
+This first slice is intentionally local-only. The target architecture links the desktop client to the Armelis web service using the same account, projects, normalized finding contracts, reports, and graph data. Local scan synchronization will be added only after explicit project selection and user confirmation.

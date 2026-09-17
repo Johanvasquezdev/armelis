@@ -1,13 +1,13 @@
-# CyberScan Client Platform
+# Armelis Client Platform
 
 ## Decision
 
-CyberScan is one linked product with two clients:
+Armelis is one linked product with two clients:
 
 - Web client for browser access and centralized product updates.
 - Tauri 2 desktop client for the same workspace plus local scanning capabilities.
 
-Both clients use the same authenticated CyberScan backend, domain contracts, design system, and project data.
+Both clients use the same authenticated Armelis backend, domain contracts, design system, and project data.
 
 Electron is not the initial desktop target.
 
@@ -17,7 +17,7 @@ The relationship should feel like Discord: the user signs in once, sees the same
 
 ```text
 Web client ───────┐
-                  ├── Authenticated CyberScan API ── PostgreSQL
+                  ├── Authenticated Armelis API ── PostgreSQL
 Desktop client ───┘              │
                                  ├── Scan queue and workers
                                  ├── Projects and findings
@@ -37,7 +37,7 @@ The desktop client may perform a local scan, but it should upload only the norma
 
 ## Why Tauri for desktop
 
-Tauri can reuse the web frontend while providing a native shell for desktop and mobile targets. It is appropriate if CyberScan later needs:
+Tauri can reuse the web frontend while providing a native shell for desktop and mobile targets. It is appropriate if Armelis later needs:
 
 - Local repository selection.
 - Local scanner execution through a restricted native bridge.
@@ -51,7 +51,7 @@ The native bridge must expose narrow allowlisted operations. It must not become 
 
 Electron is a valid option when the product needs a mature Node.js desktop ecosystem or deep JavaScript-native integration. It also increases the bundled runtime and security responsibility because the application includes Chromium and Node.js capabilities. Electron would require strict context isolation, process sandboxing, restrictive CSP, controlled navigation, validated IPC senders, and no Node integration for remote content.
 
-Those requirements are manageable, but they are not necessary for CyberScan's first product slice.
+Those requirements are manageable, but they are not necessary for Armelis's first product slice.
 
 ## Update behavior
 
@@ -85,7 +85,7 @@ workers/               Scan orchestration and analysis jobs
 Browser / PWA / Tauri UI
           |
           v
-Authenticated CyberScan API
+Authenticated Armelis API
           |
           v
 Queue and isolated scanner workers

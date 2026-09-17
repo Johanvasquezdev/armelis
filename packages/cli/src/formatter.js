@@ -22,21 +22,112 @@ const colors = {
   bgYellow: isColorSupported ? '\x1b[43m\x1b[30m' : ''
 };
 
-function banner() {
-  const blue = `${colors.brightBlue}${colors.bold}`;
-  const red = `${colors.brightRed}${colors.bold}`;
-  const reset = colors.reset;
+const rgb = (r, g, b) => (isColorSupported ? `\x1b[38;2;${r};${g};${b}m` : '');
+const bgRgb = (r, g, b) => (isColorSupported ? `\x1b[48;2;${r};${g};${b}m` : '');
 
-  return [
-    `${blue}  _  _  _____  ____   ${red}___ _  _   _   ___ _  _ ${reset}`,
-    `${blue} | || |/ _ \\ \\|  _ \\ ${red}/ __| || | /_\\ |_ _| \\| |${reset}`,
-    `${blue} | __ | (_) ) | |_) ${red}| (__| __ |/ _ \\ | || .\` |${reset}`,
-    `${blue} |_||_|\\___/ /| .__/ ${red}\\___|_||_/_/ \\_\\___|_|\\_|${reset}`,
-    `${blue}            /_|_|    ${reset}`,
-    ` ${colors.dim}Application Security Intelligence for AI-Assisted Teams & SOC Analysts${reset}`,
-    ` ${colors.dim}See every hop. Break the chain.${reset}`,
+function getGitBranch() {
+  try {
+    const { execSync } = require('node:child_process');
+    return execSync('git rev-parse --abbrev-ref HEAD', { stdio: ['ignore', 'pipe', 'ignore'] }).toString().trim() || 'main';
+  } catch {
+    return 'main';
+  }
+}
+
+function banner(theme = 'warm') {
+  const isCold = String(theme).toLowerCase().includes('cold');
+  const reset = colors.reset;
+  const bold = colors.bold;
+  const dim = colors.dim;
+
+  // Powerline / Breadcrumb Bar (Matching Reference Screenshot)
+  const pathPart = require('node:path').basename(process.cwd()) || 'workspace';
+  const branch = getGitBranch();
+  const timeStr = new Date().toLocaleTimeString('en-US', { hour12: false });
+
+  const pathBadge = isCold
+    ? bgRgb(14, 116, 144) + rgb(255, 255, 255) + bold + ` ~\\${pathPart} ` + reset
+    : bgRgb(30, 64, 175) + rgb(255, 255, 255) + bold + ` ~\\${pathPart} ` + reset;
+  const branchBadge = isCold
+    ? bgRgb(3, 105, 161) + rgb(186, 230, 253) + ` ⎇ ${branch} ` + reset
+    : bgRgb(161, 98, 7) + rgb(254, 240, 138) + ` ⎇ ${branch} ` + reset;
+  const timeBadge = bgRgb(30, 41, 59) + rgb(148, 163, 184) + ` ${timeStr} ` + reset;
+
+  const topBreadcrumb = ` ${pathBadge}${branchBadge}                                  ${timeBadge}\n`;
+
+  // Tactical Shields (Cold with severed attack path, Warm with fortified perimeter)
+  const shieldCold = [
+    '   ╭───▲───╮   ',
+    '  ╱  ╭─┴─╮  ╲  ',
+    ' ▕  ╭┤◈ ═├╮  ▏ ',
+    ' ▕  │ ╰◈╯ │  ▏ ',
+    '  ╲  ╰─┬─╯  ╱  ',
+    '   ╰───▼───╯   '
+  ];
+
+  const shieldWarm = [
+    '   ╭───▲───╮   ',
+    '  ╱  ╭─┴─╮  ╲  ',
+    ' ▕  ╭┤▞ ▚├╮  ▏ ',
+    ' ▕  │ ▚ ▞ │  ▏ ',
+    '  ╲  ╰─┬─╯  ╱  ',
+    '   ╰───▼───╯   '
+  ];
+
+  const fontARME = [
+    ' █████╗ ██████╗ ███╗   ███╗███████╗',
+    '██╔══██╗██╔══██╗████╗ ████║██╔════╝',
+    '███████║██████╔╝██╔████╔██║█████╗  ',
+    '██╔══██║██╔══██╗██║╚██╔╝██║██╔══╝  ',
+    '██║  ██║██║  ██║██║ ╚═╝ ██║███████╗',
+    '╚═╝  ╚═╝╚═╝  ╚═╝╚═╝     ╚═╝╚══════╝'
+  ];
+
+  const fontLIS = [
+    '██╗     ██╗███████╗',
+    '██║     ██║██╔════╝',
+    '██║     ██║███████╗',
+    '██║     ██║╚════██║',
+    '███████╗██║███████║',
+    '╚══════╝╚═╝╚══════╝'
+  ];
+
+  const bracketLeft = [' ╔ ', ' ║ ', ' ║ ', ' ║ ', ' ║ ', ' ╚ '];
+  const bracketRight = [' ╗', ' ║', ' ║', ' ║', ' ║', ' ╝'];
+
+  // Right-hand Side Menu
+  const menu = [
+    (isCold ? rgb(0, 229, 255) : rgb(245, 158, 11)) + '> Commands' + reset,
+    '  ' + bold + 'scan' + reset + '    ' + dim + 'Execute AST, CVE & secret engine' + reset,
+    '  ' + bold + 'trace' + reset + '   ' + dim + 'Synthesize attack reachability graph' + reset,
+    '  ' + bold + 'break' + reset + '   ' + dim + 'Pinpoint critical choke-point link' + reset,
+    '  ' + bold + 'export' + reset + '  ' + dim + 'Dispatch findings in SIEM formats' + reset,
+    ''
+  ];
+
+  const accent = isCold ? rgb(0, 229, 255) : rgb(245, 158, 11);
+  const white = rgb(240, 246, 252);
+  const shield = isCold ? shieldCold : shieldWarm;
+
+  const renderedFont = fontARME.map((lineARME, idx) => {
+    const s = accent + bold + shield[idx] + reset;
+    const a = white + bold + lineARME + reset;
+    const bl = accent + bold + bracketLeft[idx] + reset;
+    const l = accent + bold + fontLIS[idx] + reset;
+    const br = accent + bold + bracketRight[idx] + reset;
+    const rightCol = menu[idx] || '';
+    return s + ' ' + a + bl + l + br + '   ' + rightCol;
+  }).join('\n');
+
+  const modeLabel = isCold ? 'Cold analytical mode' : 'Warm protective';
+  const subtitle = [
+    '',
+    ` ${dim}Application Security Intelligence & Choke-Point Defense • ${reset}${bold}${modeLabel}${reset}`,
+    ` ${dim}See every hop. Sever the chain against bedrock.${reset}`,
     ''
   ].join('\n');
+
+  return `\n${topBreadcrumb}\n${renderedFont}\n${subtitle}`;
 }
 
 function severityBadge(severity) {

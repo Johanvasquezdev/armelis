@@ -1,5 +1,5 @@
 {
-  "name": "@hopchain/trivy-adapter",
+  "name": "@armelis/trivy-adapter",
   "version": "0.1.0",
   "private": true,
   "type": "commonjs",
