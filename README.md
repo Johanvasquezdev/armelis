@@ -13,7 +13,6 @@
 
 <p align="center">
   <a href="https://www.npmjs.com/package/armelis"><img src="https://img.shields.io/npm/v/armelis.svg?color=cb3837&logo=npm" alt="npm version" /></a>
-  <a href="https://www.npmjs.com/package/armelis"><img src="https://img.shields.io/npm/dm/armelis.svg?color=blue&logo=npm" alt="npm downloads" /></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License: MIT" /></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/Open%20Source-100%25%20Free-34d399.svg" alt="Open Source: 100% Free" /></a>
   <a href="#"><img src="https://img.shields.io/badge/Platform-Web%20%7C%20Tauri%202%20Desktop-00e5ff.svg" alt="Platform: Web | Tauri 2 Desktop" /></a>
