@@ -194,6 +194,7 @@ export default function HomePage() {
   const [copiedSnippet, setCopiedSnippet] = useState<string>('');
 
   // Marketing Showcase State
+  const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
   const [showcaseMode, setShowcaseMode] = useState<'video' | 'photos'>('video');
   const [videoChapter, setVideoChapter] = useState<number>(0);
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
@@ -320,7 +321,145 @@ export default function HomePage() {
             </a>
           </Button>
         </nav>
+
+        {/* Mobile Navigation Toggle Button */}
+        <button
+          type="button"
+          className="mobile-menu-btn"
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          aria-label={mobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
+          aria-expanded={mobileMenuOpen}
+        >
+          {mobileMenuOpen ? (
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
+          ) : (
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="3" y1="12" x2="21" y2="12" />
+              <line x1="3" y1="6" x2="21" y2="6" />
+              <line x1="3" y1="18" x2="21" y2="18" />
+            </svg>
+          )}
+        </button>
       </header>
+
+      {/* Mobile Navigation Drawer */}
+      {mobileMenuOpen && (
+        <div className="mobile-nav-drawer shell" role="dialog" aria-modal="true">
+          <div className="mobile-nav-content">
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+              <span style={{ fontSize: '11px', color: 'var(--cyan)', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase' }}>
+                Navigation &amp; Controls
+              </span>
+              <div className="web-theme-control" role="group" aria-label="Mobile theme switcher">
+                <button
+                  type="button"
+                  className={`web-theme-btn ${theme === 'cold' ? 'active' : ''}`}
+                  onClick={() => setTheme('cold')}
+                  title="Cold analytical mode"
+                >
+                  Cold
+                </button>
+                <button
+                  type="button"
+                  className={`web-theme-btn ${theme === 'warm' ? 'active' : ''}`}
+                  onClick={() => setTheme('warm')}
+                  title="Warm protective"
+                >
+                  Warm
+                </button>
+              </div>
+            </div>
+
+            <div className="mobile-nav-links">
+              <Link
+                href="/dashboard"
+                className="mobile-nav-link active-link"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                <span>Live Interactive Console</span>
+                <b>↗</b>
+              </Link>
+              <Link
+                href="#showcase"
+                className="mobile-nav-link"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                <span>Demo &amp; Interactive Media</span>
+                <b>→</b>
+              </Link>
+              <Link
+                href="#platforms"
+                className="mobile-nav-link"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                <span>CLI &amp; Desktop HUD</span>
+                <b>→</b>
+              </Link>
+              <Link
+                href="#how-it-works"
+                className="mobile-nav-link"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                <span>Choke-Point Mathematics</span>
+                <b>→</b>
+              </Link>
+              <Link
+                href="#install"
+                className="mobile-nav-link"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                <span>Download &amp; Activation</span>
+                <b>→</b>
+              </Link>
+              <Link
+                href="#open-source"
+                className="mobile-nav-link"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                <span>Open Source Philosophy</span>
+                <b>→</b>
+              </Link>
+              <a
+                href="https://github.com/Johanvasquezdev/armelis"
+                target="_blank"
+                rel="noreferrer"
+                className="mobile-nav-link"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                <span>GitHub Repository</span>
+                <b>↗</b>
+              </a>
+              <div style={{ borderTop: '1px solid var(--line)', paddingTop: '12px', marginTop: '6px', display: 'flex', gap: '16px', justifyContent: 'space-between' }}>
+                <Link
+                  href="/privacy"
+                  style={{ color: 'var(--muted)', fontSize: '12px', textDecoration: 'none' }}
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Privacy Policy
+                </Link>
+                <Link
+                  href="/terms"
+                  style={{ color: 'var(--muted)', fontSize: '12px', textDecoration: 'none' }}
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Terms of Use
+                </Link>
+                <a
+                  href="https://github.com/Johanvasquezdev/armelis"
+                  target="_blank"
+                  rel="noreferrer"
+                  style={{ color: 'var(--muted)', fontSize: '12px', textDecoration: 'none' }}
+                >
+                  MIT License
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Hero Section */}
       <section className="hero shell" aria-labelledby="hero-title">
@@ -1599,9 +1738,26 @@ export default function HomePage() {
       </section>
 
       {/* Site Footer */}
-      <footer className="site-footer shell">
+      <footer className="site-footer shell" style={{ alignItems: 'center' }}>
         <span>ARMELIS • APPLICATION SECURITY INTELLIGENCE</span>
-        <span>100% FREE &amp; OPEN SOURCE • MIT LICENSE</span>
+        <div style={{ display: 'flex', gap: '16px', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'center' }}>
+          <Link href="/privacy" style={{ color: 'var(--muted)', textDecoration: 'none', transition: 'color 150ms ease' }}>
+            Privacy Policy
+          </Link>
+          <span style={{ opacity: 0.3 }}>•</span>
+          <Link href="/terms" style={{ color: 'var(--muted)', textDecoration: 'none', transition: 'color 150ms ease' }}>
+            Terms of Use
+          </Link>
+          <span style={{ opacity: 0.3 }}>•</span>
+          <a
+            href="https://github.com/Johanvasquezdev/armelis"
+            target="_blank"
+            rel="noreferrer"
+            style={{ color: 'var(--muted)', textDecoration: 'none', transition: 'color 150ms ease' }}
+          >
+            MIT License
+          </a>
+        </div>
         <span>DEVELOPED BY JOHAN VASQUEZ</span>
       </footer>
 
