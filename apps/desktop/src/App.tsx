@@ -321,16 +321,26 @@ export default function App() {
             className={`segmented-btn ${theme === 'cold' ? 'active' : ''}`}
             onClick={() => setTheme('cold')}
             title="Cold analytical mode: Deep cyber void, nocturnal blue & cyan illumination"
+            style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}
           >
-            <span>❄ Cold analytical mode</span>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <polygon points="12 2 2 7 12 12 22 7 12 2" />
+              <polyline points="2 17 12 22 22 17" />
+              <polyline points="2 12 12 17 22 12" />
+            </svg>
+            <span>Cold analytical mode</span>
           </button>
           <button
             type="button"
             className={`segmented-btn ${theme === 'warm' ? 'active' : ''}`}
             onClick={() => setTheme('warm')}
             title="Warm protective: Tactical graphite armor, warm amber & bronze shield"
+            style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}
           >
-            <span>🛡 Warm protective</span>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+            </svg>
+            <span>Warm protective</span>
           </button>
         </div>
       </header>
@@ -350,8 +360,8 @@ export default function App() {
           </div>
           <div className="hud-subtext">
             {isPathSevered
-              ? '✓ Attack path severed at choke point'
-              : '🚨 Ingress reaches AWS Credentials'}
+              ? 'Attack path severed at choke point'
+              : 'Active ingress trajectory to credentials'}
           </div>
         </div>
 
@@ -406,7 +416,7 @@ export default function App() {
           <div className="reachability-title">
             <p className="eyebrow">ATTACK PATH REACHABILITY TOPOLOGY</p>
             <h3 id="attack-path-heading">
-              {isPathSevered ? '🛡 Exploit Chain Severed at Choke Point' : '⚡ Active Ingress-to-Crown-Jewel Trajectory'}
+              {isPathSevered ? 'Exploit Chain Severed at Choke Point' : 'Active Ingress-to-Crown-Jewel Trajectory'}
             </h3>
             <p>
               {isPathSevered
@@ -420,7 +430,7 @@ export default function App() {
             className={`sever-toggle-btn ${isPathSevered ? 'active' : 'inactive'}`}
             onClick={() => setIsPathSevered(!isPathSevered)}
           >
-            {isPathSevered ? '↺ Reset Attack Path Simulation' : '✂ Simulate Choke-Point Severance (Patch v9.0.2)'}
+            {isPathSevered ? 'Reset Attack Path Simulation' : 'Simulate Choke-Point Severance (Patch v9.0.2)'}
           </button>
         </div>
 
@@ -429,7 +439,13 @@ export default function App() {
           {/* Node 1: Ingress Entry Point */}
           <div className="topology-node topology-node-ingress">
             <div className="node-top">
-              <span className="node-icon-badge">🌐</span>
+              <span className="node-icon-badge">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <circle cx="12" cy="12" r="10" />
+                  <line x1="2" y1="12" x2="22" y2="12" />
+                  <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+                </svg>
+              </span>
               <span className="node-category">ENTRY POINT</span>
             </div>
             <strong>Public HTTP Endpoint</strong>
@@ -443,14 +459,29 @@ export default function App() {
           {/* Connector 1 */}
           <div className="topology-connector">
             <div className={`beam-line ${isPathSevered ? 'severed-line' : 'active'}`} />
-            <span className="beam-badge">{isPathSevered ? '✂' : '▶'}</span>
+            <span className="beam-badge">
+              {isPathSevered ? (
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                  <line x1="18" y1="6" x2="6" y2="18" />
+                  <line x1="6" y1="6" x2="18" y2="18" />
+                </svg>
+              ) : '▶'}
+            </span>
           </div>
 
           {/* Node 2: Choke-Point Vulnerability */}
           <div className={`topology-node topology-node-chokepoint ${isPathSevered ? 'severed' : ''}`}>
             <div className="node-top">
               <span className="node-icon-badge" style={{ color: isPathSevered ? '#10b981' : '#ef4444' }}>
-                {isPathSevered ? '✓' : '⚡'}
+                {isPathSevered ? (
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                    <polyline points="20 6 9 17 4 12" />
+                  </svg>
+                ) : (
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+                  </svg>
+                )}
               </span>
               <span className="node-category" style={{ color: isPathSevered ? '#34d399' : '#f87171' }}>
                 {isPathSevered ? 'PATCHED CHOKE POINT' : 'CHOKE POINT #1'}
@@ -472,8 +503,11 @@ export default function App() {
           <div className="topology-connector">
             <div className={`beam-line ${isPathSevered ? 'severed-line' : 'active'}`} />
             {isPathSevered ? (
-              <div className="severed-shield-indicator">
-                🛡 SEVERED
+              <div className="severed-shield-indicator" style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                </svg>
+                <span>SEVERED</span>
               </div>
             ) : (
               <span className="beam-badge">▶</span>
@@ -483,7 +517,12 @@ export default function App() {
           {/* Node 3: Crown Jewel Asset */}
           <div className="topology-node topology-node-crown">
             <div className="node-top">
-              <span className="node-icon-badge">💎</span>
+              <span className="node-icon-badge">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <polygon points="6 3 18 3 22 9 12 22 2 9 6 3" />
+                  <line x1="12" y1="22" x2="12" y2="9" />
+                </svg>
+              </span>
               <span className="node-category" style={{ color: '#fbbf24' }}>CROWN JEWEL</span>
             </div>
             <strong>Production Credentials</strong>
