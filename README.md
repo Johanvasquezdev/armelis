@@ -1,7 +1,8 @@
 # Armelis
 
 <p align="center">
-  <img src="armelis-logo.png" alt="Armelis Logo" width="120" />
+  <img src="<img width="2172" height="724" alt="image" src="https://github.com/user-attachments/assets/3e494a2e-f3d4-4728-8924-3ea80ea39d8c" />
+" />
 </p>
 
 <h3 align="center">Application Security Intelligence for AI-Assisted Teams & SOC Analysts</h3>
