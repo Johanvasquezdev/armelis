@@ -1,0 +1,59 @@
+name: Release Desktop
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release-desktop:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+
+      - name: Install Rust stable
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Rust Cache
+        uses: swatinem/rust-cache@v2
+        with:
+          workspaces: './apps/desktop/src-tauri -> target'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build and Publish Tauri Desktop App
+        uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          projectPath: './apps/desktop'
+          tagName: v__VERSION__
+          releaseName: 'Armelis v__VERSION__ — Security Command Center'
+          releaseBody: |
+            ### Armelis Desktop v__VERSION__
+            
+            Official native Windows desktop distribution of **Armelis: Application Security Intelligence & Choke-Point Defense**.
+            
+            #### 📦 Downloads:
+            - **Windows Installer (`.msi`)**: Standard Enterprise / Windows Installer package.
+            - **Windows Setup (`.exe`)**: Self-contained NSIS installer for current user or machine.
+            
+            #### ⚡ Key Capabilities:
+            - **Deterministic Reachability & Choke-Point Identification**: Pinpoint the exact blast-radius nexus where a single defensive fix collapses multi-vector attack paths.
+            - **Unified Multi-Engine Correlation**: Correlates SAST, SCA, secrets, and supply-chain vulnerabilities into cohesive kill-chains.
+            - **Live GitHub Repository Scanner**: Direct integration for real-time repository static & dynamic vulnerability audits.
+            - **Offline Air-Gapped Operation**: Full local scanning and intelligence cache with zero outbound telemetry requirements.
+          releaseDraft: false
+          prerelease: false
