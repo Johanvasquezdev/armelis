@@ -4,8 +4,8 @@
   "version": "0.1.3",
   "identifier": "dev.johanvasquez.armelis",
   "build": {
-    "beforeDevCommand": "npm run dev",
-    "beforeBuildCommand": "npm run build",
+    "beforeDevCommand": "cmd /c npm run dev",
+    "beforeBuildCommand": "cmd /c npm run build",
     "devUrl": "http://localhost:1420",
     "frontendDist": "../dist"
   },
@@ -24,7 +24,7 @@
   },
   "bundle": {
     "active": true,
-    "targets": "all",
+    "targets": ["nsis"],
     "icon": [
       "icons/32x32.png",
       "icons/128x128.png",
@@ -45,7 +45,7 @@
         "sidebarImage": "icons/installer-sidebar.bmp",
         "installerIcon": "icons/icon.ico",
         "installMode": "currentUser",
-        "languages": ["en-US", "es-ES"],
+        "languages": ["English", "Spanish"],
         "displayLanguageSelector": false
       }
     }

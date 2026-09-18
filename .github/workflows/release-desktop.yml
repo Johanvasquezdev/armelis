@@ -39,6 +39,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           projectPath: './apps/desktop'
+          args: --verbose
           tagName: v__VERSION__
           releaseName: 'Armelis v__VERSION__ — Security Command Center'
           releaseBody: |
@@ -47,8 +48,7 @@ jobs:
             Official native Windows desktop distribution of **Armelis: Application Security Intelligence & Choke-Point Defense**.
             
             #### 📦 Downloads:
-            - **Windows Installer (`.msi`)**: Standard Enterprise / Windows Installer package.
-            - **Windows Setup (`.exe`)**: Self-contained NSIS installer for current user or machine.
+            - **Windows Setup (`.exe`)**: Self-contained NSIS installer with desktop and start-menu integration.
             
             #### ⚡ Key Capabilities:
             - **Deterministic Reachability & Choke-Point Identification**: Pinpoint the exact blast-radius nexus where a single defensive fix collapses multi-vector attack paths.
