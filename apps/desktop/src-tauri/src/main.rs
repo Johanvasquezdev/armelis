@@ -100,21 +100,37 @@ fn assert_inside(workspace: &Path, candidate: &Path) -> Result<(), String> {
 }
 
 #[tauri::command]
-fn run_scan(target: String, scanners: Vec<String>, trivy_executable: Option<String>) -> Result<ScanResult, String> {
+async fn run_scan(target: String, scanners: Vec<String>, trivy_executable: Option<String>) -> Result<ScanResult, String> {
     let target_path = validate_target(&target)?;
     validate_scanners(&scanners)?;
     let clean_trivy = validate_executable(trivy_executable.as_deref().unwrap_or(""), "Trivy", Some("trivy"))?;
 
-    let output = Command::new(&clean_trivy)
-        .args([
-            "repo",
-            "--format", "json",
-            "--scanners", &scanners.join(","),
-            "--skip-dirs", "node_modules,.git,dist,build,.next"
-        ])
-        .arg(&target_path)
-        .output()
-        .map_err(|error| format!("Could not start Trivy executable '{clean_trivy}': {error}"))?;
+    let clean_trivy_for_err = clean_trivy.clone();
+    let thread_handle = std::thread::spawn(move || {
+        Command::new(&clean_trivy)
+            .args([
+                "repo",
+                "--format", "json",
+                "--scanners", &scanners.join(","),
+                "--skip-dirs", "**/node_modules",
+                "--skip-dirs", "**/.git",
+                "--skip-dirs", "**/dist",
+                "--skip-dirs", "**/build",
+                "--skip-dirs", "**/.next",
+                "--skip-dirs", "**/target",
+                "--skip-dirs", "**/.venv",
+                "--skip-dirs", "**/embedding-pipeline/.cache",
+                "--skip-dirs", "**/.gemini",
+                "--timeout", "120s",
+            ])
+            .arg(&target_path)
+            .output()
+    });
+
+    let output = thread_handle
+        .join()
+        .map_err(|_| "Scanner worker thread panicked".to_string())?
+        .map_err(|error| format!("Could not start Trivy executable '{clean_trivy_for_err}': {error}"))?;
 
     let stdout = String::from_utf8_lossy(&output.stdout).into_owned();
     let stderr = String::from_utf8_lossy(&output.stderr).into_owned();

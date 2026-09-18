@@ -1,55 +1,14 @@
 import { useState, useEffect, useRef } from 'react';
 import { invoke } from '@tauri-apps/api/core';
-
-export type MitreTechnique = {
-  tactic: string;
-  technique_id: string;
-  technique_name: string;
-  url?: string;
-};
-
-export type CodeDiff = {
-  file: string;
-  before: string[];
-  after: string[];
-};
-
-export type Finding = {
-  id: string;
-  title: string;
-  description: string;
-  severity: 'CRITICAL' | 'HIGH' | 'MEDIUM' | 'LOW' | 'INFO';
-  confidence: string;
-  source: string;
-  category: string;
-  finding_type: string;
-  owasp_top10?: string[];
-  mitre_attack?: MitreTechnique[];
-  package?: string;
-  installed_version?: string;
-  fixed_version?: string;
-  file?: string;
-  line?: number;
-  cve?: string;
-  remediation?: string;
-  code_diff?: CodeDiff;
-  ai_prompt?: string;
-  status: string;
-  is_reachable?: boolean;
-  evidence?: Record<string, unknown>;
-};
-
-export type AttackNode = {
-  id: string;
-  category: string;
-  title: string;
-  subtitle: string;
-  description: string;
-  hopNumber: number;
-  isChokePoint?: boolean;
-  isCrownJewel?: boolean;
-  findingId?: string;
-};
+import {
+  Finding,
+  AttackNode,
+  CodeDiff,
+  MitreTechnique,
+  normalizeTrivyReport,
+  synthesizeAttackTopology
+} from './trivyNormalizer';
+export type { Finding, AttackNode, CodeDiff, MitreTechnique };
 
 export type TelemetryEvent = {
   id: string;
@@ -310,7 +269,7 @@ const INITIAL_TELEMETRY: TelemetryEvent[] = [
 
 export default function App() {
   const [theme, setTheme] = useState<'cold' | 'warm'>('cold');
-  const [target, setTarget] = useState('');
+  const [target, setTarget] = useState('.');
   const [selected, setSelected] = useState(scanners);
   const [busy, setBusy] = useState(false);
   const [scanProgress, setScanProgress] = useState(0);
@@ -318,9 +277,15 @@ export default function App() {
   const [error, setError] = useState('');
   const [embedStatus, setEmbedStatus] = useState<'idle' | 'skipped' | 'pending' | 'succeeded' | 'failed'>('idle');
   const [embedMessage, setEmbedMessage] = useState('');
-  const [findings, setFindings] = useState<Finding[]>(DEMO_FINDINGS);
+  const [findings, setFindings] = useState<Finding[]>([]);
   const [hasScanned, setHasScanned] = useState(false);
+  const [isDemoMode, setIsDemoMode] = useState(false);
   const [filterSeverity, setFilterSeverity] = useState<string>('ALL');
+  
+  // Dynamic Attack Graph Topology
+  const [topologyNodes, setTopologyNodes] = useState<AttackNode[]>(() =>
+    synthesizeAttackTopology([], 'Local Workspace')
+  );
   
   // Tactical Drawer & Inspector State
   const [selectedFinding, setSelectedFinding] = useState<Finding | null>(null);
@@ -335,7 +300,15 @@ export default function App() {
 
   // Live SIEM Telemetry Dock State
   const [telemetryOpen, setTelemetryOpen] = useState(true);
-  const [telemetryLogs, setTelemetryLogs] = useState<TelemetryEvent[]>(INITIAL_TELEMETRY);
+  const [telemetryLogs, setTelemetryLogs] = useState<TelemetryEvent[]>(() => [
+    {
+      id: 'tel-init-1',
+      timestamp: new Date().toTimeString().split(' ')[0],
+      level: 'INFO',
+      type: 'ENGINE_READY',
+      raw: 'CEF:0|Armelis|CoreEngine|0.1.4|INITIALIZED|Air-gapped security workstation ready. Select target or load simulation.|1'
+    }
+  ]);
   const [telemetryFilter, setTelemetryFilter] = useState<'ALL' | 'CRITICAL' | 'HIGH' | 'SUCCESS'>('ALL');
   const telemetryEndRef = useRef<HTMLDivElement>(null);
 
@@ -372,51 +345,43 @@ export default function App() {
     );
   }
 
+  function loadDemoScenario() {
+    setFindings(DEMO_FINDINGS);
+    const demoTopology = synthesizeAttackTopology(DEMO_FINDINGS, 'Demo Scenario (jsonwebtoken CVE-2025-4128)');
+    setTopologyNodes(demoTopology);
+    setHasScanned(true);
+    setIsDemoMode(true);
+    setIsPathSevered(false);
+    setError('');
+    setSelectedFinding(DEMO_FINDINGS[0]);
+    addTelemetryLog(
+      'INFO',
+      'DEMO_SIMULATION_LOADED',
+      'CEF:0|Armelis|App|0.1.4|DEMO_LOADED|Loaded authorized demo attack path simulation (jsonwebtoken 8.5.1 key confusion)|1'
+    );
+  }
+
   function handleSeverToggle() {
     const nextSevered = !isPathSevered;
     setIsPathSevered(nextSevered);
+
+    const chokeNode = topologyNodes.find((n) => n.isChokePoint);
+    const chokeTitle = chokeNode?.title || 'Choke Point';
+    const fixText = chokeNode?.fixedVersion ? `patched to ${chokeNode.fixedVersion}` : 'remediated';
 
     if (nextSevered) {
       addTelemetryLog(
         'SUCCESS',
         'CHOKE_POINT_SEVERED',
-        'CEF:0|Armelis|DefenseEngine|0.1.3|SEVERANCE_ACTIVE|Choke-point patched to jsonwebtoken@9.0.2. Ingress reachability dropped to 0%.|1|action="SEVER" target="package.json:142"'
+        `CEF:0|Armelis|DefenseEngine|0.1.4|SEVERANCE_ACTIVE|Choke point ${chokeTitle} ${fixText}. Ingress reachability dropped to 0%.|1|action="SEVER" target="${chokeNode?.subtitle || 'target'}"`
       );
     } else {
       addTelemetryLog(
         'HIGH',
         'SIMULATION_RESET',
-        'CEF:0|Armelis|GraphEngine|0.1.3|PATH_RESTORED|Simulation reset. Active exploit reachability trajectory restored to 84%.|7|status="EXPOSED"'
+        'CEF:0|Armelis|GraphEngine|0.1.4|PATH_RESTORED|Simulation reset. Active exploit reachability trajectory restored.|7|status="EXPOSED"'
       );
     }
-  }
-
-  function simulateScanProgress(): Promise<void> {
-    const phases = [
-      { pct: 15, msg: 'Initializing native Trivy sandbox vector...' },
-      { pct: 35, msg: 'Auditing dependency manifest call-graphs...' },
-      { pct: 60, msg: 'Scanning IaC container policies & misconfigurations...' },
-      { pct: 80, msg: 'Running Shannon entropy credential detectors...' },
-      { pct: 95, msg: 'Correlating attack path reachability to Crown Jewels...' },
-      { pct: 100, msg: 'Scan complete. Findings normalized.' }
-    ];
-
-    return new Promise((resolve) => {
-      let currentIdx = 0;
-      setScanProgress(5);
-      setScanPhaseMessage(phases[0].msg);
-
-      const interval = setInterval(() => {
-        currentIdx++;
-        if (currentIdx < phases.length) {
-          setScanProgress(phases[currentIdx].pct);
-          setScanPhaseMessage(phases[currentIdx].msg);
-        } else {
-          clearInterval(interval);
-          resolve();
-        }
-      }, 400);
-    });
   }
 
   async function runScan() {
@@ -425,95 +390,128 @@ export default function App() {
     setEmbedStatus('idle');
     setEmbedMessage('');
     setHasScanned(true);
+    setIsDemoMode(false);
     setIsPathSevered(false);
+    setSelectedFinding(null);
+
+    const targetPath = target.trim() || '.';
 
     addTelemetryLog(
       'INFO',
       'SCAN_INITIATED',
-      `CEF:0|Armelis|Runner|0.1.3|SCAN_STARTED|Sandboxed scan initiated on target "${target || 'Default Workspace'}"|3|providers="${selected.join(',')}"`
+      `CEF:0|Armelis|Runner|0.1.4|SCAN_STARTED|Sandboxed scan initiated on target "${targetPath}"|3|providers="${selected.join(',')}"`
     );
 
-    try {
-      const progressPromise = simulateScanProgress();
+    setScanProgress(15);
+    setScanPhaseMessage('Invoking native Trivy security engine...');
 
+    const timer1 = setTimeout(() => {
+      setScanProgress(45);
+      setScanPhaseMessage('Auditing dependencies, lockfiles, and package manifests...');
+    }, 1500);
+
+    const timer2 = setTimeout(() => {
+      setScanProgress(75);
+      setScanPhaseMessage('Scanning container configurations, IaC, and secrets...');
+    }, 4500);
+
+    const timer3 = setTimeout(() => {
+      setScanProgress(90);
+      setScanPhaseMessage('Synthesizing reachability graph and choke points...');
+    }, 9000);
+
+    try {
       const result = await invoke<ScanResult>('run_scan', {
-        target: target.trim(),
+        target: targetPath,
         scanners: selected
       });
 
-      await progressPromise;
+      clearTimeout(timer1);
+      clearTimeout(timer2);
+      clearTimeout(timer3);
 
-      const scanSucceeded = result.status === 'SUCCESS' || result.status === 'DEMO' || result.status === 'COMPLETED';
+      setScanProgress(100);
+      setScanPhaseMessage('Scan complete. Findings normalized.');
+
+      const scanSucceeded = result.status === 'SUCCESS' || result.status === 'COMPLETED';
       if (scanSucceeded) {
-        let normalized: Finding[] = [];
-        try {
-          const parsed = JSON.parse(result.stdout);
-          const rawFindings = Array.isArray(parsed) ? parsed : (parsed.findings || []);
-          normalized = rawFindings.map((f: Record<string, unknown>, idx: number) => ({
-            id: String(f.id || `f-${idx}`),
-            title: String(f.title || f.name || 'Security Finding'),
-            description: String(f.description || ''),
-            severity: (String(f.severity || 'INFO').toUpperCase()) as Finding['severity'],
-            confidence: String(f.confidence || 'HIGH'),
-            source: String(f.source || 'Trivy'),
-            category: String(f.category || 'General'),
-            finding_type: String(f.finding_type || f.type || 'UNKNOWN'),
-            owasp_top10: Array.isArray(f.owasp_top10) ? f.owasp_top10.map(String) : [],
-            mitre_attack: Array.isArray(f.mitre_attack) ? (f.mitre_attack as MitreTechnique[]) : [],
-            package: f.package ? String(f.package) : undefined,
-            installed_version: f.installed_version ? String(f.installed_version) : undefined,
-            fixed_version: f.fixed_version ? String(f.fixed_version) : undefined,
-            file: f.file ? String(f.file) : undefined,
-            line: typeof f.line === 'number' ? f.line : undefined,
-            cve: f.cve ? String(f.cve) : undefined,
-            remediation: f.remediation ? String(f.remediation) : undefined,
-            code_diff: (f.code_diff as CodeDiff) || undefined,
-            ai_prompt: f.ai_prompt ? String(f.ai_prompt) : undefined,
-            status: String(f.status || 'OPEN'),
-            is_reachable: idx === 0 || f.finding_type === 'DEPENDENCY' || f.category === 'Vulnerability',
-            evidence: (f.evidence as Record<string, unknown>) || {}
-          }));
-        } catch {
-          normalized = [];
+        const normalized = normalizeTrivyReport(result.stdout, targetPath);
+        setFindings(normalized);
+
+        const newTopology = synthesizeAttackTopology(normalized, targetPath);
+        setTopologyNodes(newTopology);
+
+        if (newTopology[1]?.id) {
+          setSelectedNodeId(newTopology[1].id);
         }
 
-        setFindings(normalized);
-        addTelemetryLog(
-          'INFO',
-          'SCAN_FINISHED',
-          `CEF:0|Armelis|Runner|0.1.3|SCAN_COMPLETED|Normalized ${normalized.length} findings across scanned manifests|3|findings_count=${normalized.length}`
-        );
-
         if (normalized.length === 0) {
-          setEmbedStatus('skipped');
-          setEmbedMessage('No findings to embed.');
+          addTelemetryLog(
+            'SUCCESS',
+            'PERIMETER_VERIFIED',
+            `CEF:0|Armelis|DetectionEngine|0.1.4|PERIMETER_CLEAN|Target "${targetPath}" verified secure. 0 vulnerabilities or secrets found.|1|findings_count=0`
+          );
         } else {
-          setEmbedStatus('pending');
+          addTelemetryLog(
+            'HIGH',
+            'FINDINGS_NORMALIZED',
+            `CEF:0|Armelis|DetectionEngine|0.1.4|FINDINGS_CORRELATED|Normalized ${normalized.length} findings across scanned manifests|8|findings_count=${normalized.length}`
+          );
+
+          normalized.slice(0, 3).forEach((f) => {
+            addTelemetryLog(
+              f.severity === 'CRITICAL' ? 'CRITICAL' : f.severity === 'HIGH' ? 'HIGH' : 'INFO',
+              f.finding_type,
+              generateCEF(f)
+            );
+          });
+        }
+
+        if (normalized.length > 0) {
           try {
             const embedResult = await invoke<ScanResult>('embed_findings', {
-              workspace: target.trim(),
+              workspace: targetPath,
               findingsJson: JSON.stringify({ product: 'Armelis', findings: normalized })
             });
             if (embedResult.status === 'SUCCEEDED') {
               setEmbedStatus('succeeded');
-              setEmbedMessage('Local similarity vectors stored. Similarity is not confirmed evidence.');
+              setEmbedMessage('Local similarity vectors stored.');
             } else {
-              setEmbedStatus('failed');
-              setEmbedMessage(embedResult.stderr || embedResult.stdout || 'Embedding worker failed.');
+              setEmbedStatus('skipped');
+              setEmbedMessage('Similarity embeddings skipped (local Python venv not initialized).');
             }
-          } catch (embedError: unknown) {
-            setEmbedStatus('failed');
-            setEmbedMessage(embedError instanceof Error ? embedError.message : String(embedError));
+          } catch {
+            setEmbedStatus('skipped');
+            setEmbedMessage('Similarity embeddings skipped.');
           }
         }
       } else {
-        setError(`Scanner failed (Exit ${result.exit_code}): ${result.stderr || result.stdout}`);
+        clearTimeout(timer1);
+        clearTimeout(timer2);
+        clearTimeout(timer3);
+        setError(`Scanner failed (Exit ${result.exit_code}): ${result.stderr || result.stdout || 'Unknown error'}`);
+        addTelemetryLog(
+          'CRITICAL',
+          'SCAN_FAILED',
+          `CEF:0|Armelis|Runner|0.1.4|SCAN_ABORTED|Scan failed on target "${targetPath}": ${result.stderr || 'Execution error'}|9`
+        );
       }
     } catch (e: unknown) {
-      setError(e instanceof Error ? e.message : String(e));
+      clearTimeout(timer1);
+      clearTimeout(timer2);
+      clearTimeout(timer3);
+      const errMsg = e instanceof Error ? e.message : String(e);
+      setError(`Scanner error: ${errMsg}`);
+      addTelemetryLog(
+        'CRITICAL',
+        'SCAN_EXCEPTION',
+        `CEF:0|Armelis|Runner|0.1.4|EXCEPTION|Scanner failed to execute: ${errMsg}|10`
+      );
     } finally {
       setBusy(false);
-      setScanProgress(0);
+      setTimeout(() => {
+        setScanProgress(0);
+      }, 1500);
     }
   }
 
@@ -534,7 +532,7 @@ export default function App() {
   // SIEM formatting helpers
   function generateCEF(f: Finding) {
     const sevNum = f.severity === 'CRITICAL' ? 10 : f.severity === 'HIGH' ? 7 : f.severity === 'MEDIUM' ? 5 : 3;
-    return `CEF:0|Armelis|SecurityPlatform|0.1.3|${f.id}|${f.title}|${sevNum}|src=127.0.0.1 cat=${f.category} cs1Label=TargetFile cs1=${f.file || 'unknown'} cs2Label=Remediation cs2=${f.remediation || 'none'}`;
+    return `CEF:0|Armelis|SecurityPlatform|0.1.4|${f.id}|${f.title}|${sevNum}|src=127.0.0.1 cat=${f.category} cs1Label=TargetFile cs1=${f.file || 'unknown'} cs2Label=Remediation cs2=${f.remediation || 'none'}`;
   }
 
   function generateECS(f: Finding) {
@@ -573,8 +571,18 @@ export default function App() {
   // Radial Exposure Gauge calculations
   const radius = 34;
   const circumference = 2 * Math.PI * radius;
-  const exposurePct = isPathSevered ? 0 : 84;
+  const reachableCount = findings.filter((f) => f.is_reachable).length;
+  const exposurePct = isPathSevered || findings.length === 0
+    ? 0
+    : Math.min(100, Math.max(15, reachableCount * 25 + findings.length * 3));
   const strokeDashoffset = circumference - (exposurePct / 100) * circumference;
+
+  const uniqueMitre = Array.from(
+    new Set(findings.flatMap((f) => f.mitre_attack?.map((m) => m.technique_id) || []))
+  );
+
+  const chokeNode = topologyNodes.find((n) => n.isChokePoint);
+  const isClean = hasScanned && findings.length === 0;
 
   return (
     <main className="shell">
@@ -590,7 +598,7 @@ export default function App() {
           <p className="eyebrow">
             {theme === 'cold' ? 'TACTICAL ATTACK GRAPH INTELLIGENCE' : 'TACTICAL DEFENSIVE ARMOR MATRIX'}
           </p>
-          <h1>ARME<span>[LIS]</span> <span className="version-tag">v0.1.3</span></h1>
+          <h1>ARME<span>[LIS]</span> <span className="version-tag">v0.1.4</span></h1>
         </div>
 
         {/* Segmented Control for Dual Theme */}
@@ -628,8 +636,8 @@ export default function App() {
         <div className="hud-card hud-gauge-card">
           <div className="hud-card-header">
             <span className="hud-label">Threat Exposure Index</span>
-            <span className={`hud-badge ${isPathSevered ? 'hud-badge-success' : 'hud-badge-danger'}`}>
-              {isPathSevered ? 'SECURED' : 'CRITICAL'}
+            <span className={`hud-badge ${isPathSevered || findings.length === 0 ? 'hud-badge-success' : 'hud-badge-danger'}`}>
+              {isPathSevered || findings.length === 0 ? 'SECURED' : 'CRITICAL'}
             </span>
           </div>
           <div className="gauge-row">
@@ -643,7 +651,7 @@ export default function App() {
                   strokeWidth="7"
                 />
                 <circle
-                  className={`gauge-indicator ${isPathSevered ? 'gauge-severed' : 'gauge-active'}`}
+                  className={`gauge-indicator ${isPathSevered || findings.length === 0 ? 'gauge-severed' : 'gauge-active'}`}
                   cx="42"
                   cy="42"
                   r={radius}
@@ -653,19 +661,21 @@ export default function App() {
                 />
               </svg>
               <div className="gauge-center-text">
-                <span className="gauge-pct" style={{ color: isPathSevered ? '#10b981' : '#ef4444' }}>
+                <span className="gauge-pct" style={{ color: isPathSevered || findings.length === 0 ? '#10b981' : '#ef4444' }}>
                   {exposurePct}%
                 </span>
               </div>
             </div>
             <div className="gauge-meta">
               <span className="gauge-status-title">
-                {isPathSevered ? 'Trajectory Neutralized' : 'Active Ingress Path'}
+                {findings.length === 0 ? 'Perimeter Verified' : isPathSevered ? 'Trajectory Neutralized' : 'Active Ingress Path'}
               </span>
               <p className="gauge-status-desc">
-                {isPathSevered
+                {findings.length === 0
+                  ? 'Zero vulnerabilities detected. System perimeter verified clean.'
+                  : isPathSevered
                   ? 'Choke point severed. 0% of external traffic reaches credentials.'
-                  : 'Direct exploit reachability from port 443 to production database.'}
+                  : `Direct exploit reachability from ${topologyNodes[0]?.title || 'Ingress'} to ${topologyNodes[4]?.title || 'Target Asset'}.`}
               </p>
             </div>
           </div>
@@ -678,7 +688,7 @@ export default function App() {
             <span className="hud-badge hud-badge-accent">1 ACTION = 100%</span>
           </div>
           <div className="hud-value" style={{ color: 'var(--accent-primary)' }}>
-            1 : {findings.length || 3}
+            1 : {Math.max(1, findings.length)}
           </div>
           <div className="hud-subtext">
             1 isolated choke point breaks entire intrusion chain
@@ -689,7 +699,7 @@ export default function App() {
         <div className="hud-card">
           <div className="hud-card-header">
             <span className="hud-label">Perimeter Findings</span>
-            <span className="hud-badge hud-badge-danger">{criticalCount} CRIT</span>
+            <span className={`hud-badge ${criticalCount > 0 ? 'hud-badge-danger' : 'hud-badge-accent'}`}>{criticalCount} CRIT</span>
           </div>
           <div className="hud-value">
             {findings.length}
@@ -708,10 +718,10 @@ export default function App() {
             <span className="hud-badge hud-badge-accent">ATT&CK</span>
           </div>
           <div className="hud-value" style={{ color: '#60a5fa' }}>
-            4 Vectors
+            {uniqueMitre.length > 0 ? `${uniqueMitre.length} Vectors` : 'Verified'}
           </div>
           <div className="hud-subtext" style={{ fontFamily: 'monospace' }}>
-            T1190 • T1195 • T1552 • T1562
+            {uniqueMitre.length > 0 ? uniqueMitre.slice(0, 4).join(' • ') : 'No Threat Vectors'}
           </div>
         </div>
       </section>
@@ -725,12 +735,18 @@ export default function App() {
               <p className="eyebrow" style={{ margin: 0 }}>ATTACK PATH CORRELATION TOPOLOGY (5-STAGE DAG)</p>
             </div>
             <h3 id="attack-path-heading" style={{ marginTop: '4px' }}>
-              {isPathSevered ? 'Exploit Chain Severed at Choke Point' : 'Active Ingress-to-Crown-Jewel Trajectory'}
+              {isClean
+                ? 'Perimeter Verified • Zero Attack Routes'
+                : isPathSevered
+                ? 'Exploit Chain Severed at Choke Point'
+                : 'Active Ingress-to-Crown-Jewel Trajectory'}
             </h3>
             <p>
-              {isPathSevered
-                ? 'Minimal Cut Activated: Upgrading jsonwebtoken to v9.0.2 severs lateral pivot and protects production database.'
-                : 'Graph correlation reveals an unauthenticated public route reaches production customer database through one choke point.'}
+              {isClean
+                ? 'All manifests, dependencies, and configuration policies are verified against known CVEs and security benchmarks.'
+                : isPathSevered
+                ? `Minimal Cut Activated: Remediating ${chokeNode?.title || 'Choke Point'} breaks the lateral pivot and protects downstream assets.`
+                : `Graph correlation reveals external ingress reaches target assets through primary choke point: ${chokeNode?.title || 'Component'}.`}
             </p>
           </div>
 
@@ -742,17 +758,20 @@ export default function App() {
             {isPathSevered ? (
               <>
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                  <path d="M1 4v6h6M23 20v-6h-6" />
-                  <path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15" />
+                  <polyline points="20 6 9 17 4 12" />
                 </svg>
-                <span>Reset Attack Simulation</span>
+                <span>Choke Point Severed (Reset Simulation)</span>
               </>
             ) : (
               <>
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                   <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
                 </svg>
-                <span>Sever Choke Point (Patch v9.0.2)</span>
+                <span>
+                  Sever Choke Point (
+                  {chokeNode?.fixedVersion ? `Patch v${chokeNode.fixedVersion}` : 'Break Path'}
+                  )
+                </span>
               </>
             )}
           </button>
@@ -761,7 +780,7 @@ export default function App() {
         {/* 5-Node Interactive Attack Graph Flow */}
         <div className="topology-flow-scroll">
           <div className="topology-flow-5nodes">
-            {TOPOLOGY_NODES.map((node, index) => {
+            {topologyNodes.map((node, index) => {
               const isSelected = selectedNodeId === node.id;
               const isChokePoint = node.isChokePoint;
               const isAfterChokePoint = index >= 2;
@@ -823,11 +842,13 @@ export default function App() {
                     </div>
 
                     <strong>
-                      {isChokePoint && isPathSevered ? 'jsonwebtoken @ 9.0.2' : node.title}
+                      {isChokePoint && isPathSevered
+                        ? (node.fixedVersion ? `${node.title.split('@')[0]} @ ${node.fixedVersion}` : 'Remediated & Protected')
+                        : node.title}
                     </strong>
                     <p>
                       {isChokePoint && isPathSevered
-                        ? 'Signature algorithm whitelisting enforced. Key forgery blocked.'
+                        ? 'Defensive remediation applied. Key reachability path severed to 0%.'
                         : node.description}
                     </p>
 
@@ -838,19 +859,23 @@ export default function App() {
                           ? 'ISOLATED'
                           : isChokePoint && isPathSevered
                           ? 'SEVERED'
+                          : findings.length === 0
+                          ? 'VERIFIED'
                           : 'EXPOSED'}
                       </span>
                     </div>
                   </div>
 
                   {/* Inter-node Connector */}
-                  {index < TOPOLOGY_NODES.length - 1 && (
+                  {index < topologyNodes.length - 1 && (
                     <div className="topology-connector">
                       <div
                         className={`beam-line ${
                           index === 1 && isPathSevered
                             ? 'severed-beam'
                             : isPathSevered && isAfterChokePoint
+                            ? 'isolated-beam'
+                            : findings.length === 0
                             ? 'isolated-beam'
                             : 'active'
                         }`}
@@ -934,16 +959,26 @@ export default function App() {
           <button
             type="button"
             className="quick-target-chip"
-            onClick={() => setTarget('C:\\Users\\johan\\OneDrive\\Documents\\CyberScan')}
+            onClick={() => setTarget('.')}
+            title="Scan current workspace root"
           >
-            CyberScan (Armelis)
+            Current Directory (.)
           </button>
           <button
             type="button"
             className="quick-target-chip"
-            onClick={() => setTarget('.')}
+            onClick={() => setTarget('packages/scanner-adapters/trivy/test/fixture')}
+            title="Scan test fixture containing real CVEs & credentials"
           >
-            Current Directory (.)
+            Vulnerable Fixture (Testbed)
+          </button>
+          <button
+            type="button"
+            className="quick-target-chip highlight-chip"
+            onClick={loadDemoScenario}
+            title="Load full 5-stage attack path demonstration scenario"
+          >
+            🧪 Load Demo Scenario
           </button>
         </div>
 
@@ -1000,17 +1035,10 @@ export default function App() {
             </button>
             <button
               className="secondary-pill"
-              onClick={() => {
-                setFindings(DEMO_FINDINGS);
-                setHasScanned(false);
-                setIsPathSevered(false);
-                setError('');
-                setEmbedStatus('idle');
-                setEmbedMessage('');
-                addTelemetryLog('INFO', 'DEMO_RESET', 'CEF:0|Armelis|App|0.1.3|BASELINE_RESET|Demo findings restored|1');
-              }}
+              onClick={loadDemoScenario}
+              title="Load pre-configured attack path with CVE-2025-4128 and AWS credentials"
             >
-              Reset Demo Baseline
+              Load Demo Scenario
             </button>
           </div>
         )}
@@ -1055,7 +1083,45 @@ export default function App() {
         </div>
 
         {/* Finding Rows or Clean Empty State */}
-        {hasScanned && findings.length === 0 ? (
+        {!hasScanned && findings.length === 0 ? (
+          <div className="clean-state-card" style={{ padding: '36px 24px', borderStyle: 'dashed' }}>
+            <div
+              className="clean-shield"
+              style={{
+                background: theme === 'cold' ? 'rgba(56, 189, 248, 0.12)' : 'rgba(245, 158, 11, 0.12)',
+                color: 'var(--accent-primary)',
+                borderColor: 'var(--accent-primary)'
+              }}
+            >
+              ⚡
+            </div>
+            <h3>Ready to Audit Repository</h3>
+            <p style={{ maxWidth: '540px', margin: '8px auto 20px', lineHeight: 1.6 }}>
+              Armelis runs Trivy air-gapped directly on your machine. Scan your local dependencies, lockfiles, configuration manifests, and secret tokens with zero data egress.
+            </p>
+            <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
+              <button
+                type="button"
+                className="primary-pill"
+                onClick={runScan}
+                style={{ fontSize: '13px', padding: '9px 20px' }}
+              >
+                Scan Workspace Now
+              </button>
+              <button
+                type="button"
+                className="secondary-pill"
+                onClick={loadDemoScenario}
+                style={{ fontSize: '13px', padding: '9px 20px' }}
+              >
+                🧪 Explore Attack Path Simulation
+              </button>
+            </div>
+            <span className="clean-chip" style={{ marginTop: '22px' }}>
+              LOCAL PROCESS BOUNDARY • ZERO CLOUD EGRESS • MITRE ATT&CK ALIGNED
+            </span>
+          </div>
+        ) : hasScanned && findings.length === 0 ? (
           <div className="clean-state-card">
             <div className="clean-shield">✓</div>
             <h3>Target Repository Secure & Verified</h3>
