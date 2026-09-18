@@ -13,6 +13,7 @@
 
 <p align="center">
   <a href="https://www.npmjs.com/package/armelis"><img src="https://img.shields.io/npm/v/armelis.svg?color=cb3837&logo=npm" alt="npm version" /></a>
+  <a href="https://github.com/Johanvasquezdev/armelis/releases/latest"><img src="https://img.shields.io/github/v/release/Johanvasquezdev/armelis?color=10b981&logo=github&label=Windows%20Desktop" alt="Desktop Release" /></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License: MIT" /></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/Open%20Source-100%25%20Free-34d399.svg" alt="Open Source: 100% Free" /></a>
   <a href="#"><img src="https://img.shields.io/badge/Platform-Web%20%7C%20Tauri%202%20Desktop-00e5ff.svg" alt="Platform: Web | Tauri 2 Desktop" /></a>
@@ -140,7 +141,15 @@ armelis --help
 
 ---
 
-### 2. Zero-Install Instant Execution (`npx`)
+### 2. Native Windows Desktop Installer
+For local, air-gapped visual attack path inspection and interactive repository analysis:
+
+- 📦 **[Download Armelis v0.1.3 Setup (.exe)](https://github.com/Johanvasquezdev/armelis/releases/download/v0.1.3/Armelis_0.1.3_x64-setup.exe)**
+- 🏷️ **[View All GitHub Releases & Checksums](https://github.com/Johanvasquezdev/armelis/releases)**
+
+---
+
+### 3. Zero-Install Instant Execution (`npx`)
 Run scans, trace lateral attack reachability, or break exploit chains without installing:
 
 ```bash
@@ -159,7 +168,7 @@ npx armelis export . --format cef
 
 ---
 
-### 3. Clone from Source (Monorepo)
+### 4. Clone from Source (Monorepo)
 ```bash
 git clone https://github.com/Johanvasquezdev/armelis.git
 cd armelis
