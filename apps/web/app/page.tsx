@@ -269,36 +269,6 @@ export default function HomePage() {
           <BrandWordmark theme={theme} />
         </Link>
         <nav aria-label="Primary navigation">
-          {/* Apple HIG Segmented Theme Control */}
-          <div className="web-theme-control" role="group" aria-label="Theme mode switcher">
-            <button
-              type="button"
-              className={`web-theme-btn ${theme === 'cold' ? 'active' : ''}`}
-              onClick={() => setTheme('cold')}
-              title="Cold analytical mode"
-              style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}
-            >
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <polygon points="12 2 2 7 12 12 22 7 12 2" />
-                <polyline points="2 17 12 22 22 17" />
-                <polyline points="2 12 12 17 22 12" />
-              </svg>
-              <span>Cold analytical mode</span>
-            </button>
-            <button
-              type="button"
-              className={`web-theme-btn ${theme === 'warm' ? 'active' : ''}`}
-              onClick={() => setTheme('warm')}
-              title="Warm protective"
-              style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}
-            >
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-              </svg>
-              <span>Warm protective</span>
-            </button>
-          </div>
-
           <Link href="/dashboard" style={{ color: 'var(--cyan)', fontWeight: 700 }}>
             Live Console ↗
           </Link>
@@ -307,6 +277,38 @@ export default function HomePage() {
           <Link href="#how-it-works">How it works</Link>
           <Link href="#install">Activation &amp; Download</Link>
           <Link href="#open-source">Open Source</Link>
+        </nav>
+
+        {/* Header Right Actions (Theme Switcher + GitHub CTA) */}
+        <div className="site-header-actions">
+          {/* Apple HIG Segmented Theme Control */}
+          <div className="web-theme-control" role="group" aria-label="Theme mode switcher">
+            <button
+              type="button"
+              className={`web-theme-btn ${theme === 'cold' ? 'active' : ''}`}
+              onClick={() => setTheme('cold')}
+              title="Cold analytical mode"
+            >
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <polygon points="12 2 2 7 12 12 22 7 12 2" />
+                <polyline points="2 17 12 22 22 17" />
+                <polyline points="2 12 12 17 22 12" />
+              </svg>
+              <span>Cold</span>
+            </button>
+            <button
+              type="button"
+              className={`web-theme-btn ${theme === 'warm' ? 'active' : ''}`}
+              onClick={() => setTheme('warm')}
+              title="Warm protective"
+            >
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+              </svg>
+              <span>Warm</span>
+            </button>
+          </div>
+
           <Button asChild size="sm">
             <a
               href="https://github.com/Johanvasquezdev/armelis"
@@ -320,7 +322,7 @@ export default function HomePage() {
               GitHub <span>↗</span>
             </a>
           </Button>
-        </nav>
+        </div>
 
         {/* Mobile Navigation Toggle Button */}
         <button
@@ -480,20 +482,20 @@ export default function HomePage() {
               : 'Armelis provides active defensive armor, turning chaotic security alerts into deterministic choke points that protect your crown jewels.'}
           </p>
           <div className="hero-actions">
-            <Button asChild>
+            <Button asChild size="md">
               <Link href="/dashboard">
-                Open Live Console <span>→</span>
+                <span>Open Live Console</span>
+                <span aria-hidden="true">→</span>
               </Link>
             </Button>
             <a
               href="#showcase"
               className="cs-button cs-button-ghost cs-button-md"
-              style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}
             >
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                 <polygon points="5 3 19 12 5 21 5 3" />
               </svg>
-              Watch Demo (2 min)
+              <span>Watch Demo (2 min)</span>
             </a>
             <a
               className="text-link"
