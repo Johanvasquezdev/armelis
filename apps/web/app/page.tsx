@@ -1141,14 +1141,14 @@ export default function HomePage() {
       <section id="platforms" className="section shell platforms-section">
         <div className="section-intro split">
           <div>
-            <p className="eyebrow">TWO MODALITIES • ONE DEFENSE MATRIX</p>
+            <p className="eyebrow">{t.platforms.eyebrow}</p>
             <h2>
-              Armelis CLI &amp;<br />
-              <em>Desktop Command.</em>
+              {t.platforms.title1}<br />
+              <em>{t.platforms.title2}</em>
             </h2>
           </div>
           <p>
-            Automate high-speed choke-point verification in headless CI/CD pipelines, or command an interactive visual attack-path HUD on your local workstation.
+            {t.platforms.lead}
           </p>
         </div>
 
@@ -1156,51 +1156,51 @@ export default function HomePage() {
           {/* Card 1: Armelis CLI */}
           <div className="platform-card">
             <div className="platform-top">
-              <span className="platform-badge">⚡ HEADLESS &amp; CI/CD NATIVE</span>
-              <span style={{ fontSize: '11px', color: 'var(--muted)', fontFamily: 'monospace' }}>v0.1.0 • Node / Rust</span>
+              <span className="platform-badge">{t.platforms.cliBadge}</span>
+              <span style={{ fontSize: '11px', color: 'var(--muted)', fontFamily: 'monospace' }}>{t.platforms.cliMeta}</span>
             </div>
-            <h3 className="platform-title">Armelis CLI</h3>
+            <h3 className="platform-title">{t.platforms.cliTitle}</h3>
             <p className="platform-desc">
-              Deterministic, terminal-first attack-path intelligence designed for developers, automated GitHub Actions, Docker builds, and SecOps triage.
+              {t.platforms.cliDesc}
             </p>
             <ul className="platform-features">
               <li>
                 <i>✓</i>
-                <span><strong>3D Block Shadow Typography:</strong> Terminal aesthetic with live Git branch detection, current directory path, and UTC telemetry.</span>
+                <span><strong>{t.platforms.cliFeat1Title}:</strong> {t.platforms.cliFeat1Desc}</span>
               </li>
               <li>
                 <i>✓</i>
-                <span><strong>Lateral Hop Tracing (<code>armelis trace</code>):</strong> Correlates entry points, vulnerable dependencies, and database credentials into ordered attack chains.</span>
+                <span><strong>{t.platforms.cliFeat2Title}:</strong> {t.platforms.cliFeat2Desc}</span>
               </li>
               <li>
                 <i>✓</i>
-                <span><strong>1-Click Choke-Point Severance (<code>armelis break</code>):</strong> Computes the minimal code or container policy change needed to neutralize 100% of exploit reachability.</span>
+                <span><strong>{t.platforms.cliFeat3Title}:</strong> {t.platforms.cliFeat3Desc}</span>
               </li>
               <li>
                 <i>✓</i>
-                <span><strong>Direct SIEM Streaming:</strong> Emits formatted events to Splunk, Elasticsearch, QRadar, and Wazuh in CEF, ECS, and Syslog RFC 5424.</span>
+                <span><strong>{t.platforms.cliFeat4Title}:</strong> {t.platforms.cliFeat4Desc}</span>
               </li>
               <li>
                 <i>✓</i>
-                <span><strong>Dual Visual Modes:</strong> Toggle between <code>--cold</code> (Cold analytical mode) and <code>--warm</code> (Warm protective armor).</span>
+                <span><strong>{t.platforms.cliFeat5Title}:</strong> {t.platforms.cliFeat5Desc}</span>
               </li>
             </ul>
 
             <div className="platform-preview-terminal">
               <div>$ armelis scan . --cold</div>
-              <div style={{ color: '#94a3b8' }}>● Scanners: vuln, misconfig, secret, license</div>
-              <div style={{ color: 'var(--green)' }}>✔ Analysis Complete: 0 critical choke points active</div>
+              <div style={{ color: '#94a3b8' }}>{t.platforms.cliPreviewScanners}</div>
+              <div style={{ color: 'var(--green)' }}>{t.platforms.cliPreviewStatus}</div>
             </div>
 
             <div style={{ marginTop: '20px', display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
               <Button asChild size="sm">
                 <a href="#install" onClick={() => { setInstallTab('cli'); setCliShell('powershell'); }}>
-                  Install via PowerShell <span>→</span>
+                  {t.platforms.cliBtnPowershell} <span>→</span>
                 </a>
               </Button>
               <Button asChild size="sm" variant="ghost">
                 <a href="#install" onClick={() => { setInstallTab('cli'); setCliShell('cmd'); }}>
-                  Command Prompt (CMD) <span>→</span>
+                  {t.platforms.cliBtnCmd} <span>→</span>
                 </a>
               </Button>
             </div>
@@ -1210,47 +1210,47 @@ export default function HomePage() {
           <div className="platform-card" style={{ borderColor: 'var(--cyan)' }}>
             <div className="platform-top">
               <span className="platform-badge" style={{ background: 'var(--navy)', color: 'var(--cyan)', borderColor: 'var(--cyan)' }}>
-                🛡 TACTICAL COMMAND HUD
+                {t.platforms.desktopBadge}
               </span>
-              <span style={{ fontSize: '11px', color: 'var(--cyan)', fontWeight: 700 }}>Tauri 2 + Rust Native</span>
+              <span style={{ fontSize: '11px', color: 'var(--cyan)', fontWeight: 700 }}>{t.platforms.desktopMeta}</span>
             </div>
-            <h3 className="platform-title">Armelis Desktop</h3>
+            <h3 className="platform-title">{t.platforms.desktopTitle}</h3>
             <p className="platform-desc">
-              Tactical AppSec command center running locally inside an isolated native sandbox. Near-zero memory footprint (&lt;40MB RAM), zero electron bloat.
+              {t.platforms.desktopDesc}
             </p>
             <ul className="platform-features">
               <li>
                 <i>✓</i>
-                <span><strong>Attack Path Reachability Visualizer:</strong> Live interactive topology linking Public Ingress ➔ Vulnerability Choke Point ➔ Crown Jewel Assets.</span>
+                <span><strong>{t.platforms.desktopFeat1Title}:</strong> {t.platforms.desktopFeat1Desc}</span>
               </li>
               <li>
                 <i>✓</i>
-                <span><strong>Windows Custom Installer:</strong> Dedicated setup wizard with high-DPI vector icons, automatic PATH registration, and right-click "Scan with Armelis" explorer context menu.</span>
+                <span><strong>{t.platforms.desktopFeat2Title}:</strong> {t.platforms.desktopFeat2Desc}</span>
               </li>
               <li>
                 <i>✓</i>
-                <span><strong>Interactive Severance Simulator:</strong> Test how upgrading a single dependency severs the entire lateral exploit trajectory in real-time.</span>
+                <span><strong>{t.platforms.desktopFeat3Title}:</strong> {t.platforms.desktopFeat3Desc}</span>
               </li>
               <li>
                 <i>✓</i>
-                <span><strong>Perimeter Threat HUD:</strong> Monospace gauges for Reachability Exposure Index (84% ➔ 0%), Choke-Point Severance Ratio, and MITRE ATT&amp;CK coverage.</span>
+                <span><strong>{t.platforms.desktopFeat4Title}:</strong> {t.platforms.desktopFeat4Desc}</span>
               </li>
               <li>
                 <i>✓</i>
-                <span><strong>Atmospheric Canvas Transformation:</strong> Dynamic radial lighting and grid textures shift automatically between Cold analytical and Warm protective modes.</span>
+                <span><strong>{t.platforms.desktopFeat5Title}:</strong> {t.platforms.desktopFeat5Desc}</span>
               </li>
             </ul>
 
             <div className="platform-preview-terminal" style={{ color: 'var(--ink)' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px' }}>
-                <span style={{ color: '#ef4444' }}>[ 🌐 INGRESS ]</span>
+                <span style={{ color: '#ef4444' }}>{t.platforms.desktopPreviewIngress}</span>
                 <span>──▶</span>
-                <span style={{ color: '#f59e0b' }}>[ ⚡ CHOKE POINT ]</span>
+                <span style={{ color: '#f59e0b' }}>{t.platforms.desktopPreviewChoke}</span>
                 <span>──▶</span>
-                <span style={{ color: '#10b981' }}>[ 💎 ASSET ]</span>
+                <span style={{ color: '#10b981' }}>{t.platforms.desktopPreviewAsset}</span>
               </div>
               <div style={{ color: 'var(--cyan)', fontSize: '11px' }}>
-                Simulate Severance: 1 Action Cuts 100% of Reachability Paths
+                {t.platforms.desktopPreviewSimulate}
               </div>
             </div>
 
@@ -1693,9 +1693,7 @@ jobs:
             <em>{t.install.title.split(' ').slice(2).join(' ') || t.install.title}</em>
           </h2>
           <p style={{ color: '#94a3b8', fontSize: '15px', marginTop: '10px' }}>
-            {lang === 'es'
-              ? 'Armelis es 100% gratuito y de código abierto bajo la licencia MIT. Todo se ejecuta de manera estrictamente local en tu máquina con procesos aislados. Elige tu ruta de activación:'
-              : 'Armelis is 100% free and open-source under the MIT license. Everything runs strictly on your local machine with isolated process boundaries. Choose your activation path:'}
+            {t.install.desc}
           </p>
         </div>
 
@@ -1734,10 +1732,10 @@ jobs:
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px', marginBottom: '24px' }}>
               <div>
                 <h3 style={{ margin: 0, fontSize: '17px', fontWeight: 800, color: 'var(--ink)' }}>
-                  Command Shell Selector
+                  {t.install.shellSelectorTitle}
                 </h3>
                 <p style={{ margin: '4px 0 0', fontSize: '13px', color: 'var(--muted)' }}>
-                  Select your terminal shell to copy optimized installation and execution commands:
+                  {t.install.shellSelectorDesc}
                 </p>
               </div>
               <div className="install-subtab-bar" role="group" aria-label="Command shell selector">
@@ -1747,7 +1745,7 @@ jobs:
                   onClick={() => setCliShell('powershell')}
                 >
                   <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" strokeWidth="2"><polyline points="9 18 15 12 9 6" /></svg>
-                  <span>PowerShell (Windows)</span>
+                  <span>{t.install.shellTabPowershell}</span>
                 </button>
                 <button
                   type="button"
@@ -1755,7 +1753,7 @@ jobs:
                   onClick={() => setCliShell('cmd')}
                 >
                   <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="2" y="4" width="20" height="16" rx="2" /><path d="M6 8l4 4-4 4" /><line x1="12" y1="16" x2="18" y2="16" /></svg>
-                  <span>Command Prompt (CMD)</span>
+                  <span>{t.install.shellTabCmd}</span>
                 </button>
                 <button
                   type="button"
@@ -1763,7 +1761,7 @@ jobs:
                   onClick={() => setCliShell('bash')}
                 >
                   <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--green)" strokeWidth="2"><polyline points="4 17 10 11 4 5" /><line x1="12" y1="19" x2="20" y2="19" /></svg>
-                  <span>Bash / Zsh (macOS &amp; Linux)</span>
+                  <span>{t.install.shellTabBash}</span>
                 </button>
               </div>
             </div>
@@ -1772,8 +1770,8 @@ jobs:
             {cliShell === 'powershell' && (
               <>
                 <div className="install-step">
-                  <h4><span>1</span> Global Installation in PowerShell</h4>
-                  <p>Execute in Windows PowerShell (or PowerShell 7+ / <code>pwsh</code>):</p>
+                  <h4><span>1</span> {t.install.psStep1Title}</h4>
+                  <p>{t.install.psStep1Desc}</p>
                   <div className="install-code-box">
                     <code>npm install -g armelis</code>
                     <button
@@ -1781,18 +1779,18 @@ jobs:
                       className="install-copy-btn"
                       onClick={() => handleCopy('npm install -g armelis', 'ps-install')}
                     >
-                      {copiedSnippet === 'ps-install' ? 'Copied! ✓' : 'Copy'}
+                      {copiedSnippet === 'ps-install' ? t.install.copied : t.install.copy}
                     </button>
                   </div>
                   <div className="shell-command-note">
                     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" strokeWidth="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
-                    <span>Zero-install alternative: Run instantly without global installation via <code>npx armelis scan . --cold</code></span>
+                    <span>{t.install.psStep1ZeroInstall}</span>
                   </div>
                 </div>
 
                 <div className="install-step">
-                  <h4><span>2</span> Verify Binary &amp; Environment PATH</h4>
-                  <p>Check the active version and telemetry status:</p>
+                  <h4><span>2</span> {t.install.psStep2Title}</h4>
+                  <p>{t.install.psStep2Desc}</p>
                   <div className="install-code-box">
                     <code>armelis --version</code>
                     <button
@@ -1800,14 +1798,14 @@ jobs:
                       className="install-copy-btn"
                       onClick={() => handleCopy('armelis --version', 'ps-version')}
                     >
-                      {copiedSnippet === 'ps-version' ? 'Copied! ✓' : 'Copy'}
+                      {copiedSnippet === 'ps-version' ? t.install.copied : t.install.copy}
                     </button>
                   </div>
                 </div>
 
                 <div className="install-step">
-                  <h4><span>3</span> Execute Scan in PowerShell</h4>
-                  <p>Scan the current repository using the Cold analytical theme:</p>
+                  <h4><span>3</span> {t.install.psStep3Title}</h4>
+                  <p>{t.install.psStep3Desc}</p>
                   <div className="install-code-box">
                     <code>armelis scan . --cold</code>
                     <button
@@ -1815,18 +1813,18 @@ jobs:
                       className="install-copy-btn"
                       onClick={() => handleCopy('armelis scan . --cold', 'ps-scan')}
                     >
-                      {copiedSnippet === 'ps-scan' ? 'Copied! ✓' : 'Copy'}
+                      {copiedSnippet === 'ps-scan' ? t.install.copied : t.install.copy}
                     </button>
                   </div>
                   <div className="shell-command-note">
                     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
-                    <span>PowerShell absolute path example: <code>armelis scan "$HOME\Documents\YourRepo" --cold</code></span>
+                    <span>{t.install.psStep3Note}</span>
                   </div>
                 </div>
 
                 <div className="install-step">
-                  <h4><span>4</span> Calculate Choke Points &amp; Copy AI Prompt</h4>
-                  <p>Pinpoint the exact lateral choke point and generate the ready-to-paste prompt for Cursor/Copilot:</p>
+                  <h4><span>4</span> {t.install.psStep4Title}</h4>
+                  <p>{t.install.psStep4Desc}</p>
                   <div className="install-code-box">
                     <code>armelis break .</code>
                     <button
@@ -1834,7 +1832,7 @@ jobs:
                       className="install-copy-btn"
                       onClick={() => handleCopy('armelis break .', 'ps-break')}
                     >
-                      {copiedSnippet === 'ps-break' ? 'Copied! ✓' : 'Copy'}
+                      {copiedSnippet === 'ps-break' ? t.install.copied : t.install.copy}
                     </button>
                   </div>
                 </div>
@@ -1845,8 +1843,8 @@ jobs:
             {cliShell === 'cmd' && (
               <>
                 <div className="install-step">
-                  <h4><span>1</span> Global Installation in Command Prompt (CMD)</h4>
-                  <p>Open <code>cmd.exe</code> and install the Armelis CLI globally:</p>
+                  <h4><span>1</span> {t.install.cmdStep1Title}</h4>
+                  <p>{t.install.cmdStep1Desc}</p>
                   <div className="install-code-box">
                     <code>npm install -g armelis</code>
                     <button
@@ -1854,14 +1852,14 @@ jobs:
                       className="install-copy-btn"
                       onClick={() => handleCopy('npm install -g armelis', 'cmd-install')}
                     >
-                      {copiedSnippet === 'cmd-install' ? 'Copied! ✓' : 'Copy'}
+                      {copiedSnippet === 'cmd-install' ? t.install.copied : t.install.copy}
                     </button>
                   </div>
                 </div>
 
                 <div className="install-step">
-                  <h4><span>2</span> Verify Installation in CMD</h4>
-                  <p>Check that Windows detects the executable and display the banner:</p>
+                  <h4><span>2</span> {t.install.cmdStep2Title}</h4>
+                  <p>{t.install.cmdStep2Desc}</p>
                   <div className="install-code-box">
                     <code>armelis --help</code>
                     <button
@@ -1869,14 +1867,14 @@ jobs:
                       className="install-copy-btn"
                       onClick={() => handleCopy('armelis --help', 'cmd-help')}
                     >
-                      {copiedSnippet === 'cmd-help' ? 'Copied! ✓' : 'Copy'}
+                      {copiedSnippet === 'cmd-help' ? t.install.copied : t.install.copy}
                     </button>
                   </div>
                 </div>
 
                 <div className="install-step">
-                  <h4><span>3</span> Run Scan with Windows Environment Paths</h4>
-                  <p>Scan your current directory or target a path using <code>%USERPROFILE%</code>:</p>
+                  <h4><span>3</span> {t.install.cmdStep3Title}</h4>
+                  <p>{t.install.cmdStep3Desc}</p>
                   <div className="install-code-box">
                     <code>armelis scan "%USERPROFILE%\Documents\YourProject" --cold</code>
                     <button
@@ -1884,18 +1882,18 @@ jobs:
                       className="install-copy-btn"
                       onClick={() => handleCopy('armelis scan "%USERPROFILE%\\Documents\\YourProject" --cold', 'cmd-scan')}
                     >
-                      {copiedSnippet === 'cmd-scan' ? 'Copied! ✓' : 'Copy'}
+                      {copiedSnippet === 'cmd-scan' ? t.install.copied : t.install.copy}
                     </button>
                   </div>
                   <div className="shell-command-note">
                     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" strokeWidth="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
-                    <span>For current directory in CMD: <code>armelis scan . --cold</code></span>
+                    <span>{t.install.cmdStep3Note}</span>
                   </div>
                 </div>
 
                 <div className="install-step">
-                  <h4><span>4</span> Neutralize Choke Points (Warm Protective Mode)</h4>
-                  <p>Run choke-point severance analysis in CMD with the warm defensive theme:</p>
+                  <h4><span>4</span> {t.install.cmdStep4Title}</h4>
+                  <p>{t.install.cmdStep4Desc}</p>
                   <div className="install-code-box">
                     <code>armelis break . --warm</code>
                     <button
@@ -1903,7 +1901,7 @@ jobs:
                       className="install-copy-btn"
                       onClick={() => handleCopy('armelis break . --warm', 'cmd-break')}
                     >
-                      {copiedSnippet === 'cmd-break' ? 'Copied! ✓' : 'Copy'}
+                      {copiedSnippet === 'cmd-break' ? t.install.copied : t.install.copy}
                     </button>
                   </div>
                 </div>
@@ -1914,8 +1912,8 @@ jobs:
             {cliShell === 'bash' && (
               <>
                 <div className="install-step">
-                  <h4><span>1</span> Global Installation (macOS &amp; Linux)</h4>
-                  <p>Install via npm with automatic POSIX symlink creation:</p>
+                  <h4><span>1</span> {t.install.bashStep1Title}</h4>
+                  <p>{t.install.bashStep1Desc}</p>
                   <div className="install-code-box">
                     <code>npm install -g armelis</code>
                     <button
@@ -1923,14 +1921,14 @@ jobs:
                       className="install-copy-btn"
                       onClick={() => handleCopy('npm install -g armelis', 'bash-install')}
                     >
-                      {copiedSnippet === 'bash-install' ? 'Copied! ✓' : 'Copy'}
+                      {copiedSnippet === 'bash-install' ? t.install.copied : t.install.copy}
                     </button>
                   </div>
                 </div>
 
                 <div className="install-step">
-                  <h4><span>2</span> Scan &amp; Stream CEF / ECS Events</h4>
-                  <p>Scan repository and pipe standardized Common Event Format telemetry to disk or SIEM:</p>
+                  <h4><span>2</span> {t.install.bashStep2Title}</h4>
+                  <p>{t.install.bashStep2Desc}</p>
                   <div className="install-code-box">
                     <code>armelis scan . --cold --format cef &gt; findings.cef</code>
                     <button
@@ -1938,14 +1936,14 @@ jobs:
                       className="install-copy-btn"
                       onClick={() => handleCopy('armelis scan . --cold --format cef > findings.cef', 'bash-scan')}
                     >
-                      {copiedSnippet === 'bash-scan' ? 'Copied! ✓' : 'Copy'}
+                      {copiedSnippet === 'bash-scan' ? t.install.copied : t.install.copy}
                     </button>
                   </div>
                 </div>
 
                 <div className="install-step">
-                  <h4><span>3</span> Lateral Hop Tracing</h4>
-                  <p>Correlate ingress points, dependencies, and database targets into an attack trajectory:</p>
+                  <h4><span>3</span> {t.install.bashStep3Title}</h4>
+                  <p>{t.install.bashStep3Desc}</p>
                   <div className="install-code-box">
                     <code>armelis trace .</code>
                     <button
@@ -1953,7 +1951,7 @@ jobs:
                       className="install-copy-btn"
                       onClick={() => handleCopy('armelis trace .', 'bash-trace')}
                     >
-                      {copiedSnippet === 'bash-trace' ? 'Copied! ✓' : 'Copy'}
+                      {copiedSnippet === 'bash-trace' ? t.install.copied : t.install.copy}
                     </button>
                   </div>
                 </div>
@@ -1969,10 +1967,10 @@ jobs:
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px', marginBottom: '24px' }}>
               <div>
                 <h3 style={{ margin: 0, fontSize: '17px', fontWeight: 800, color: 'var(--ink)' }}>
-                  Desktop Client Deployment Mode
+                  {t.install.desktopModeTitle}
                 </h3>
                 <p style={{ margin: '4px 0 0', fontSize: '13px', color: 'var(--muted)' }}>
-                  Choose between the pre-configured Windows Custom Setup Wizard or building from native Rust source:
+                  {t.install.desktopModeDesc}
                 </p>
               </div>
               <div className="install-subtab-bar" role="group" aria-label="Desktop deployment mode">
@@ -1982,7 +1980,7 @@ jobs:
                   onClick={() => setDesktopMode('installer')}
                 >
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" /></svg>
-                  <span>Windows Custom Installer (.exe / .msi)</span>
+                  <span>{t.install.desktopTabInstaller}</span>
                 </button>
                 <button
                   type="button"
@@ -1990,7 +1988,7 @@ jobs:
                   onClick={() => setDesktopMode('source')}
                 >
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" /></svg>
-                  <span>Run from Source (Tauri 2)</span>
+                  <span>{t.install.desktopTabSource}</span>
                 </button>
               </div>
             </div>
@@ -2009,18 +2007,18 @@ jobs:
                       </svg>
                     </div>
                     <div className="installer-title-box">
-                      <h3>Armelis Tactical Command — Windows Setup Wizard</h3>
-                      <p>Custom-branded native installer with vector icons, logos, context menu hooks &amp; automatic PATH</p>
+                      <h3>{t.install.installerHeading}</h3>
+                      <p>{t.install.installerSubheading}</p>
                     </div>
                   </div>
                   <div className="installer-badge-tag">
                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" strokeWidth="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" /></svg>
-                    <span>ROADMAP &amp; EARLY ACCESS</span>
+                    <span>{t.install.installerRoadmapBadge}</span>
                   </div>
                 </div>
 
                 <p style={{ color: 'var(--muted)', fontSize: '14px', lineHeight: 1.6, margin: '0 0 20px' }}>
-                  The dedicated Armelis Windows Installer (<code>Armelis-Setup-x64.exe</code> &amp; <code>.msi</code>) provides a seamless out-of-the-box installation experience for workstations, developers, and enterprise security analysts:
+                  {t.install.installerIntro}
                 </p>
 
                 {/* 4 Feature Highlights */}
@@ -2030,8 +2028,8 @@ jobs:
                       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" strokeWidth="2"><circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></svg>
                     </div>
                     <div className="installer-feat-content">
-                      <strong>Custom Visual Identity &amp; Icons</strong>
-                      <p>Handcrafted high-resolution multi-size <code>.ico</code> icons (16px to 512px) for Windows Explorer, Start Menu, taskbar pinning, and a branded dark cold-cyan wizard window.</p>
+                      <strong>{t.install.installerFeat1Title}</strong>
+                      <p>{t.install.installerFeat1Desc}</p>
                     </div>
                   </div>
 
@@ -2040,8 +2038,8 @@ jobs:
                       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" strokeWidth="2"><path d="m3 3 7.07 16.97 2.51-7.39 7.39-2.51L3 3z"/><path d="m13 13 6 6"/></svg>
                     </div>
                     <div className="installer-feat-content">
-                      <strong>Explorer Context Menu ("Scan with Armelis")</strong>
-                      <p>Deep Windows Explorer shell integration: Right-click any repository folder or drive and click <em>"Scan with Armelis"</em> to launch immediate attack-path graph traversal.</p>
+                      <strong>{t.install.installerFeat2Title}</strong>
+                      <p>{t.install.installerFeat2Desc}</p>
                     </div>
                   </div>
 
@@ -2050,8 +2048,8 @@ jobs:
                       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" strokeWidth="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
                     </div>
                     <div className="installer-feat-content">
-                      <strong>Automated System PATH Registration</strong>
-                      <p>Automatically configures Windows User &amp; System <code>PATH</code> variables. Use the <code>armelis</code> CLI instantly from any new PowerShell or CMD terminal without manual setup.</p>
+                      <strong>{t.install.installerFeat3Title}</strong>
+                      <p>{t.install.installerFeat3Desc}</p>
                     </div>
                   </div>
 
@@ -2060,8 +2058,8 @@ jobs:
                       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" strokeWidth="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
                     </div>
                     <div className="installer-feat-content">
-                      <strong>Air-Gapped &amp; Sub-40MB RAM Footprint</strong>
-                      <p>Built with native Rust and Tauri 2. No bloated Electron runtimes. Consumes &lt;40MB of RAM and executes 100% locally with zero cloud phone-home.</p>
+                      <strong>{t.install.installerFeat4Title}</strong>
+                      <p>{t.install.installerFeat4Desc}</p>
                     </div>
                   </div>
                 </div>
@@ -2078,7 +2076,7 @@ jobs:
                       <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                         <path d="M0 3.449L9.75 2.1v9.451H0m10.949-9.602L24 0v11.4H10.949M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-12.901-1.851" />
                       </svg>
-                      Download Armelis-Setup-x64.exe
+                      {t.install.installerBtnExe}
                     </a>
                     <a
                       href="https://github.com/Johanvasquezdev/armelis/releases"
@@ -2087,7 +2085,7 @@ jobs:
                       className="installer-secondary-btn"
                     >
                       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" /></svg>
-                      <span>Download Portable .zip</span>
+                      <span>{t.install.installerBtnZip}</span>
                     </a>
                   </div>
 
@@ -2117,7 +2115,7 @@ jobs:
                 <div style={{ marginTop: '16px', fontSize: '12px', color: 'var(--dim)', display: 'flex', alignItems: 'center', gap: '8px' }}>
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" strokeWidth="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
                   <span>
-                    The custom packaging pipeline is currently scheduled for deployment. In the meantime, you can launch or compile the Desktop client immediately from source using the tab above.
+                    {t.install.installerPipelineNotice}
                   </span>
                 </div>
               </div>
@@ -2127,8 +2125,8 @@ jobs:
             {desktopMode === 'source' && (
               <div className="install-card">
                 <div className="install-step">
-                  <h4><span>1</span> Clone Repository</h4>
-                  <p>Clone the open-source Armelis repository to your machine:</p>
+                  <h4><span>1</span> {t.install.sourceStep1Title}</h4>
+                  <p>{t.install.sourceStep1Desc}</p>
                   <div className="install-code-box">
                     <code>git clone https://github.com/Johanvasquezdev/armelis.git armelis</code>
                     <button
@@ -2136,14 +2134,14 @@ jobs:
                       className="install-copy-btn"
                       onClick={() => handleCopy('git clone https://github.com/Johanvasquezdev/armelis.git armelis', 'desktop-clone')}
                     >
-                      {copiedSnippet === 'desktop-clone' ? 'Copied! ✓' : 'Copy'}
+                      {copiedSnippet === 'desktop-clone' ? t.install.copied : t.install.copy}
                     </button>
                   </div>
                 </div>
 
                 <div className="install-step">
-                  <h4><span>2</span> Launch Desktop App in Dev Mode</h4>
-                  <p>Start Vite and the native Rust/Tauri 2 window with live HMR:</p>
+                  <h4><span>2</span> {t.install.sourceStep2Title}</h4>
+                  <p>{t.install.sourceStep2Desc}</p>
                   <div className="install-code-box">
                     <code>cd armelis/apps/desktop &amp;&amp; npm install &amp;&amp; npm run tauri dev</code>
                     <button
@@ -2151,14 +2149,14 @@ jobs:
                       className="install-copy-btn"
                       onClick={() => handleCopy('cd armelis/apps/desktop && npm install && npm run tauri dev', 'desktop-run')}
                     >
-                      {copiedSnippet === 'desktop-run' ? 'Copied! ✓' : 'Copy'}
+                      {copiedSnippet === 'desktop-run' ? t.install.copied : t.install.copy}
                     </button>
                   </div>
                 </div>
 
                 <div className="install-step">
-                  <h4><span>3</span> Compile Standalone Binary (.exe / .msi)</h4>
-                  <p>Package an ultra-compact, air-gapped native executable with zero dependencies:</p>
+                  <h4><span>3</span> {t.install.sourceStep3Title}</h4>
+                  <p>{t.install.sourceStep3Desc}</p>
                   <div className="install-code-box">
                     <code>npm run tauri build</code>
                     <button
@@ -2166,7 +2164,7 @@ jobs:
                       className="install-copy-btn"
                       onClick={() => handleCopy('npm run tauri build', 'desktop-build')}
                     >
-                      {copiedSnippet === 'desktop-build' ? 'Copied! ✓' : 'Copy'}
+                      {copiedSnippet === 'desktop-build' ? t.install.copied : t.install.copy}
                     </button>
                   </div>
                 </div>
@@ -2179,8 +2177,8 @@ jobs:
         {installTab === 'docker' && (
           <div className="install-card">
             <div className="install-step">
-              <h4><span>1</span> GitHub Actions Security Gate</h4>
-              <p>Add deterministic choke-point scanning to your automated Pull Request pipeline:</p>
+              <h4><span>1</span> {t.install.dockerStep1Heading}</h4>
+              <p>{t.install.dockerStep1Text}</p>
               <div className="install-code-box">
                 <code>- name: Armelis Choke-Point Scan\n  run: npx armelis scan . --format cef &gt; findings.cef</code>
                 <button
@@ -2188,14 +2186,14 @@ jobs:
                   className="install-copy-btn"
                   onClick={() => handleCopy('- name: Armelis Choke-Point Scan\n  run: npx armelis scan . --format cef > findings.cef', 'ci-github')}
                 >
-                  {copiedSnippet === 'ci-github' ? 'Copied! ✓' : 'Copy'}
+                  {copiedSnippet === 'ci-github' ? t.install.copied : t.install.copy}
                 </button>
               </div>
             </div>
 
             <div className="install-step">
-              <h4><span>2</span> Standalone Docker Container</h4>
-              <p>Mount any local repository without installing Node or Rust:</p>
+              <h4><span>2</span> {t.install.dockerStep2Heading}</h4>
+              <p>{t.install.dockerStep2Text}</p>
               <div className="install-code-box">
                 <code>docker run --rm -v $(pwd):/repo ghcr.io/johanvasquezdev/armelis:latest scan /repo</code>
                 <button
@@ -2203,7 +2201,7 @@ jobs:
                   className="install-copy-btn"
                   onClick={() => handleCopy('docker run --rm -v $(pwd):/repo ghcr.io/johanvasquezdev/armelis:latest scan /repo', 'ci-docker')}
                 >
-                  {copiedSnippet === 'ci-docker' ? 'Copied! ✓' : 'Copy'}
+                  {copiedSnippet === 'ci-docker' ? t.install.copied : t.install.copy}
                 </button>
               </div>
             </div>

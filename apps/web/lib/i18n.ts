@@ -135,6 +135,45 @@ export interface I18nContent {
   platforms: {
     eyebrow: string;
     title: string;
+    title1?: string;
+    title2?: string;
+    lead?: string;
+    cliBadge?: string;
+    cliMeta?: string;
+    cliTitle?: string;
+    cliDesc?: string;
+    cliFeat1Title?: string;
+    cliFeat1Desc?: string;
+    cliFeat2Title?: string;
+    cliFeat2Desc?: string;
+    cliFeat3Title?: string;
+    cliFeat3Desc?: string;
+    cliFeat4Title?: string;
+    cliFeat4Desc?: string;
+    cliFeat5Title?: string;
+    cliFeat5Desc?: string;
+    cliPreviewScanners?: string;
+    cliPreviewStatus?: string;
+    cliBtnPowershell?: string;
+    cliBtnCmd?: string;
+    desktopBadge?: string;
+    desktopMeta?: string;
+    desktopTitle?: string;
+    desktopDesc?: string;
+    desktopFeat1Title?: string;
+    desktopFeat1Desc?: string;
+    desktopFeat2Title?: string;
+    desktopFeat2Desc?: string;
+    desktopFeat3Title?: string;
+    desktopFeat3Desc?: string;
+    desktopFeat4Title?: string;
+    desktopFeat4Desc?: string;
+    desktopFeat5Title?: string;
+    desktopFeat5Desc?: string;
+    desktopPreviewIngress?: string;
+    desktopPreviewChoke?: string;
+    desktopPreviewAsset?: string;
+    desktopPreviewSimulate?: string;
     tabCli: string;
     tabDesktop: string;
     cliHeading: string;
@@ -157,6 +196,7 @@ export interface I18nContent {
   install: {
     eyebrow: string;
     title: string;
+    desc?: string;
     tabCli: string;
     tabDesktop: string;
     tabDocker: string;
@@ -175,6 +215,67 @@ export interface I18nContent {
     dockerStep2Title: string;
     dockerStep2Desc: string;
     launchConsole: string;
+    shellSelectorTitle?: string;
+    shellSelectorDesc?: string;
+    shellTabPowershell?: string;
+    shellTabCmd?: string;
+    shellTabBash?: string;
+    psStep1Title?: string;
+    psStep1Desc?: string;
+    psStep1ZeroInstall?: string;
+    psStep2Title?: string;
+    psStep2Desc?: string;
+    psStep3Title?: string;
+    psStep3Desc?: string;
+    psStep3Note?: string;
+    psStep4Title?: string;
+    psStep4Desc?: string;
+    cmdStep1Title?: string;
+    cmdStep1Desc?: string;
+    cmdStep2Title?: string;
+    cmdStep2Desc?: string;
+    cmdStep3Title?: string;
+    cmdStep3Desc?: string;
+    cmdStep3Note?: string;
+    cmdStep4Title?: string;
+    cmdStep4Desc?: string;
+    bashStep1Title?: string;
+    bashStep1Desc?: string;
+    bashStep2Title?: string;
+    bashStep2Desc?: string;
+    bashStep3Title?: string;
+    bashStep3Desc?: string;
+    desktopModeTitle?: string;
+    desktopModeDesc?: string;
+    desktopTabInstaller?: string;
+    desktopTabSource?: string;
+    installerHeading?: string;
+    installerSubheading?: string;
+    installerRoadmapBadge?: string;
+    installerIntro?: string;
+    installerFeat1Title?: string;
+    installerFeat1Desc?: string;
+    installerFeat2Title?: string;
+    installerFeat2Desc?: string;
+    installerFeat3Title?: string;
+    installerFeat3Desc?: string;
+    installerFeat4Title?: string;
+    installerFeat4Desc?: string;
+    installerBtnExe?: string;
+    installerBtnZip?: string;
+    installerPipelineNotice?: string;
+    sourceStep1Title?: string;
+    sourceStep1Desc?: string;
+    sourceStep2Title?: string;
+    sourceStep2Desc?: string;
+    sourceStep3Title?: string;
+    sourceStep3Desc?: string;
+    dockerStep1Heading?: string;
+    dockerStep1Text?: string;
+    dockerStep2Heading?: string;
+    dockerStep2Text?: string;
+    copy?: string;
+    copied?: string;
   };
   footer: {
     tagline: string;
@@ -409,8 +510,47 @@ export const translations: Record<Language, I18nContent> = {
       copySnippet: 'Copy snippet'
     },
     platforms: {
-      eyebrow: 'Cross-Platform Ecosystem',
+      eyebrow: 'TWO MODALITIES • ONE DEFENSE MATRIX',
       title: 'Run anywhere. From terminal to desktop.',
+      title1: 'Armelis CLI &',
+      title2: 'Desktop Command.',
+      lead: 'Automate high-speed choke-point verification in headless CI/CD pipelines, or command an interactive visual attack-path HUD on your local workstation.',
+      cliBadge: '⚡ HEADLESS & CI/CD NATIVE',
+      cliMeta: 'v0.1.0 • Node / Rust',
+      cliTitle: 'Armelis CLI',
+      cliDesc: 'Deterministic, terminal-first attack-path intelligence designed for developers, automated GitHub Actions, Docker builds, and SecOps triage.',
+      cliFeat1Title: '3D Block Shadow Typography',
+      cliFeat1Desc: 'Terminal aesthetic with live Git branch detection, current directory path, and UTC telemetry.',
+      cliFeat2Title: 'Lateral Hop Tracing (armelis trace)',
+      cliFeat2Desc: 'Correlates entry points, vulnerable dependencies, and database credentials into ordered attack chains.',
+      cliFeat3Title: '1-Click Choke-Point Severance (armelis break)',
+      cliFeat3Desc: 'Computes the minimal code or container policy change needed to neutralize 100% of exploit reachability.',
+      cliFeat4Title: 'Direct SIEM Streaming',
+      cliFeat4Desc: 'Emits formatted events to Splunk, Elasticsearch, QRadar, and Wazuh in CEF, ECS, and Syslog RFC 5424.',
+      cliFeat5Title: 'Dual Visual Modes',
+      cliFeat5Desc: 'Toggle between --cold (Cold analytical mode) and --warm (Warm protective armor).',
+      cliPreviewScanners: '● Scanners: vuln, misconfig, secret, license',
+      cliPreviewStatus: '✔ Analysis Complete: 0 critical choke points active',
+      cliBtnPowershell: 'Install via PowerShell',
+      cliBtnCmd: 'Command Prompt (CMD)',
+      desktopBadge: '🛡 TACTICAL COMMAND HUD',
+      desktopMeta: 'Tauri 2 + Rust Native',
+      desktopTitle: 'Armelis Desktop',
+      desktopDesc: 'Tactical AppSec command center running locally inside an isolated native sandbox. Near-zero memory footprint (<40MB RAM), zero electron bloat.',
+      desktopFeat1Title: 'Attack Path Reachability Visualizer',
+      desktopFeat1Desc: 'Live interactive topology linking Public Ingress ➔ Vulnerability Choke Point ➔ Crown Jewel Assets.',
+      desktopFeat2Title: 'Windows Custom Installer',
+      desktopFeat2Desc: 'Dedicated setup wizard with high-DPI vector icons, automatic PATH registration, and right-click "Scan with Armelis" explorer context menu.',
+      desktopFeat3Title: 'Interactive Severance Simulator',
+      desktopFeat3Desc: 'Test how upgrading a single dependency severs the entire lateral exploit trajectory in real-time.',
+      desktopFeat4Title: 'Perimeter Threat HUD',
+      desktopFeat4Desc: 'Monospace gauges for Reachability Exposure Index (84% ➔ 0%), Choke-Point Severance Ratio, and MITRE ATT&CK coverage.',
+      desktopFeat5Title: 'Atmospheric Canvas Transformation',
+      desktopFeat5Desc: 'Dynamic radial lighting and grid textures shift automatically between Cold analytical and Warm protective modes.',
+      desktopPreviewIngress: '[ 🌐 INGRESS ]',
+      desktopPreviewChoke: '[ ⚡ CHOKE POINT ]',
+      desktopPreviewAsset: '[ 💎 ASSET ]',
+      desktopPreviewSimulate: 'Simulate Severance: 1 Action Cuts 100% of Reachability Paths',
       tabCli: 'Armelis CLI (Terminal & CI)',
       tabDesktop: 'Armelis Desktop (Windows)',
       cliHeading: 'Fast, Headless Security for Developers & CI/CD',
@@ -433,9 +573,69 @@ export const translations: Record<Language, I18nContent> = {
     install: {
       eyebrow: 'Instant Setup',
       title: 'Get started in 30 seconds.',
+      desc: 'Armelis is 100% free and open-source under the MIT license. Everything runs strictly on your local machine with isolated process boundaries. Choose your activation path:',
       tabCli: 'Armelis CLI',
       tabDesktop: 'Windows Desktop',
       tabDocker: 'Docker Container',
+      shellSelectorTitle: 'Command Shell Selector',
+      shellSelectorDesc: 'Select your terminal shell to copy optimized installation and execution commands:',
+      shellTabPowershell: 'PowerShell (Windows)',
+      shellTabCmd: 'Command Prompt (CMD)',
+      shellTabBash: 'Bash / Zsh (macOS & Linux)',
+      psStep1Title: 'Global Installation in PowerShell',
+      psStep1Desc: 'Execute in Windows PowerShell (or PowerShell 7+ / pwsh):',
+      psStep1ZeroInstall: 'Zero-install alternative: Run instantly without global installation via npx armelis scan . --cold',
+      psStep2Title: 'Verify Binary & Environment PATH',
+      psStep2Desc: 'Check the active version and telemetry status:',
+      psStep3Title: 'Execute Scan in PowerShell',
+      psStep3Desc: 'Scan the current repository using the Cold analytical theme:',
+      psStep3Note: 'PowerShell absolute path example: armelis scan "$HOME\\Documents\\YourRepo" --cold',
+      psStep4Title: 'Calculate Choke Points & Copy AI Prompt',
+      psStep4Desc: 'Pinpoint the exact lateral choke point and generate the ready-to-paste prompt for Cursor/Copilot:',
+      cmdStep1Title: 'Global Installation in Command Prompt (CMD)',
+      cmdStep1Desc: 'Open cmd.exe and install the Armelis CLI globally:',
+      cmdStep2Title: 'Verify Installation in CMD',
+      cmdStep2Desc: 'Check that Windows detects the executable and display the banner:',
+      cmdStep3Title: 'Run Scan with Windows Environment Paths',
+      cmdStep3Desc: 'Scan your current directory or target a path using %USERPROFILE%:',
+      cmdStep3Note: 'For current directory in CMD: armelis scan . --cold',
+      cmdStep4Title: 'Neutralize Choke Points (Warm Protective Mode)',
+      cmdStep4Desc: 'Run choke-point severance analysis in CMD with the warm defensive theme:',
+      bashStep1Title: 'Global Installation (macOS & Linux)',
+      bashStep1Desc: 'Install via npm with automatic POSIX symlink creation:',
+      bashStep2Title: 'Scan & Stream CEF / ECS Events',
+      bashStep2Desc: 'Scan repository and pipe standardized Common Event Format telemetry to disk or SIEM:',
+      bashStep3Title: 'Lateral Hop Tracing',
+      bashStep3Desc: 'Correlate ingress points, dependencies, and database targets into an attack trajectory:',
+      desktopModeTitle: 'Desktop Client Deployment Mode',
+      desktopModeDesc: 'Choose between the pre-configured Windows Custom Setup Wizard or building from native Rust source:',
+      desktopTabInstaller: 'Windows Custom Installer (.exe / .msi)',
+      desktopTabSource: 'Run from Source (Tauri 2)',
+      installerHeading: 'Armelis Tactical Command — Windows Setup Wizard',
+      installerSubheading: 'Custom-branded native installer with vector icons, logos, context menu hooks & automatic PATH',
+      installerRoadmapBadge: 'ROADMAP & EARLY ACCESS',
+      installerIntro: 'The dedicated Armelis Windows Installer (Armelis-Setup-x64.exe & .msi) provides a seamless out-of-the-box installation experience for workstations, developers, and enterprise security analysts:',
+      installerFeat1Title: 'Custom Visual Identity & Icons',
+      installerFeat1Desc: 'Handcrafted high-resolution multi-size .ico icons (16px to 512px) for Windows Explorer, Start Menu, taskbar pinning, and a branded dark cold-cyan wizard window.',
+      installerFeat2Title: 'Explorer Context Menu ("Scan with Armelis")',
+      installerFeat2Desc: 'Deep Windows Explorer shell integration: Right-click any repository folder or drive and click "Scan with Armelis" to launch immediate attack-path graph traversal.',
+      installerFeat3Title: 'Automated System PATH Registration',
+      installerFeat3Desc: 'Automatically configures Windows User & System PATH variables. Use the armelis CLI instantly from any new PowerShell or CMD terminal without manual setup.',
+      installerFeat4Title: 'Air-Gapped & Sub-40MB RAM Footprint',
+      installerFeat4Desc: 'Built with native Rust and Tauri 2. No bloated Electron runtimes. Consumes <40MB of RAM and executes 100% locally with zero cloud phone-home.',
+      installerBtnExe: 'Download Armelis-Setup-x64.exe',
+      installerBtnZip: 'Download Portable .zip',
+      installerPipelineNotice: 'The custom packaging pipeline is currently scheduled for deployment. In the meantime, you can launch or compile the Desktop client immediately from source using the tab above.',
+      sourceStep1Title: 'Clone Repository',
+      sourceStep1Desc: 'Clone the open-source Armelis repository to your machine:',
+      sourceStep2Title: 'Launch Desktop App in Dev Mode',
+      sourceStep2Desc: 'Start Vite and the native Rust/Tauri 2 window with live HMR:',
+      sourceStep3Title: 'Compile Standalone Binary (.exe / .msi)',
+      sourceStep3Desc: 'Package an ultra-compact, air-gapped native executable with zero dependencies:',
+      dockerStep1Heading: 'GitHub Actions Security Gate',
+      dockerStep1Text: 'Add deterministic choke-point scanning to your automated Pull Request pipeline:',
+      dockerStep2Heading: 'Standalone Docker Container',
+      dockerStep2Text: 'Mount any local repository without installing Node or Rust on the host:',
       step1Title: 'Global Installation',
       step1Desc: 'Install the Armelis CLI globally via npm or pnpm:',
       step2Title: 'Scan Any Local Repository',
@@ -450,7 +650,9 @@ export const translations: Record<Language, I18nContent> = {
       dockerStep1Desc: 'Retrieve the pre-built multi-arch container image:',
       dockerStep2Title: 'Mount Local Repository & Scan',
       dockerStep2Desc: 'Mount any local directory without installing Node or Rust on the host:',
-      launchConsole: 'Launch Live Console'
+      launchConsole: 'Launch Live Console',
+      copy: 'Copy',
+      copied: 'Copied! ✓'
     },
     footer: {
       tagline: 'ARMELIS • APPLICATION SECURITY INTELLIGENCE',
@@ -683,8 +885,47 @@ export const translations: Record<Language, I18nContent> = {
       copySnippet: 'Copiar código'
     },
     platforms: {
-      eyebrow: 'Ecosistema Multiplataforma',
+      eyebrow: 'DOS MODALIDADES • UNA MATRIZ DE DEFENSA',
       title: 'Ejecuta en cualquier lugar. De la terminal al escritorio.',
+      title1: 'Armelis CLI y',
+      title2: 'Comando de Escritorio.',
+      lead: 'Automatiza la verificación de puntos críticos a alta velocidad en pipelines CI/CD sin interfaz, o comanda un HUD visual e interactivo de rutas de ataque en tu estación de trabajo local.',
+      cliBadge: '⚡ NATIVO PARA TERMINAL Y CI/CD',
+      cliMeta: 'v0.1.0 • Node / Rust',
+      cliTitle: 'Armelis CLI',
+      cliDesc: 'Inteligencia determinista de rutas de ataque en terminal, diseñada para desarrolladores, GitHub Actions automatizados, contenedores Docker y triaje SecOps.',
+      cliFeat1Title: 'Tipografía con Sombra de Bloque 3D',
+      cliFeat1Desc: 'Estética de terminal con detección en vivo de ramas Git, ruta del directorio actual y telemetría UTC.',
+      cliFeat2Title: 'Rastreo de Saltos Laterales (armelis trace)',
+      cliFeat2Desc: 'Correlaciona puntos de entrada, dependencias vulnerables y credenciales de bases de datos en cadenas de ataque ordenadas.',
+      cliFeat3Title: 'Neutralización de Puntos Críticos en 1 Clic (armelis break)',
+      cliFeat3Desc: 'Calcula el cambio mínimo en código o política de contenedor requerido para cortar el 100% del alcance del exploit.',
+      cliFeat4Title: 'Transmisión Directa a SIEM',
+      cliFeat4Desc: 'Emite eventos estructurados a Splunk, Elasticsearch, QRadar y Wazuh en formatos CEF, ECS y Syslog RFC 5424.',
+      cliFeat5Title: 'Modos Visuales Duales',
+      cliFeat5Desc: 'Alterna entre --cold (Modo analítico frío) y --warm (Armadura protectora cálida).',
+      cliPreviewScanners: '● Escáneres: vuln, misconfig, secret, license',
+      cliPreviewStatus: '✔ Análisis Completo: 0 puntos de estrangulamiento críticos activos',
+      cliBtnPowershell: 'Instalar mediante PowerShell',
+      cliBtnCmd: 'Símbolo del Sistema (CMD)',
+      desktopBadge: '🛡 HUD DE COMANDO TÁCTICO',
+      desktopMeta: 'Tauri 2 + Rust Nativo',
+      desktopTitle: 'Armelis Desktop',
+      desktopDesc: 'Centro de comando táctico AppSec ejecutándose localmente en un sandbox nativo aislado. Huella de memoria casi nula (<40MB RAM), sin sobrecarga de Electron.',
+      desktopFeat1Title: 'Visualizador de Alcance de Rutas de Ataque',
+      desktopFeat1Desc: 'Topología interactiva en vivo conectando Entrada Pública ➔ Punto Crítico de Vulnerabilidad ➔ Activos Más Valiosos.',
+      desktopFeat2Title: 'Instalador Personalizado para Windows',
+      desktopFeat2Desc: 'Asistente de instalación dedicado con iconos vectoriales de alta resolución, registro automático en PATH y menú contextual de Windows "Escanear con Armelis".',
+      desktopFeat3Title: 'Simulador Interactivo de Corte',
+      desktopFeat3Desc: 'Prueba en tiempo real cómo actualizar una sola dependencia corta por completo la trayectoria del exploit lateral.',
+      desktopFeat4Title: 'HUD de Amenazas Perimetrales',
+      desktopFeat4Desc: 'Medidores de ancho fijo para el Índice de Exposición de Alcance (84% ➔ 0%), Ratio de Corte de Puntos Críticos y cobertura MITRE ATT&CK.',
+      desktopFeat5Title: 'Transformación Atmosférica del Lienzo',
+      desktopFeat5Desc: 'Iluminación radial dinámica y texturas de cuadrícula que cambian automáticamente entre los modos Frío analítico y Cálido protector.',
+      desktopPreviewIngress: '[ 🌐 ENTRADA ]',
+      desktopPreviewChoke: '[ ⚡ PUNTO CRÍTICO ]',
+      desktopPreviewAsset: '[ 💎 ACTIVO ]',
+      desktopPreviewSimulate: 'Simular Corte: 1 Acción Corta el 100% de las Rutas de Alcance',
       tabCli: 'CLI Armelis (Terminal y CI)',
       tabDesktop: 'Armelis Desktop (Windows)',
       cliHeading: 'Seguridad Rápida y sin Interfaz Gráfica para Desarrolladores y CI/CD',
@@ -707,9 +948,69 @@ export const translations: Record<Language, I18nContent> = {
     install: {
       eyebrow: 'Instalación Inmediata',
       title: 'Comienza en 30 segundos.',
+      desc: 'Armelis es 100% gratuito y de código abierto bajo la licencia MIT. Todo se ejecuta estrictamente en tu máquina local con límites de proceso aislados. Selecciona tu método de activación:',
       tabCli: 'CLI Armelis',
       tabDesktop: 'Escritorio Windows',
       tabDocker: 'Contenedor Docker',
+      shellSelectorTitle: 'Selector de Terminal',
+      shellSelectorDesc: 'Selecciona tu consola de comandos para copiar las instrucciones optimizadas de instalación y ejecución:',
+      shellTabPowershell: 'PowerShell (Windows)',
+      shellTabCmd: 'Símbolo del Sistema (CMD)',
+      shellTabBash: 'Bash / Zsh (macOS y Linux)',
+      psStep1Title: 'Instalación Global en PowerShell',
+      psStep1Desc: 'Ejecuta en Windows PowerShell (o PowerShell 7+ / pwsh):',
+      psStep1ZeroInstall: 'Alternativa sin instalación: Ejecuta al instante sin instalación global mediante npx armelis scan . --cold',
+      psStep2Title: 'Verificar Binario y Variable de Entorno PATH',
+      psStep2Desc: 'Verifica la versión activa y el estado de telemetría:',
+      psStep3Title: 'Ejecutar Escaneo en PowerShell',
+      psStep3Desc: 'Escanea el repositorio actual usando el tema analítico Frío:',
+      psStep3Note: 'Ejemplo con ruta absoluta en PowerShell: armelis scan "$HOME\\Documents\\TuRepo" --cold',
+      psStep4Title: 'Calcular Puntos Críticos y Copiar Prompt de IA',
+      psStep4Desc: 'Identifica el punto crítico exacto y genera el prompt listo para pegar en Cursor/Copilot:',
+      cmdStep1Title: 'Instalación Global en Símbolo del Sistema (CMD)',
+      cmdStep1Desc: 'Abre cmd.exe e instala el CLI de Armelis globalmente:',
+      cmdStep2Title: 'Verificar Instalación en CMD',
+      cmdStep2Desc: 'Comprueba que Windows detecta el ejecutable y muestra el banner de inicio:',
+      cmdStep3Title: 'Ejecutar Escaneo con Rutas de Entorno de Windows',
+      cmdStep3Desc: 'Escanea tu directorio actual o apunta a una ruta usando %USERPROFILE%:',
+      cmdStep3Note: 'Para el directorio actual en CMD: armelis scan . --cold',
+      cmdStep4Title: 'Neutralizar Puntos Críticos (Modo Protector Cálido)',
+      cmdStep4Desc: 'Ejecuta el análisis de corte de puntos críticos en CMD con el tema defensivo cálido:',
+      bashStep1Title: 'Instalación Global (macOS y Linux)',
+      bashStep1Desc: 'Instala mediante npm con creación automática de enlaces simbólicos POSIX:',
+      bashStep2Title: 'Escanear y Transmitir Eventos CEF / ECS',
+      bashStep2Desc: 'Escanea el repositorio y canaliza la telemetría formateada en Common Event Format a disco o SIEM:',
+      bashStep3Title: 'Rastreo de Saltos Laterales',
+      bashStep3Desc: 'Correlaciona puntos de entrada, dependencias y destinos de base de datos en una trayectoria de ataque:',
+      desktopModeTitle: 'Modalidad de Despliegue del Cliente de Escritorio',
+      desktopModeDesc: 'Elige entre el Asistente de Instalación preconfigurado para Windows o compilar desde el código fuente nativo en Rust:',
+      desktopTabInstaller: 'Instalador Personalizado de Windows (.exe / .msi)',
+      desktopTabSource: 'Ejecutar desde el Código Fuente (Tauri 2)',
+      installerHeading: 'Armelis Tactical Command — Asistente de Instalación de Windows',
+      installerSubheading: 'Instalador nativo personalizado con iconos vectoriales, logotipos, menú contextual y registro automático en PATH',
+      installerRoadmapBadge: 'HOJA DE RUTA Y ACCESO ANTICIPADO',
+      installerIntro: 'El instalador dedicado de Armelis para Windows (Armelis-Setup-x64.exe y .msi) proporciona una experiencia de instalación fluida e instantánea para estaciones de trabajo, desarrolladores y analistas de seguridad:',
+      installerFeat1Title: 'Identidad Visual e Iconos Personalizados',
+      installerFeat1Desc: 'Iconos .ico multi-tamaño en alta resolución (16px a 512px) para el Explorador de Windows, Menú Inicio, anclaje a la barra de tareas y una ventana de instalación en tono cian oscuro.',
+      installerFeat2Title: 'Menú Contextual del Explorador ("Escanear con Armelis")',
+      installerFeat2Desc: 'Integración profunda con el shell del Explorador de Windows: Haz clic derecho en cualquier carpeta o unidad y selecciona "Escanear con Armelis" para iniciar el análisis del grafo de ataque.',
+      installerFeat3Title: 'Registro Automatizado en el PATH del Sistema',
+      installerFeat3Desc: 'Configura automáticamente las variables PATH de Usuario y Sistema. Usa el comando armelis de inmediato en cualquier nueva ventana de PowerShell o CMD sin configuración manual.',
+      installerFeat4Title: 'Aislado (Air-Gapped) y Menos de 40MB de RAM',
+      installerFeat4Desc: 'Construido con Rust nativo y Tauri 2. Sin la sobrecarga de Electron. Consume menos de 40MB de RAM y se ejecuta 100% localmente sin conexiones a la nube.',
+      installerBtnExe: 'Descargar Armelis-Setup-x64.exe',
+      installerBtnZip: 'Descargar Portable .zip',
+      installerPipelineNotice: 'El flujo de empaquetado personalizado está programado para su despliegue. Mientras tanto, puedes iniciar o compilar el cliente de escritorio directamente desde el código fuente usando la pestaña superior.',
+      sourceStep1Title: 'Clonar Repositorio',
+      sourceStep1Desc: 'Clona el repositorio de código abierto de Armelis en tu equipo:',
+      sourceStep2Title: 'Iniciar App de Escritorio en Modo Desarrollo',
+      sourceStep2Desc: 'Inicia Vite y la ventana nativa de Rust/Tauri 2 con recarga rápida en vivo (HMR):',
+      sourceStep3Title: 'Compilar Binario Independiente (.exe / .msi)',
+      sourceStep3Desc: 'Empaqueta un ejecutable nativo ultracompacto, aislado y sin dependencias externas:',
+      dockerStep1Heading: 'Puerta de Seguridad para GitHub Actions',
+      dockerStep1Text: 'Añade el escaneo determinista de puntos críticos a tu pipeline automatizado de Pull Requests:',
+      dockerStep2Heading: 'Contenedor Docker Independiente',
+      dockerStep2Text: 'Monta cualquier repositorio local sin instalar Node ni Rust en el equipo anfitrión:',
       step1Title: 'Instalación Global',
       step1Desc: 'Instala el CLI de Armelis globalmente usando npm o pnpm:',
       step2Title: 'Escanear Cualquier Repositorio Local',
@@ -719,12 +1020,14 @@ export const translations: Record<Language, I18nContent> = {
       desktopStep1Title: 'Descargar Instalador Ejecutable para Windows',
       desktopStep1Desc: 'Obtén el instalador NSIS independiente oficial desde GitHub Releases:',
       desktopStep2Title: 'Compilar desde el Código Fuente (Alternativa)',
-      desktopStep2Desc: 'Clona el repositorio y compila el paquete de escritorio Electron localmente:',
+      desktopStep2Desc: 'Clona el repositorio y compila el paquete de escritorio nativo localmente:',
       dockerStep1Title: 'Descargar Imagen Oficial de Contenedor',
       dockerStep1Desc: 'Descarga la imagen precompilada multiarquitectura:',
       dockerStep2Title: 'Montar Repositorio Local y Escanear',
       dockerStep2Desc: 'Monta cualquier directorio local sin instalar Node ni Rust en el equipo anfitrión:',
-      launchConsole: 'Iniciar Consola en Vivo'
+      launchConsole: 'Iniciar Consola en Vivo',
+      copy: 'Copiar',
+      copied: '¡Copiado! ✓'
     },
     footer: {
       tagline: 'ARMELIS • INTELIGENCIA EN SEGURIDAD DE APLICACIONES',
