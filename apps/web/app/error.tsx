@@ -60,11 +60,11 @@ export default function ErrorBoundary({
 
         <h2
           style={{
-            fontFamily: "'Space Grotesk', sans-serif",
+            fontFamily: "'Gilroy', sans-serif",
             fontSize: '26px',
             margin: '0 0 10px',
             fontWeight: 700,
-            letterSpacing: '-0.025em'
+            letterSpacing: '-0.02em'
           }}
         >
           Session Exception Intercepted

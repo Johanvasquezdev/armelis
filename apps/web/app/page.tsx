@@ -175,10 +175,10 @@ function BrandWordmark({ large = false, theme = 'cold' }: { large?: boolean; the
       />
       <span
         style={{
-          fontFamily: "'Rajdhani', sans-serif",
-          fontSize: large ? '44px' : '32px',
+          fontFamily: "'Gilroy', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
+          fontSize: large ? '42px' : '30px',
           fontWeight: 800,
-          letterSpacing: '-0.3px',
+          letterSpacing: '-0.4px',
           lineHeight: 1,
           display: 'inline-flex',
           alignItems: 'baseline'

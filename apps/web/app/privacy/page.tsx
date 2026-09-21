@@ -26,7 +26,7 @@ export default function PrivacyPolicyPage() {
           <p style={{ color: 'var(--cyan, #00e5ff)', fontSize: '11px', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', margin: '0 0 10px' }}>
             LEGAL COMPLIANCE &amp; TELEMETRY DISCLOSURE
           </p>
-          <h1 style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: 'clamp(34px, 5vw, 46px)', fontWeight: 700, margin: '0 0 10px', letterSpacing: '-0.03em' }}>
+          <h1 style={{ fontFamily: "'Gilroy', sans-serif", fontSize: 'clamp(34px, 5vw, 46px)', fontWeight: 700, margin: '0 0 10px', letterSpacing: '-0.025em' }}>
             Privacy Policy
           </h1>
           <p style={{ color: 'var(--muted, #8ba2bb)', fontSize: '14px', margin: 0 }}>

@@ -472,7 +472,7 @@ export default function DashboardPage() {
                 filter: 'drop-shadow(0 0 10px rgba(0, 229, 255, 0.35))'
               }}
             />
-            <span style={{ fontSize: '26px', fontWeight: 800, letterSpacing: '-0.3px', fontFamily: "'Rajdhani', sans-serif" }}>
+            <span style={{ fontSize: '24px', fontWeight: 800, letterSpacing: '-0.4px', fontFamily: "'Gilroy', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" }}>
               ARME<span style={{ color: '#00e5ff' }}>[LIS]</span>
             </span>
           </Link>
