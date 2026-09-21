@@ -33,7 +33,7 @@ async function loadRunTrivy(): Promise<(opts: Record<string, unknown>) => Promis
   ];
 
   for (const candidate of candidates) {
-    if (!fs.existsSync(candidate)) continue;
+    if (!fs.existsSync(/*turbopackIgnore: true*/ candidate)) continue;
     // CommonJS module — use createRequire via dynamic import of node:module
     const { createRequire } = await import('node:module');
     const require = createRequire(pathToFileURL(candidate).href);
@@ -85,7 +85,7 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  if (!fs.existsSync(resolved) || !fs.statSync(resolved).isDirectory()) {
+  if (!fs.existsSync(/*turbopackIgnore: true*/ resolved) || !fs.statSync(/*turbopackIgnore: true*/ resolved).isDirectory()) {
     return NextResponse.json(
       { ok: false, error: 'target must exist and be a directory' },
       { status: 400 }
