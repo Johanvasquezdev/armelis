@@ -6,6 +6,13 @@ import { animate } from 'animejs';
 import { gsap } from 'gsap';
 import { Button } from '../components/ui/button';
 import { translations, type Language } from '../lib/i18n';
+import {
+  trackLanguageSwitch,
+  trackLiveConsoleLaunch,
+  trackInstallerDownload,
+  trackDocView
+} from '../lib/analytics';
+
 
 
 const findings = [
@@ -212,6 +219,7 @@ export default function HomePage() {
 
   const handleSetLang = (newLang: Language) => {
     setLang(newLang);
+    trackLanguageSwitch(newLang);
     try {
       localStorage.setItem('armelis_lang', newLang);
       document.documentElement.lang = newLang;
@@ -219,6 +227,12 @@ export default function HomePage() {
       // ignore
     }
   };
+
+  const handleSetDocsTab = (tab: 'cli' | 'graph' | 'siem' | 'cicd') => {
+    setDocsTab(tab);
+    trackDocView(tab);
+  };
+
 
   const t = translations[lang];
 
@@ -555,7 +569,7 @@ export default function HomePage() {
           </p>
           <div className="hero-actions">
             <Button asChild size="md">
-              <Link href="/dashboard">
+              <Link href="/dashboard" onClick={() => trackLiveConsoleLaunch('hero')}>
                 <span>{t.hero.openConsole}</span>
                 <span aria-hidden="true">→</span>
               </Link>
@@ -1169,12 +1183,26 @@ export default function HomePage() {
 
             <div style={{ marginTop: '20px', display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
               <Button asChild size="sm">
-                <a href="#install" onClick={() => { setInstallTab('desktop'); setDesktopMode('installer'); }}>
+                <a
+                  href="#install"
+                  onClick={() => {
+                    setInstallTab('desktop');
+                    setDesktopMode('installer');
+                    trackInstallerDownload('windows');
+                  }}
+                >
                   {t.platforms.downloadInstaller} <span>→</span>
                 </a>
               </Button>
               <Button asChild size="sm" variant="ghost">
-                <a href="#install" onClick={() => { setInstallTab('desktop'); setDesktopMode('source'); }}>
+                <a
+                  href="#install"
+                  onClick={() => {
+                    setInstallTab('desktop');
+                    setDesktopMode('source');
+                    trackInstallerDownload('source');
+                  }}
+                >
                   {t.platforms.buildFromSource} <span>→</span>
                 </a>
               </Button>
@@ -1198,28 +1226,28 @@ export default function HomePage() {
           <button
             type="button"
             className={`docs-tab-btn ${docsTab === 'cli' ? 'active' : ''}`}
-            onClick={() => setDocsTab('cli')}
+            onClick={() => handleSetDocsTab('cli')}
           >
             ⚡ {t.docs.tabCli}
           </button>
           <button
             type="button"
             className={`docs-tab-btn ${docsTab === 'graph' ? 'active' : ''}`}
-            onClick={() => setDocsTab('graph')}
+            onClick={() => handleSetDocsTab('graph')}
           >
             🕸 {t.docs.tabGraph}
           </button>
           <button
             type="button"
             className={`docs-tab-btn ${docsTab === 'siem' ? 'active' : ''}`}
-            onClick={() => setDocsTab('siem')}
+            onClick={() => handleSetDocsTab('siem')}
           >
             📡 {t.docs.tabSiem}
           </button>
           <button
             type="button"
             className={`docs-tab-btn ${docsTab === 'cicd' ? 'active' : ''}`}
-            onClick={() => setDocsTab('cicd')}
+            onClick={() => handleSetDocsTab('cicd')}
           >
             🛡 {t.docs.tabCicd}
           </button>
@@ -2112,7 +2140,7 @@ jobs:
         {/* Quick Launch Buttons */}
         <div style={{ display: 'flex', gap: '14px', flexWrap: 'wrap', justifyContent: 'center', marginTop: '36px' }}>
           <Button asChild>
-            <Link href="/dashboard">
+            <Link href="/dashboard" onClick={() => trackLiveConsoleLaunch('bottom_cta')}>
               {t.install.launchConsole} <span>→</span>
             </Link>
           </Button>
