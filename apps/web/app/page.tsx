@@ -678,6 +678,79 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* AI & Vibecoding Security Spotlight Section */}
+      <section id="vibecoding" className="vibecoding-section">
+        <div className="shell">
+          <div className="section-intro">
+            <p className="eyebrow" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
+              <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: 'var(--cyan)' }} />
+              {t.aiVibecoding.eyebrow}
+            </p>
+            <h2 style={{ fontSize: 'clamp(32px, 4.5vw, 54px)', lineHeight: 1.05, margin: '10px 0 16px' }}>
+              {t.aiVibecoding.title.split('.')[0]}.<br />
+              <em>{t.aiVibecoding.title.split('.').slice(1).join('.').trim() || t.aiVibecoding.title}</em>
+            </h2>
+            <p style={{ color: '#94a3b8', fontSize: '15px', maxWidth: '780px', lineHeight: 1.7, margin: '0 0 8px' }}>
+              {t.aiVibecoding.subtitle}
+            </p>
+          </div>
+
+          <div className="vibecoding-grid">
+            <div className="vibecoding-card">
+              <span className="vibecoding-badge">{t.aiVibecoding.card1Badge}</span>
+              <h3>{t.aiVibecoding.card1Title}</h3>
+              <p>{t.aiVibecoding.card1Desc}</p>
+            </div>
+
+            <div className="vibecoding-card">
+              <span className="vibecoding-badge" style={{ color: '#f59e0b' }}>{t.aiVibecoding.card2Badge}</span>
+              <h3>{t.aiVibecoding.card2Title}</h3>
+              <p>{t.aiVibecoding.card2Desc}</p>
+            </div>
+
+            <div className="vibecoding-card" style={{ borderColor: 'rgba(0, 229, 255, 0.4)', background: 'rgba(7, 18, 38, 0.85)' }}>
+              <span className="vibecoding-badge" style={{ color: '#10b981' }}>{t.aiVibecoding.card3Badge}</span>
+              <h3>{t.aiVibecoding.card3Title}</h3>
+              <p>{t.aiVibecoding.card3Desc}</p>
+            </div>
+          </div>
+
+          {/* 1-Click AI Prompt Box */}
+          <div className="vibecoding-prompt-box">
+            <div className="vibecoding-prompt-header">
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <span style={{ background: 'rgba(0, 229, 255, 0.15)', color: 'var(--cyan)', padding: '4px 8px', borderRadius: '4px', fontSize: '11px', fontWeight: 700, fontFamily: 'monospace' }}>
+                  CURSOR / COPILOT / CLAUDE PROMPT
+                </span>
+                <strong style={{ color: 'var(--ink)', fontSize: '13px' }}>
+                  {t.aiVibecoding.promptTitle}
+                </strong>
+              </div>
+              <button
+                type="button"
+                className="install-copy-btn"
+                onClick={() => handleCopy(t.aiVibecoding.promptSnippet, 'vibecoding-prompt')}
+              >
+                {copiedSnippet === 'vibecoding-prompt' ? 'Copied to Clipboard! ✓' : (lang === 'es' ? 'Copiar Prompt' : 'Copy AI Prompt')}
+              </button>
+            </div>
+            <pre className="vibecoding-prompt-code">{t.aiVibecoding.promptSnippet}</pre>
+            <div style={{ padding: '14px 20px', background: 'rgba(255, 255, 255, 0.02)', borderTop: '1px solid var(--line)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
+              <span style={{ fontSize: '12px', color: 'var(--muted)' }}>
+                {t.aiVibecoding.promptDesc}
+              </span>
+              <Link
+                href="/dashboard"
+                onClick={() => trackLiveConsoleLaunch('vibecoding_section')}
+                style={{ color: 'var(--cyan)', fontWeight: 700, fontSize: '13px', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '6px' }}
+              >
+                {t.aiVibecoding.ctaConsole}
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Interactive Marketing Showcase: Videos & Photo Captures */}
       <section id="showcase" className="showcase-section">
         <div className="shell">

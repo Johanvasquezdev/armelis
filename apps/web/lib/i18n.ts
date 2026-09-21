@@ -96,6 +96,24 @@ export interface I18nContent {
       desc: string;
     }>;
   };
+  aiVibecoding: {
+    eyebrow: string;
+    title: string;
+    subtitle: string;
+    card1Badge: string;
+    card1Title: string;
+    card1Desc: string;
+    card2Badge: string;
+    card2Title: string;
+    card2Desc: string;
+    card3Badge: string;
+    card3Title: string;
+    card3Desc: string;
+    promptTitle: string;
+    promptDesc: string;
+    promptSnippet: string;
+    ctaConsole: string;
+  };
   docs: {
     eyebrow: string;
     title: string;
@@ -351,6 +369,27 @@ export const translations: Record<Language, I18nContent> = {
         }
       ]
     },
+    aiVibecoding: {
+      eyebrow: 'THE AI & VIBECODING SECURITY BLINDSPOT',
+      title: 'Nobody knows what AI just wrote. Armelis proves whether it can be breached.',
+      subtitle: 'When developers vibecode applications at lightning speed using Cursor, GitHub Copilot, and Claude Code, security becomes an invisible gamble. Traditional scanners scream at 800 unexploitable lines, while real injection paths slip into production. Armelis brings deterministic reachability defense to AI workflows.',
+      card1Badge: '01 • THE VIBECODING REALITY',
+      card1Title: '100x Output, 0x Line-by-Line Review',
+      card1Desc: 'AI models assemble full-stack apps in minutes, silently hallucinating outdated dependencies, omitting session authorization checks, and connecting untrusted parameters straight to database sinks.',
+      card2Badge: '02 • THE SCANNER DILEMMA',
+      card2Title: 'Legacy Scanners Kill the Flow',
+      card2Desc: 'Throwing 600 static CVE alerts at a vibecoder causes instant alert blindness. Developers dismiss the noise and push vulnerable code to production anyway.',
+      card3Badge: '03 • THE ARMELIS HARNESS',
+      card3Title: 'Deterministic AST Reachability',
+      card3Desc: "Armelis traces the live execution tree from public ingress to sink. If the vulnerability can't be reached, it stays silent. If it can, it isolates the exact choke point and hands you a 1-click prompt to paste back to your AI to fix it in seconds.",
+      promptTitle: '1-Click AI Remediation Prompt',
+      promptDesc: 'Feed Armelis findings directly back into Cursor, Copilot, or Claude Code to fix the choke point without breaking your sprint velocity.',
+      promptSnippet: `Fix critical choke point in package.json and controllers/auth.ts:
+- Upgrade jsonwebtoken from 8.5.1 to ^9.0.2 (CVE-2025-4128)
+- Enforce explicit algorithms: ['RS256'] in jwt.verify()
+- Verify req.user.tenantId matches order.tenantId before DB query execution`,
+      ctaConsole: 'Test an AI-Generated Repo in Live Console →'
+    },
     docs: {
       eyebrow: 'TECHNICAL DOCUMENTATION',
       title: 'Developer & SecOps Guide',
@@ -603,6 +642,27 @@ export const translations: Record<Language, I18nContent> = {
           desc: 'Calcula el incremento de versión mínimo que rompe la ruta de ataque sin alterar la compatibilidad de APIs semver.'
         }
       ]
+    },
+    aiVibecoding: {
+      eyebrow: 'EL PUNTO CIEGO DE LA IA Y EL VIBECODING',
+      title: 'Nadie sabe qué acaba de escribir la IA. Armelis demuestra si realmente es vulnerable.',
+      subtitle: 'Cuando los desarrolladores programan a la velocidad de la luz mediante "vibecoding" con Cursor, Copilot y Claude Code, la seguridad se vuelve una ruleta rusa. Los escáneres viejos gritan por 800 líneas inofensivas mientras brechas críticas pasan a producción. Armelis devuelve la certeza determinista al desarrollo con IA.',
+      card1Badge: '01 • LA REALIDAD DEL VIBECODING',
+      card1Title: 'Producción a 100x, Revisión a 0x',
+      card1Desc: 'Los modelos de IA crean aplicaciones completas en minutos, introduciendo paquetes vulnerables alucinados, omitiendo validaciones de autorización y uniendo entradas HTTP externas directamente a bases de datos.',
+      card2Badge: '02 • EL DILEMA DEL ESCÁNER TRADICIONAL',
+      card2Title: 'Los Escáneres Viejos Destruyen el Ritmo',
+      card2Desc: 'Lanzar 600 alertas estáticas de CVE a un desarrollador causa fatiga instantánea de alertas. El resultado es ignorar los avisos y desplegar código inseguro en producción de todos modos.',
+      card3Badge: '03 • EL ARNÉS DETERMINISTA ARMELIS',
+      card3Title: 'Alcance Real por Grafos AST',
+      card3Desc: 'Armelis analiza el árbol de llamadas AST de extremo a extremo. Si la vulnerabilidad no es alcanzable, guarda silencio. Si lo es, aísla el punto crítico exacto y te entrega un prompt en 1 clic para que tu IA lo corrija en segundos.',
+      promptTitle: 'Prompt de Remediación para IA en 1 Clic',
+      promptDesc: 'Pega los hallazgos de Armelis directamente en Cursor, Copilot o Claude Code para corregir el punto crítico sin sacrificar tu velocidad de desarrollo.',
+      promptSnippet: `Corrige el punto crítico en package.json y controllers/auth.ts:
+- Actualiza jsonwebtoken de 8.5.1 a ^9.0.2 (CVE-2025-4128)
+- Aplica algorithms: ['RS256'] explícito en jwt.verify()
+- Valida que req.user.tenantId coincida con order.tenantId antes de consultar la BD`,
+      ctaConsole: 'Auditar Repositorio de IA en la Consola →'
     },
     docs: {
       eyebrow: 'DOCUMENTACIÓN TÉCNICA',
