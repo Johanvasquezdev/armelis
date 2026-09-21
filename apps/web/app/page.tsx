@@ -1,12 +1,12 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { animate } from 'animejs';
 import { gsap } from 'gsap';
 import { Button } from '../components/ui/button';
+import { translations, type Language } from '../lib/i18n';
 
-import { useState } from 'react';
 
 const findings = [
   ['01', 'Public endpoint', 'GET /orders/:id'],
@@ -188,10 +188,40 @@ function BrandWordmark({ large = false, theme = 'cold' }: { large?: boolean; the
 
 export default function HomePage() {
   const [theme, setTheme] = useState<'cold' | 'warm'>('cold');
+  const [lang, setLang] = useState<Language>('en');
+  const [docsTab, setDocsTab] = useState<'cli' | 'graph' | 'siem' | 'cicd'>('cli');
   const [installTab, setInstallTab] = useState<'cli' | 'desktop' | 'docker'>('cli');
   const [cliShell, setCliShell] = useState<'powershell' | 'cmd' | 'bash'>('powershell');
   const [desktopMode, setDesktopMode] = useState<'installer' | 'source'>('installer');
   const [copiedSnippet, setCopiedSnippet] = useState<string>('');
+
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem('armelis_lang') as Language;
+      if (saved === 'en' || saved === 'es') {
+        setLang(saved);
+        document.documentElement.lang = saved;
+      } else if (typeof navigator !== 'undefined' && navigator.language?.toLowerCase().startsWith('es')) {
+        setLang('es');
+        document.documentElement.lang = 'es';
+      }
+    } catch {
+      // ignore
+    }
+  }, []);
+
+  const handleSetLang = (newLang: Language) => {
+    setLang(newLang);
+    try {
+      localStorage.setItem('armelis_lang', newLang);
+      document.documentElement.lang = newLang;
+    } catch {
+      // ignore
+    }
+  };
+
+  const t = translations[lang];
+
 
   // Marketing Showcase State
   const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
@@ -270,17 +300,38 @@ export default function HomePage() {
         </Link>
         <nav aria-label="Primary navigation">
           <Link href="/dashboard" style={{ color: 'var(--cyan)', fontWeight: 700 }}>
-            Live Console ↗
+            {t.nav.liveConsole}
           </Link>
-          <Link href="#showcase">Demo &amp; Videos</Link>
-          <Link href="#platforms">CLI &amp; Desktop</Link>
-          <Link href="#how-it-works">How it works</Link>
-          <Link href="#install">Activation &amp; Download</Link>
-          <Link href="#open-source">Open Source</Link>
+          <Link href="#showcase">{t.nav.showcase}</Link>
+          <Link href="#platforms">{t.nav.platforms}</Link>
+          <Link href="#how-it-works">{t.nav.howItWorks}</Link>
+          <Link href="#docs" style={{ color: 'var(--cyan)' }}>{t.nav.docs}</Link>
+          <Link href="#install">{t.nav.install}</Link>
+          <Link href="#open-source">{t.nav.openSource}</Link>
         </nav>
 
-        {/* Header Right Actions (Theme Switcher + GitHub CTA) */}
+        {/* Header Right Actions (Language Switcher + Theme Switcher + GitHub CTA) */}
         <div className="site-header-actions">
+          {/* Apple HIG Segmented Language Control */}
+          <div className="web-theme-control" role="group" aria-label="Language selector">
+            <button
+              type="button"
+              className={`web-theme-btn ${lang === 'en' ? 'active' : ''}`}
+              onClick={() => handleSetLang('en')}
+              title="English"
+            >
+              <span>EN</span>
+            </button>
+            <button
+              type="button"
+              className={`web-theme-btn ${lang === 'es' ? 'active' : ''}`}
+              onClick={() => handleSetLang('es')}
+              title="Español"
+            >
+              <span>ES</span>
+            </button>
+          </div>
+
           {/* Apple HIG Segmented Theme Control */}
           <div className="web-theme-control" role="group" aria-label="Theme mode switcher">
             <button
@@ -294,7 +345,7 @@ export default function HomePage() {
                 <polyline points="2 17 12 22 22 17" />
                 <polyline points="2 12 12 17 22 12" />
               </svg>
-              <span>Cold</span>
+              <span>{t.nav.coldMode}</span>
             </button>
             <button
               type="button"
@@ -305,7 +356,7 @@ export default function HomePage() {
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
               </svg>
-              <span>Warm</span>
+              <span>{t.nav.warmMode}</span>
             </button>
           </div>
 
@@ -351,27 +402,45 @@ export default function HomePage() {
       {mobileMenuOpen && (
         <div className="mobile-nav-drawer shell" role="dialog" aria-modal="true">
           <div className="mobile-nav-content">
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', flexWrap: 'wrap', gap: '8px' }}>
               <span style={{ fontSize: '11px', color: 'var(--cyan)', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase' }}>
                 Navigation &amp; Controls
               </span>
-              <div className="web-theme-control" role="group" aria-label="Mobile theme switcher">
-                <button
-                  type="button"
-                  className={`web-theme-btn ${theme === 'cold' ? 'active' : ''}`}
-                  onClick={() => setTheme('cold')}
-                  title="Cold analytical mode"
-                >
-                  Cold
-                </button>
-                <button
-                  type="button"
-                  className={`web-theme-btn ${theme === 'warm' ? 'active' : ''}`}
-                  onClick={() => setTheme('warm')}
-                  title="Warm protective"
-                >
-                  Warm
-                </button>
+              <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
+                <div className="web-theme-control" role="group" aria-label="Mobile language switcher">
+                  <button
+                    type="button"
+                    className={`web-theme-btn ${lang === 'en' ? 'active' : ''}`}
+                    onClick={() => handleSetLang('en')}
+                  >
+                    EN
+                  </button>
+                  <button
+                    type="button"
+                    className={`web-theme-btn ${lang === 'es' ? 'active' : ''}`}
+                    onClick={() => handleSetLang('es')}
+                  >
+                    ES
+                  </button>
+                </div>
+                <div className="web-theme-control" role="group" aria-label="Mobile theme switcher">
+                  <button
+                    type="button"
+                    className={`web-theme-btn ${theme === 'cold' ? 'active' : ''}`}
+                    onClick={() => setTheme('cold')}
+                    title="Cold analytical mode"
+                  >
+                    {t.nav.coldMode}
+                  </button>
+                  <button
+                    type="button"
+                    className={`web-theme-btn ${theme === 'warm' ? 'active' : ''}`}
+                    onClick={() => setTheme('warm')}
+                    title="Warm protective"
+                  >
+                    {t.nav.warmMode}
+                  </button>
+                </div>
               </div>
             </div>
 
@@ -381,7 +450,7 @@ export default function HomePage() {
                 className="mobile-nav-link active-link"
                 onClick={() => setMobileMenuOpen(false)}
               >
-                <span>Live Interactive Console</span>
+                <span>{t.nav.liveConsole}</span>
                 <b>↗</b>
               </Link>
               <Link
@@ -389,7 +458,7 @@ export default function HomePage() {
                 className="mobile-nav-link"
                 onClick={() => setMobileMenuOpen(false)}
               >
-                <span>Demo &amp; Interactive Media</span>
+                <span>{t.nav.showcase}</span>
                 <b>→</b>
               </Link>
               <Link
@@ -397,7 +466,7 @@ export default function HomePage() {
                 className="mobile-nav-link"
                 onClick={() => setMobileMenuOpen(false)}
               >
-                <span>CLI &amp; Desktop HUD</span>
+                <span>{t.nav.platforms}</span>
                 <b>→</b>
               </Link>
               <Link
@@ -405,7 +474,15 @@ export default function HomePage() {
                 className="mobile-nav-link"
                 onClick={() => setMobileMenuOpen(false)}
               >
-                <span>Choke-Point Mathematics</span>
+                <span>{t.nav.howItWorks}</span>
+                <b>→</b>
+              </Link>
+              <Link
+                href="#docs"
+                className="mobile-nav-link"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                <span style={{ color: 'var(--cyan)' }}>{t.nav.docs}</span>
                 <b>→</b>
               </Link>
               <Link
@@ -413,7 +490,7 @@ export default function HomePage() {
                 className="mobile-nav-link"
                 onClick={() => setMobileMenuOpen(false)}
               >
-                <span>Download &amp; Activation</span>
+                <span>{t.nav.install}</span>
                 <b>→</b>
               </Link>
               <Link
@@ -421,7 +498,7 @@ export default function HomePage() {
                 className="mobile-nav-link"
                 onClick={() => setMobileMenuOpen(false)}
               >
-                <span>Open Source Philosophy</span>
+                <span>{t.nav.openSource}</span>
                 <b>→</b>
               </Link>
               <a
@@ -467,24 +544,19 @@ export default function HomePage() {
       <section className="hero shell" aria-labelledby="hero-title">
         <div className="hero-copy">
           <p className="eyebrow">
-            Application security for AI-assisted teams <span className="eyebrow-rule" />
+            {t.hero.badge} <span className="eyebrow-rule" />
           </p>
           <h1 id="hero-title">
-            {theme === 'cold' ? (
-              <>Find the path.<br /><em>Fix the risk.</em></>
-            ) : (
-              <>Armor the code.<br /><em>Sever the chain.</em></>
-            )}
+            {t.hero.title1}<br />
+            <em>{t.hero.title2}</em>
           </h1>
           <p className="hero-lede">
-            {theme === 'cold'
-              ? 'Armelis correlates your code, dependencies, containers, and configurations to show what could actually happen—and what choke point to sever first.'
-              : 'Armelis provides active defensive armor, turning chaotic security alerts into deterministic choke points that protect your crown jewels.'}
+            {t.hero.lede}
           </p>
           <div className="hero-actions">
             <Button asChild size="md">
               <Link href="/dashboard">
-                <span>Open Live Console</span>
+                <span>{t.hero.openConsole}</span>
                 <span aria-hidden="true">→</span>
               </Link>
             </Button>
@@ -495,7 +567,7 @@ export default function HomePage() {
               <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                 <polygon points="5 3 19 12 5 21 5 3" />
               </svg>
-              <span>Watch Demo (2 min)</span>
+              <span>{t.hero.exploreShowcase}</span>
             </a>
             <a
               className="text-link"
@@ -503,12 +575,12 @@ export default function HomePage() {
               target="_blank"
               rel="noreferrer"
             >
-              Clone on GitHub (MIT) <span>↗</span>
+              {lang === 'es' ? 'Clonar en GitHub (MIT)' : 'Clone on GitHub (MIT)'} <span>↗</span>
             </a>
           </div>
           <p className="hero-proof">
-            <span>EVIDENCE / PATH / FIX</span>
-            <i /> Works with AI-assisted workflows <i /> Rescan to verify
+            <span>{t.hero.badge1}</span>
+            <i /> {t.hero.badge2} <i /> {t.hero.badge3}
           </p>
         </div>
 
@@ -519,25 +591,25 @@ export default function HomePage() {
           <div className="radar-sweep" />
           <div className="scan-console">
             <div className="console-top">
-              <span className="live-dot" /> sample scan / storefront-api <b>READY</b>
+              <span className="live-dot" /> {lang === 'es' ? 'escaneo muestra / storefront-api' : 'sample scan / storefront-api'} <b>{lang === 'es' ? 'LISTO' : 'READY'}</b>
             </div>
             <div className="console-body">
               <div className="console-repo">
                 <div className="repo-mark">⌘</div>
                 <div>
                   <strong>storefront-api</strong>
-                  <small>connected repository</small>
+                  <small>{lang === 'es' ? 'repositorio conectado' : 'connected repository'}</small>
                 </div>
-                <span>CONNECTED</span>
+                <span>{lang === 'es' ? 'CONECTADO' : 'CONNECTED'}</span>
               </div>
-              <div className="console-label">SYNTHESIZED RISK STORY</div>
+              <div className="console-label">{t.hero.traceTitle}</div>
               <div className="path-flow">
                 {findings.map(([index, title, detail], i) => (
                   <div className="path-segment" key={index}>
                     <div className={`path-node node-${i + 1}`}>
                       <span>{index}</span>
-                      <strong>{title}</strong>
-                      <small>{detail}</small>
+                      <strong>{i === 0 ? t.hero.taintedInput : i === 1 ? t.hero.chokePoint : t.hero.exfilSink}</strong>
+                      <small>{i === 0 ? t.hero.taintedInputSub : i === 1 ? t.hero.chokePointSub : t.hero.exfilSinkSub}</small>
                     </div>
                     {i < findings.length - 1 && <div className="path-connector" />}
                   </div>
@@ -546,46 +618,48 @@ export default function HomePage() {
               <div className="fix-callout">
                 <div className="fix-spark">✦</div>
                 <div>
-                  <span>FIX FIRST</span>
-                  <strong>Verify order.user_id matches authenticated session.</strong>
-                  <p>One single authorization check breaks the entire exploit chain.</p>
+                  <span>{lang === 'es' ? 'REPARAR PRIMERO' : 'FIX FIRST'}</span>
+                  <strong>{lang === 'es' ? 'Verificar que order.user_id coincida con la sesión.' : 'Verify order.user_id matches authenticated session.'}</strong>
+                  <p>{lang === 'es' ? 'Una sola verificación de autorización rompe toda la cadena del exploit.' : 'One single authorization check breaks the entire exploit chain.'}</p>
                 </div>
                 <b>→</b>
               </div>
             </div>
           </div>
-          <span className="visual-caption caption-a">01 / AST + Secrets Correlated</span>
-          <span className="visual-caption caption-b">02 / MITRE ATT&CK Mapped</span>
+          <span className="visual-caption caption-a">{lang === 'es' ? '01 / AST + Secretos Correlacionados' : '01 / AST + Secrets Correlated'}</span>
+          <span className="visual-caption caption-b">{lang === 'es' ? '02 / Mapeado a MITRE ATT&CK' : '02 / MITRE ATT&CK Mapped'}</span>
         </div>
       </section>
 
       {/* How It Works Section */}
       <section id="how-it-works" className="section shell story-section">
         <div className="section-intro">
-          <p className="eyebrow">The difference</p>
+          <p className="eyebrow">{t.howItWorks.eyebrow}</p>
           <h2>
-            Your scanner found 18 things.<br />
-            <em>Start with the one that matters.</em>
+            {t.howItWorks.title1}<br />
+            <em>{t.howItWorks.title2}</em>
           </h2>
           <p>
-            Armelis connects code, dependencies, containers, and configuration—then turns disconnected alerts into a concrete risk path your team can understand and remediate.
+            {lang === 'es'
+              ? 'Armelis conecta código, dependencias, contenedores y configuraciones, transformando alertas dispersas en una ruta de riesgo concreta que tu equipo puede entender y mitigar de inmediato.'
+              : 'Armelis connects code, dependencies, containers, and configuration—then turns disconnected alerts into a concrete risk path your team can understand and remediate.'}
           </p>
         </div>
         <div className="steps">
           <article>
-            <span>01</span>
-            <h3>Connect evidence</h3>
-            <p>Combine Trivy, Semgrep, and Gitleaks evidence in a unified schema.</p>
+            <span>{t.howItWorks.step1Num}</span>
+            <h3>{t.howItWorks.step1Title}</h3>
+            <p>{t.howItWorks.step1Desc}</p>
           </article>
           <article>
-            <span>02</span>
-            <h3>See the path</h3>
-            <p>Follow the route from public internet entry to crown-jewel assets.</p>
+            <span>{t.howItWorks.step2Num}</span>
+            <h3>{t.howItWorks.step2Title}</h3>
+            <p>{t.howItWorks.step2Desc}</p>
           </article>
           <article>
-            <span>03</span>
-            <h3>Fix and verify</h3>
-            <p>Apply the smallest meaningful code change, then rescan to prove reduction.</p>
+            <span>{t.howItWorks.step3Num}</span>
+            <h3>{t.howItWorks.step3Title}</h3>
+            <p>{t.howItWorks.step3Desc}</p>
           </article>
         </div>
       </section>
@@ -600,15 +674,17 @@ export default function HomePage() {
                   <polygon points="23 7 16 12 23 17 23 7" />
                   <rect x="1" y="5" width="15" height="14" rx="2" ry="2" />
                 </svg>
-                <span>PRODUCT SHOWCASE &bull; SYSTEM DEMOS</span>
+                <span>{t.showcase.eyebrow}</span>
                 <span className="eyebrow-rule" />
               </p>
               <h2 style={{ margin: '8px 0 0', fontSize: 'clamp(36px, 5vw, 64px)', lineHeight: 0.9 }}>
-                See Armelis<br />
-                <em>in Action.</em>
+                {t.showcase.title.split(' ')[0]} {t.showcase.title.split(' ')[1] || ''}<br />
+                <em>{t.showcase.title.split(' ').slice(2).join(' ') || t.showcase.title}</em>
               </h2>
               <p style={{ margin: '14px 0 0', color: 'var(--muted)', fontSize: '15px', maxWidth: '620px', lineHeight: 1.6 }}>
-                Watch high-resolution video walkthroughs and inspect architectural captures of the CLI engine, tactical desktop HUD, and GitHub repository analyzer.
+                {lang === 'es'
+                  ? 'Explora recorridos en video interactivo y capturas de alta definición del motor CLI, el command center táctico de escritorio y el analizador de repositorios de GitHub.'
+                  : 'Watch high-resolution video walkthroughs and inspect architectural captures of the CLI engine, tactical desktop HUD, and GitHub repository analyzer.'}
               </p>
             </div>
 
@@ -622,7 +698,7 @@ export default function HomePage() {
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                   <polygon points="5 3 19 12 5 21 5 3" />
                 </svg>
-                <span>Video Walkthroughs</span>
+                <span>{t.showcase.tabVideo}</span>
               </button>
               <button
                 type="button"
@@ -634,7 +710,7 @@ export default function HomePage() {
                   <circle cx="8.5" cy="8.5" r="1.5" />
                   <polyline points="21 15 16 10 5 21" />
                 </svg>
-                <span>Product Captures</span>
+                <span>{t.showcase.tabPhotos}</span>
               </button>
             </div>
           </div>
@@ -899,27 +975,6 @@ export default function HomePage() {
             </div>
           )}
 
-          {/* Developer Media Slot Note */}
-          <div className="developer-media-slot">
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" strokeWidth="2">
-                <circle cx="12" cy="12" r="10" />
-                <line x1="12" y1="16" x2="12" y2="12" />
-                <line x1="12" y1="8" x2="12.01" y2="8" />
-              </svg>
-              <span>
-                <strong>Custom Media Slot:</strong> To add your own custom video recordings or screenshots, simply place your <code>.mp4</code> or <code>.png</code> files into <code>apps/web/public/media/</code>.
-              </span>
-            </div>
-            <a
-              href="https://github.com/Johanvasquezdev/armelis"
-              target="_blank"
-              rel="noreferrer"
-              style={{ color: 'var(--cyan)', fontWeight: 700 }}
-            >
-              View Documentation ↗
-            </a>
-          </div>
         </div>
       </section>
 
@@ -927,45 +982,40 @@ export default function HomePage() {
       <section id="sample-scan" className="section shell sample-section">
         <div className="section-intro split">
           <div>
-            <p className="eyebrow">Sample scan / SOC triage</p>
+            <p className="eyebrow">{t.comparison.eyebrow}</p>
             <h2>
-              Path over<br />
-              <em>pile.</em>
+              {t.comparison.title1}<br />
+              <em>{t.comparison.title2}</em>
             </h2>
           </div>
           <p>
-            Deterministic graph traversal cuts alert fatigue and eliminates wasted developer cycles.
+            {lang === 'es'
+              ? 'El recorrido determinista de grafos elimina la fatiga de alertas y evita ciclos desperdiciados de desarrollo.'
+              : 'Deterministic graph traversal cuts alert fatigue and eliminates wasted developer cycles.'}
           </p>
         </div>
         <div className="comparison">
           <div className="signal-column">
-            <span className="column-label">BEFORE / UNFILTERED ALERT FATIGUE</span>
-            <p>
-              <i className="signal orange" /> Dependency alert <small>medium</small>
-            </p>
-            <p>
-              <i className="signal orange" /> Missing auth check <small>high</small>
-            </p>
-            <p>
-              <i className="signal blue" /> Exposed debug route <small>low</small>
-            </p>
-            <p>
-              <i className="signal orange" /> Secret in config <small>high</small>
-            </p>
+            <span className="column-label">{t.comparison.legacyTitle} • {t.comparison.legacyTag}</span>
+            {t.comparison.legacyPoints.map((point, i) => (
+              <p key={i}>
+                <i className={i % 2 === 0 ? 'signal orange' : 'signal blue'} /> {point}
+              </p>
+            ))}
           </div>
           <div className="comparison-beam">→</div>
           <div className="signal-column resolved">
-            <span className="column-label">AFTER / ROOT CAUSE RESOLVED</span>
+            <span className="column-label">{t.comparison.armelisTitle} • {t.comparison.armelisTag}</span>
             <div className="resolved-row">
               <span>✓</span>
               <div>
-                <strong>Authorization check enforced</strong>
-                <small>Attack path broken. Blast radius reduced to zero.</small>
+                <strong>{lang === 'es' ? 'Punto Crítico Neutralizado' : 'Authorization Check Enforced'}</strong>
+                <small>{lang === 'es' ? 'Ruta de ataque rota. Radio de impacto reducido a cero.' : 'Attack path broken. Blast radius reduced to zero.'}</small>
               </div>
             </div>
             <div className="risk-direction">
-              <span>RISK REDUCTION</span>
-              <b>100% ELIMINATED</b>
+              <span>{lang === 'es' ? 'REDUCCIÓN DE RIESGO' : 'RISK REDUCTION'}</span>
+              <b>{lang === 'es' ? '100% NEUTRALIZADO' : '100% ELIMINATED'}</b>
             </div>
           </div>
         </div>
@@ -975,37 +1025,28 @@ export default function HomePage() {
       <section className="section shell feature-section">
         <div className="section-intro split">
           <div>
-            <p className="eyebrow">Built for modern development</p>
+            <p className="eyebrow">{t.features.eyebrow}</p>
             <h2>
-              Security in<br />
-              <em>your workflow.</em>
+              {t.features.title.split('.')[0]}<br />
+              <em>{lang === 'es' ? 'En tu flujo de desarrollo.' : 'In your workflow.'}</em>
             </h2>
           </div>
           <p>
-            Evidence first. Clear tradeoffs. Useful whether you code by hand, with AI, or across a full engineering team.
+            {lang === 'es'
+              ? 'Evidencia primero. Compensaciones claras. Útil programando a mano, con agentes de IA o en un equipo completo de ingeniería.'
+              : 'Evidence first. Clear tradeoffs. Useful whether you code by hand, with AI, or across a full engineering team.'}
           </p>
         </div>
         <div className="feature-grid">
-          <article>
-            <span style={{ letterSpacing: '0.14em', textTransform: 'uppercase', fontSize: '11px', fontWeight: 700 }}>PRIORITIZE</span>
-            <h3>Know what matters</h3>
-            <p>Skip the wall of alerts. See the risks that can actually change the outcome.</p>
-          </article>
-          <article>
-            <span style={{ letterSpacing: '0.14em', textTransform: 'uppercase', fontSize: '11px', fontWeight: 700 }}>CORRELATE</span>
-            <h3>Follow the path</h3>
-            <p>Connect your endpoint, weakness, service, and sensitive data in plain English.</p>
-          </article>
-          <article>
-            <span style={{ letterSpacing: '0.14em', textTransform: 'uppercase', fontSize: '11px', fontWeight: 700 }}>REMEDIATE</span>
-            <h3>Fix first with AI prompts</h3>
-            <p>Get the smallest set of changes that meaningfully makes your app safer, with copy-pasteable prompts for Cursor, Copilot, and Claude Code.</p>
-          </article>
-          <article>
-            <span style={{ letterSpacing: '0.14em', textTransform: 'uppercase', fontSize: '11px', fontWeight: 700 }}>VERIFY</span>
-            <h3>Rescan with confidence</h3>
-            <p>Verify the risk went down with deterministic rescanning instead of hoping the patch worked.</p>
-          </article>
+          {t.features.items.map((feat, i) => (
+            <article key={i}>
+              <span style={{ letterSpacing: '0.14em', textTransform: 'uppercase', fontSize: '11px', fontWeight: 700 }}>
+                {i === 0 ? 'AST / TAINT' : i === 1 ? 'OFFLINE' : i === 2 ? 'SIEM' : 'PATCH'}
+              </span>
+              <h3>{feat.title}</h3>
+              <p>{feat.desc}</p>
+            </article>
+          ))}
         </div>
       </section>
 
@@ -1129,12 +1170,12 @@ export default function HomePage() {
             <div style={{ marginTop: '20px', display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
               <Button asChild size="sm">
                 <a href="#install" onClick={() => { setInstallTab('desktop'); setDesktopMode('installer'); }}>
-                  Windows Installer (.exe) <span>→</span>
+                  {t.platforms.downloadInstaller} <span>→</span>
                 </a>
               </Button>
               <Button asChild size="sm" variant="ghost">
                 <a href="#install" onClick={() => { setInstallTab('desktop'); setDesktopMode('source'); }}>
-                  Compile from Source <span>→</span>
+                  {t.platforms.buildFromSource} <span>→</span>
                 </a>
               </Button>
             </div>
@@ -1142,45 +1183,393 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Interactive Developer Documentation Section */}
+      <section id="docs" className="section shell docs-section">
+        <div className="section-intro">
+          <p className="eyebrow">{t.docs.eyebrow}</p>
+          <h2>
+            {t.docs.title}<br />
+            <em>{t.docs.subtitle}</em>
+          </h2>
+        </div>
+
+        {/* Documentation Navigation Tabs */}
+        <div className="docs-tabs-nav" role="tablist" aria-label="Documentation Categories">
+          <button
+            type="button"
+            className={`docs-tab-btn ${docsTab === 'cli' ? 'active' : ''}`}
+            onClick={() => setDocsTab('cli')}
+          >
+            ⚡ {t.docs.tabCli}
+          </button>
+          <button
+            type="button"
+            className={`docs-tab-btn ${docsTab === 'graph' ? 'active' : ''}`}
+            onClick={() => setDocsTab('graph')}
+          >
+            🕸 {t.docs.tabGraph}
+          </button>
+          <button
+            type="button"
+            className={`docs-tab-btn ${docsTab === 'siem' ? 'active' : ''}`}
+            onClick={() => setDocsTab('siem')}
+          >
+            📡 {t.docs.tabSiem}
+          </button>
+          <button
+            type="button"
+            className={`docs-tab-btn ${docsTab === 'cicd' ? 'active' : ''}`}
+            onClick={() => setDocsTab('cicd')}
+          >
+            🛡 {t.docs.tabCicd}
+          </button>
+        </div>
+
+        {/* Tab 1: CLI Quickstart */}
+        {docsTab === 'cli' && (
+          <div className="docs-panel">
+            <div className="docs-panel-grid">
+              <div>
+                <h3 style={{ fontSize: '22px', color: 'var(--ink)', margin: '0 0 10px' }}>
+                  {t.docs.cliTitle}
+                </h3>
+                <p style={{ color: 'var(--muted)', fontSize: '14px', lineHeight: 1.6, margin: '0 0 20px' }}>
+                  {t.docs.cliDesc}
+                </p>
+                <div className="docs-feature-list">
+                  <div className="docs-feature-item">
+                    <div className="docs-feature-icon">01</div>
+                    <div>
+                      <strong style={{ color: 'var(--ink)', fontSize: '13px' }}>
+                        {lang === 'es' ? 'Trazado AST de Árbol de Llamadas' : 'AST Call-Graph Tracing'}
+                      </strong>
+                      <p style={{ margin: '2px 0 0', color: 'var(--muted)', fontSize: '12px' }}>
+                        {lang === 'es'
+                          ? 'Comprueba si las funciones vulnerables de dependencias transitivas realmente pueden ser ejecutadas desde tus rutas públicas.'
+                          : 'Validates whether vulnerable functions inside transitive dependencies can actually be called from your controllers.'}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="docs-feature-item">
+                    <div className="docs-feature-icon">02</div>
+                    <div>
+                      <strong style={{ color: 'var(--ink)', fontSize: '13px' }}>
+                        {lang === 'es' ? 'Exportación Estándar SARIF v2.1.0' : 'Standard SARIF v2.1.0 Output'}
+                      </strong>
+                      <p style={{ margin: '2px 0 0', color: 'var(--muted)', fontSize: '12px' }}>
+                        {lang === 'es'
+                          ? 'Compatible de forma nativa con la pestaña de Seguridad de GitHub, GitLab y herramientas de auditoría corporativa.'
+                          : 'Directly ingests into GitHub Security tab, GitLab Vulnerability Report, or IDE plugins.'}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="docs-code-card">
+                <div className="docs-code-header">
+                  <div className="docs-code-dots">
+                    <span className="docs-code-dot" />
+                    <span className="docs-code-dot" />
+                    <span className="docs-code-dot" />
+                  </div>
+                  <button
+                    type="button"
+                    className="install-copy-btn"
+                    onClick={() => handleCopy('npm install -g @armelis/cli\narmelis scan . --reachability\narmelis trace . --choke-only --cold\narmelis scan . --format sarif --out ./armelis.sarif', 'docs-cli')}
+                  >
+                    {copiedSnippet === 'docs-cli' ? 'Copied! ✓' : t.docs.copySnippet}
+                  </button>
+                </div>
+                <pre className="docs-code-body">{`# 1. Install CLI globally
+npm install -g @armelis/cli
+
+# 2. Run AST reachability analysis on current repo
+armelis scan . --reachability
+
+# 3. Trace only confirmed exploit choke points
+armelis trace . --choke-only --cold
+
+# 4. Generate SARIF report for GitHub Code Scanning
+armelis scan . --format sarif --out ./armelis.sarif`}</pre>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Tab 2: Attack Graph */}
+        {docsTab === 'graph' && (
+          <div className="docs-panel">
+            <div className="docs-panel-grid">
+              <div>
+                <h3 style={{ fontSize: '22px', color: 'var(--ink)', margin: '0 0 10px' }}>
+                  {t.docs.graphTitle}
+                </h3>
+                <p style={{ color: 'var(--muted)', fontSize: '14px', lineHeight: 1.6, margin: '0 0 20px' }}>
+                  {t.docs.graphDesc}
+                </p>
+                <div className="docs-feature-list">
+                  <div className="docs-feature-item">
+                    <div className="docs-feature-icon">★</div>
+                    <div>
+                      <strong style={{ color: 'var(--cyan)', fontSize: '13px' }}>
+                        {lang === 'es' ? 'Matemática de Puntos Críticos' : 'Choke Point Mathematics'}
+                      </strong>
+                      <p style={{ margin: '2px 0 0', color: 'var(--muted)', fontSize: '12px' }}>
+                        {lang === 'es'
+                          ? 'Aísla el vértice puente exacto cuya actualización neutraliza el 100% de las rutas de ataque hacia la base de datos.'
+                          : 'Isolates the single bridge vertex whose removal reduces the Reachability Exposure Index to 0%.'}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="docs-feature-item">
+                    <div className="docs-feature-icon">🛡</div>
+                    <div>
+                      <strong style={{ color: 'var(--ink)', fontSize: '13px' }}>
+                        {lang === 'es' ? 'Mapeo de Técnicas MITRE ATT&CK' : 'MITRE ATT&CK Technique Mapping'}
+                      </strong>
+                      <p style={{ margin: '2px 0 0', color: 'var(--muted)', fontSize: '12px' }}>
+                        {lang === 'es'
+                          ? 'Cada vulnerabilidad se mapea a tácticas reales: T1190 (Explotación de Aplicación Externa), T1552 y T1059.'
+                          : 'Each vulnerability is mapped to T1190 (Exploit Public-Facing App), T1552 (Unsecured Credentials), and T1059 (Command Execution).'}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="docs-code-card">
+                <div className="docs-code-header">
+                  <div className="docs-code-dots">
+                    <span className="docs-code-dot" />
+                    <span className="docs-code-dot" />
+                    <span className="docs-code-dot" />
+                  </div>
+                  <span style={{ fontSize: '11px', color: 'var(--muted)', fontFamily: 'monospace' }}>
+                    DAG Topology Trace
+                  </span>
+                </div>
+                <pre className="docs-code-body" style={{ color: '#67e8f9' }}>{`[ 🌐 Public Ingress: POST /api/v1/auth/callback ]
+      │
+      ▼  (Tainted token parameter)
+[ ⚙️ Auth Controller: verifyToken() ]
+      │
+      ▼  (Unpatched signature verification)
+[ ⚡ CHOKE POINT: jsonwebtoken@8.5.1 (CVE-2025-4128) ]
+      │
+      ▼  (Lateral Token Forgery)
+[ 🗄️ Sink: PostgreSQL Prod Database Pool ]
+
+>> Severing jsonwebtoken cuts 100% of exploit reachability.`}</pre>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Tab 3: SIEM Telemetry */}
+        {docsTab === 'siem' && (
+          <div className="docs-panel">
+            <div className="docs-panel-grid">
+              <div>
+                <h3 style={{ fontSize: '22px', color: 'var(--ink)', margin: '0 0 10px' }}>
+                  {t.docs.siemTitle}
+                </h3>
+                <p style={{ color: 'var(--muted)', fontSize: '14px', lineHeight: 1.6, margin: '0 0 20px' }}>
+                  {t.docs.siemDesc}
+                </p>
+                <div className="docs-feature-list">
+                  <div className="docs-feature-item">
+                    <div className="docs-feature-icon">CEF</div>
+                    <div>
+                      <strong style={{ color: 'var(--ink)', fontSize: '13px' }}>
+                        {lang === 'es' ? 'Formato ArcSight CEF' : 'ArcSight Common Event Format (CEF)'}
+                      </strong>
+                      <p style={{ margin: '2px 0 0', color: 'var(--muted)', fontSize: '12px' }}>
+                        {lang === 'es'
+                          ? 'Cabeceras estandarizadas con severidad, origen, destino y etiquetas CVE para indexación inmediata en Splunk.'
+                          : 'Standardized headers with severity, source, destination, and CVE labels for instant Splunk indexing.'}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="docs-feature-item">
+                    <div className="docs-feature-icon">ECS</div>
+                    <div>
+                      <strong style={{ color: 'var(--ink)', fontSize: '13px' }}>
+                        {lang === 'es' ? 'Elastic Common Schema (ECS 8.x)' : 'Elastic Common Schema (ECS 8.x)'}
+                      </strong>
+                      <p style={{ margin: '2px 0 0', color: 'var(--muted)', fontSize: '12px' }}>
+                        {lang === 'es'
+                          ? 'Objetos JSON estructurados con clasificación de amenazas para tableros en Elasticsearch y Kibana.'
+                          : 'JSON objects with threat classifications and reachability hops for Elasticsearch and Kibana dashboards.'}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="docs-code-card">
+                <div className="docs-code-header">
+                  <div className="docs-code-dots">
+                    <span className="docs-code-dot" />
+                    <span className="docs-code-dot" />
+                    <span className="docs-code-dot" />
+                  </div>
+                  <button
+                    type="button"
+                    className="install-copy-btn"
+                    onClick={() => handleCopy('armelis scan . --format cef --stream syslog://soc.internal:514\narmelis scan . --format ecs --out ./telemetry.json', 'docs-siem')}
+                  >
+                    {copiedSnippet === 'docs-siem' ? 'Copied! ✓' : t.docs.copySnippet}
+                  </button>
+                </div>
+                <pre className="docs-code-body">{`# Stream CEF events directly to your SOC syslog collector
+armelis scan . --format cef --stream syslog://soc.internal:514
+
+# Sample event output:
+CEF:0|Armelis|AppSecEngine|0.1.3|CHOKE_POINT_ISOLATED|Critical Choke Point|9|
+  src=192.168.1.50 dst=10.0.0.12 dpt=5432
+  cs1=CVE-2025-4128 cs1Label=VulnerabilityId
+  cs2=jsonwebtoken@8.5.1 cs2Label=Package
+  msg=Attack path verified reachable to database sink`}</pre>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Tab 4: CI/CD Gate */}
+        {docsTab === 'cicd' && (
+          <div className="docs-panel">
+            <div className="docs-panel-grid">
+              <div>
+                <h3 style={{ fontSize: '22px', color: 'var(--ink)', margin: '0 0 10px' }}>
+                  {t.docs.cicdTitle}
+                </h3>
+                <p style={{ color: 'var(--muted)', fontSize: '14px', lineHeight: 1.6, margin: '0 0 20px' }}>
+                  {t.docs.cicdDesc}
+                </p>
+                <div className="docs-feature-list">
+                  <div className="docs-feature-item">
+                    <div className="docs-feature-icon">⚡</div>
+                    <div>
+                      <strong style={{ color: 'var(--ink)', fontSize: '13px' }}>
+                        {lang === 'es' ? 'Puerta Determinista de Calidad' : 'Deterministic Quality Gate'}
+                      </strong>
+                      <p style={{ margin: '2px 0 0', color: 'var(--muted)', fontSize: '12px' }}>
+                        {lang === 'es'
+                          ? 'Falla el código de salida de CI únicamente cuando se confirma una ruta de ataque ejecutable. Cero bloqueos por CVEs inactivas.'
+                          : 'Fails CI exit code only when a critical reachability chain is proven. No more blocking PRs for unreachable CVEs.'}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="docs-feature-item">
+                    <div className="docs-feature-icon">🛡</div>
+                    <div>
+                      <strong style={{ color: 'var(--ink)', fontSize: '13px' }}>
+                        {lang === 'es' ? 'Integración con Pestaña de Seguridad GitHub' : 'Direct GitHub Security Tab Integration'}
+                      </strong>
+                      <p style={{ margin: '2px 0 0', color: 'var(--muted)', fontSize: '12px' }}>
+                        {lang === 'es'
+                          ? 'Sube resultados SARIF de modo que las sugerencias de remediación aparezcan en línea en los code reviews de los PRs.'
+                          : 'Uploads SARIF results directly so security advisories and suggested fixes appear inline in GitHub PR code reviews.'}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="docs-code-card">
+                <div className="docs-code-header">
+                  <div className="docs-code-dots">
+                    <span className="docs-code-dot" />
+                    <span className="docs-code-dot" />
+                    <span className="docs-code-dot" />
+                  </div>
+                  <button
+                    type="button"
+                    className="install-copy-btn"
+                    onClick={() => handleCopy(`name: Armelis Security Gate
+on: [push, pull_request]
+
+jobs:
+  reachability-audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 20 }
+      - run: npm install -g @armelis/cli
+      - name: Enforce Zero Reachable Choke Points
+        run: armelis scan . --fail-on critical --format sarif --out ./armelis.sarif
+      - uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        with:
+          sarif_file: armelis.sarif`, 'docs-cicd')}
+                  >
+                    {copiedSnippet === 'docs-cicd' ? 'Copied! ✓' : t.docs.copySnippet}
+                  </button>
+                </div>
+                <pre className="docs-code-body">{`name: Armelis Security Gate
+on: [push, pull_request]
+
+jobs:
+  reachability-audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 20 }
+      - run: npm install -g @armelis/cli
+      - name: Enforce Zero Reachable Choke Points
+        run: armelis scan . --fail-on critical --format sarif --out ./armelis.sarif
+      - uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        with:
+          sarif_file: armelis.sarif`}</pre>
+              </div>
+            </div>
+          </div>
+        )}
+      </section>
+
       {/* 100% Free & Open Source Section (Replaces Commercial Pricing) */}
       <section id="open-source" className="section shell pricing-section">
         <div className="section-intro">
-          <p className="eyebrow">FOSS Commitment</p>
+          <p className="eyebrow">{t.openSource.eyebrow}</p>
           <h2>
-            100% Free.<br />
-            <em>100% Open Source.</em>
+            {t.openSource.title.split('.')[0]}<br />
+            <em>{lang === 'es' ? '100% Código Abierto.' : '100% Open Source.'}</em>
           </h2>
           <p style={{ color: '#94a3b8', fontSize: '15px', marginTop: '8px' }}>
-            No paywalls, no seat limits, and no vendor lock-in. Armelis is published under the permissive MIT License for developers, security researchers, and SOC analysts worldwide.
+            {t.openSource.desc}
           </p>
         </div>
         <div className="price-grid">
           <article className="price-featured" style={{ border: '1px solid rgba(0, 229, 255, 0.35)' }}>
             <span style={{ color: '#00e5ff', fontWeight: 800 }}>COMMUNITY EDITION</span>
-            <strong style={{ fontSize: '42px', color: '#fff' }}>Free Forever</strong>
+            <strong style={{ fontSize: '42px', color: '#fff' }}>{lang === 'es' ? 'Gratis Siempre' : 'Free Forever'}</strong>
             <p style={{ color: '#cbd5e1', lineHeight: 1.6 }}>
-              Full AST correlation, MITRE ATT&CK mapping, SIEM exports (CEF/ECS), and Tauri 2 desktop client.
+              {lang === 'es'
+                ? 'Correlación AST completa, mapeo MITRE ATT&CK, exportación SIEM (CEF/ECS) y cliente de escritorio Tauri 2.'
+                : 'Full AST correlation, MITRE ATT&CK mapping, SIEM exports (CEF/ECS), and Tauri 2 desktop client.'}
             </p>
             <div style={{ marginTop: 'auto', paddingTop: '16px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-              <span style={{ fontSize: '11px', color: '#34d399', fontWeight: 600 }}>✓ Permissive MIT License</span>
-              <span style={{ fontSize: '11px', color: '#34d399', fontWeight: 600 }}>✓ Air-Gapped / Offline Local Execution</span>
-              <span style={{ fontSize: '11px', color: '#34d399', fontWeight: 600 }}>✓ Commercial & Enterprise Friendly</span>
+              <span style={{ fontSize: '11px', color: '#34d399', fontWeight: 600 }}>✓ {lang === 'es' ? 'Licencia Permisiva MIT' : 'Permissive MIT License'}</span>
+              <span style={{ fontSize: '11px', color: '#34d399', fontWeight: 600 }}>✓ {lang === 'es' ? 'Ejecución Local Air-Gapped / Offline' : 'Air-Gapped / Offline Local Execution'}</span>
+              <span style={{ fontSize: '11px', color: '#34d399', fontWeight: 600 }}>✓ {lang === 'es' ? 'Apto para Uso Comercial y Empresarial' : 'Commercial & Enterprise Friendly'}</span>
             </div>
             <Link href="/dashboard" style={{ marginTop: '16px', color: '#00e5ff', fontWeight: 700 }}>
-              Launch Dashboard →
+              {t.nav.liveConsole}
             </Link>
           </article>
 
           <article style={{ border: '1px solid rgba(255, 255, 255, 0.1)', background: 'rgba(7, 14, 28, 0.65)' }}>
             <span style={{ color: '#94a3b8', fontWeight: 800 }}>SELF-HOSTED / INFRA</span>
-            <strong style={{ fontSize: '42px', color: '#f8fafc' }}>Deploy Anywhere</strong>
+            <strong style={{ fontSize: '42px', color: '#f8fafc' }}>{lang === 'es' ? 'Despliega Donde Sea' : 'Deploy Anywhere'}</strong>
             <p style={{ color: '#94a3b8', lineHeight: 1.6 }}>
-              Run natively in Docker, GitHub Actions, GitLab CI, or on your internal Kubernetes / VMware cluster.
+              {lang === 'es'
+                ? 'Ejecuta de forma nativa en Docker, GitHub Actions, GitLab CI o en tu clúster Kubernetes / VMware interno.'
+                : 'Run natively in Docker, GitHub Actions, GitLab CI, or on your internal Kubernetes / VMware cluster.'}
             </p>
             <div style={{ marginTop: 'auto', paddingTop: '16px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-              <span style={{ fontSize: '11px', color: '#94a3b8' }}>✓ Zero Cloud Phone-Home</span>
-              <span style={{ fontSize: '11px', color: '#94a3b8' }}>✓ Dockerfile & Compose Included</span>
-              <span style={{ fontSize: '11px', color: '#94a3b8' }}>✓ PostgreSQL + pgvector Ready</span>
+              <span style={{ fontSize: '11px', color: '#94a3b8' }}>✓ {lang === 'es' ? 'Cero Llamadas a la Nube' : 'Zero Cloud Phone-Home'}</span>
+              <span style={{ fontSize: '11px', color: '#94a3b8' }}>✓ {lang === 'es' ? 'Dockerfile y Compose Incluidos' : 'Dockerfile & Compose Included'}</span>
+              <span style={{ fontSize: '11px', color: '#94a3b8' }}>✓ {lang === 'es' ? 'Compatible con PostgreSQL + pgvector' : 'PostgreSQL + pgvector Ready'}</span>
             </div>
             <a
               href="https://github.com/Johanvasquezdev/armelis"
@@ -1188,7 +1577,7 @@ export default function HomePage() {
               rel="noreferrer"
               style={{ marginTop: '16px', color: '#38bdf8', fontWeight: 700 }}
             >
-              View GitHub Documentation →
+              {t.openSource.viewSource} →
             </a>
           </article>
         </div>
@@ -1197,13 +1586,15 @@ export default function HomePage() {
       {/* Activation & Download Section */}
       <section id="install" className="section shell install-section">
         <div className="section-intro">
-          <p className="eyebrow">DEPLOYMENT &amp; ACTIVATION GUIDE</p>
+          <p className="eyebrow">{t.install.eyebrow}</p>
           <h2>
-            Get Armed in<br />
-            <em>Under 60 Seconds.</em>
+            {t.install.title.split(' ')[0]} {t.install.title.split(' ')[1] || ''}<br />
+            <em>{t.install.title.split(' ').slice(2).join(' ') || t.install.title}</em>
           </h2>
           <p style={{ color: '#94a3b8', fontSize: '15px', marginTop: '10px' }}>
-            Armelis is 100% free and open-source under the MIT license. Everything runs strictly on your local machine with isolated process boundaries. Choose your activation path:
+            {lang === 'es'
+              ? 'Armelis es 100% gratuito y de código abierto bajo la licencia MIT. Todo se ejecuta de manera estrictamente local en tu máquina con procesos aislados. Elige tu ruta de activación:'
+              : 'Armelis is 100% free and open-source under the MIT license. Everything runs strictly on your local machine with isolated process boundaries. Choose your activation path:'}
           </p>
         </div>
 
@@ -1215,7 +1606,7 @@ export default function HomePage() {
             onClick={() => setInstallTab('cli')}
           >
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="4 17 10 11 4 5" /><line x1="12" y1="19" x2="20" y2="19" /></svg>
-            <span>Armelis CLI (Terminal)</span>
+            <span>{t.install.tabCli}</span>
           </button>
           <button
             type="button"
@@ -1223,7 +1614,7 @@ export default function HomePage() {
             onClick={() => setInstallTab('desktop')}
           >
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2" /><line x1="8" y1="21" x2="16" y2="21" /><line x1="12" y1="17" x2="12" y2="21" /></svg>
-            <span>Armelis Desktop (Tauri 2)</span>
+            <span>{t.install.tabDesktop}</span>
           </button>
           <button
             type="button"
@@ -1231,7 +1622,7 @@ export default function HomePage() {
             onClick={() => setInstallTab('docker')}
           >
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" /></svg>
-            <span>CI/CD &amp; Docker Pipeline</span>
+            <span>{t.install.tabDocker}</span>
           </button>
         </div>
 
@@ -1722,7 +2113,7 @@ export default function HomePage() {
         <div style={{ display: 'flex', gap: '14px', flexWrap: 'wrap', justifyContent: 'center', marginTop: '36px' }}>
           <Button asChild>
             <Link href="/dashboard">
-              Launch Live Console <span>→</span>
+              {t.install.launchConsole} <span>→</span>
             </Link>
           </Button>
           <Button asChild variant="ghost">
@@ -1733,7 +2124,7 @@ export default function HomePage() {
               style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}
             >
               <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" /></svg>
-              <span>Star on GitHub</span>
+              <span>{t.nav.starGithub}</span>
             </a>
           </Button>
         </div>
@@ -1741,14 +2132,14 @@ export default function HomePage() {
 
       {/* Site Footer */}
       <footer className="site-footer shell" style={{ alignItems: 'center' }}>
-        <span>ARMELIS • APPLICATION SECURITY INTELLIGENCE</span>
+        <span>{t.footer.tagline}</span>
         <div style={{ display: 'flex', gap: '16px', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'center' }}>
           <Link href="/privacy" style={{ color: 'var(--muted)', textDecoration: 'none', transition: 'color 150ms ease' }}>
-            Privacy Policy
+            {t.footer.privacy}
           </Link>
           <span style={{ opacity: 0.3 }}>•</span>
           <Link href="/terms" style={{ color: 'var(--muted)', textDecoration: 'none', transition: 'color 150ms ease' }}>
-            Terms of Use
+            {t.footer.terms}
           </Link>
           <span style={{ opacity: 0.3 }}>•</span>
           <a
@@ -1757,10 +2148,10 @@ export default function HomePage() {
             rel="noreferrer"
             style={{ color: 'var(--muted)', textDecoration: 'none', transition: 'color 150ms ease' }}
           >
-            MIT License
+            {t.footer.license}
           </a>
         </div>
-        <span>DEVELOPED BY JOHAN VASQUEZ</span>
+        <span>{t.footer.credit}</span>
       </footer>
 
       {/* High-Resolution Media Lightbox Modal */}
@@ -1786,7 +2177,7 @@ export default function HomePage() {
                 className="video-ctrl-btn"
                 onClick={() => setLightboxItem(null)}
                 style={{ fontSize: '18px', padding: '4px 10px' }}
-                aria-label="Close Lightbox"
+                aria-label={t.lightbox.close}
               >
                 ✕
               </button>
@@ -1807,7 +2198,7 @@ export default function HomePage() {
                 </div>
                 <div>
                   <h5 style={{ margin: '0 0 8px', color: 'var(--cyan)', fontSize: '11px', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
-                    Architectural Highlights
+                    {t.lightbox.highlights}
                   </h5>
                   <ul style={{ margin: 0, paddingLeft: '16px', color: 'var(--muted)', fontSize: '12px', lineHeight: 1.6 }}>
                     {lightboxItem.details.map((d, i) => (
