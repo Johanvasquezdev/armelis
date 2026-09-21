@@ -13,6 +13,7 @@
     "trace": "node bin/armelis.js trace",
     "break": "node bin/armelis.js break",
     "test": "npm --prefix packages/scanner-adapters/trivy test",
+    "build": "npm --prefix apps/web run build",
     "build:web": "npm --prefix apps/web run build",
     "pack:cli": "npm pack --workspace=armelis",
     "publish:cli": "npm publish --workspace=armelis --access public"
