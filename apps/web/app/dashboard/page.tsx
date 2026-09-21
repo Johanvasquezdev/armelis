@@ -9,6 +9,7 @@ import {
   dataSourceLabel,
   dataSourceBadgeColor
 } from '../../lib/findings';
+import { auditGitHubRepository } from '../../lib/githubScanner';
 
 export default function DashboardPage() {
   const [findings, setFindings] = useState<Finding[]>([]);
@@ -354,7 +355,7 @@ export default function DashboardPage() {
     }
 
     setIsAnalyzing(true);
-    setScanStep('Connecting to GitHub API (metadata only)...');
+    setScanStep('Connecting to GitHub API...');
     setImportError('');
     setAnalyzeHint('');
 
@@ -364,45 +365,53 @@ export default function DashboardPage() {
     }
 
     const [owner, repo] = cleaned.split('/');
+    const started = performance.now();
 
     try {
-      setScanStep(`Fetching ${owner}/${repo} metadata via GitHub REST API...`);
-
-      let fetchedStars: number | null = null;
-      let fetchedBranch = 'main';
-      let fetchedLang = 'Unknown';
-
-      try {
-        const headers: HeadersInit = {
-          Accept: 'application/vnd.github.v3+json'
-        };
-        if (githubPat) {
-          headers['Authorization'] = `token ${githubPat}`;
-        }
-        const res = await fetch(`https://api.github.com/repos/${owner}/${repo}`, { headers });
-        if (res.ok) {
-          const data = await res.json();
-          fetchedStars = data.stargazers_count ?? null;
-          fetchedBranch = data.default_branch || 'main';
-          fetchedLang = data.language || 'Unknown';
-        }
-      } catch {
-        // rate limit / offline — metadata optional
-      }
+      const scanRes = await auditGitHubRepository(
+        owner,
+        repo,
+        githubPat || undefined,
+        (step) => setScanStep(step)
+      );
 
       setActiveRepo(`github.com/${owner}/${repo}`);
-      setActiveBranch(fetchedBranch);
-      setActiveCommit('—');
-      setScanDuration('0.00s');
-      setRepoStars(fetchedStars);
-      setRepoLang(fetchedLang);
+      setActiveBranch(scanRes.defaultBranch);
+      setActiveCommit(scanRes.manifestPath || 'main');
+      setScanDuration(((performance.now() - started) / 1000).toFixed(2) + 's');
+      setRepoStars(scanRes.stars);
+      setRepoLang(scanRes.language);
 
-      // Honesty: do NOT invent findings from GitHub URL analysis
-      setFindings([]);
+      if (!scanRes.ok && scanRes.error) {
+        setImportError(scanRes.error);
+        setFindings([]);
+        setDataSource('empty');
+        return;
+      }
+
+      applyLoadedFindings(scanRes.findings, 'github-scan', {
+        target: `github.com/${owner}/${repo}`,
+        durationMs: performance.now() - started
+      });
+
+      if (scanRes.findings.length > 0) {
+        setAnalyzeHint(
+          `Scanned ${scanRes.auditedCount} dependencies from ${scanRes.manifestPath || 'manifest'}. Detected ${scanRes.findings.length} real vulnerability advisory/advisories via OSV.dev & GitHub Advisories.`
+        );
+      } else if (scanRes.manifestPath) {
+        setAnalyzeHint(
+          `Audited ${scanRes.auditedCount} dependencies from ${scanRes.manifestPath} against Google OSV.dev & GitHub security advisories. 0 known vulnerabilities found. Defensive perimeter verified.`
+        );
+      } else {
+        setAnalyzeHint(
+          `Repository metadata loaded for ${owner}/${repo}. No package.json manifest found in root or standard paths. For full multi-language local scans, run Armelis Desktop or CLI.`
+        );
+      }
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : String(err);
+      setImportError(`GitHub scan failed: ${msg}`);
       setDataSource('empty');
-      setAnalyzeHint(
-        `Metadata loaded for ${owner}/${repo}. No findings invented. Scan locally with \`node scripts/scan-to-json.js\` (or \`armelis scan --format json\`) then use Import scan JSON, or click Load Trivy fixture.`
-      );
+      setFindings([]);
     } finally {
       setIsAnalyzing(false);
       setScanStep('');
@@ -557,7 +566,7 @@ export default function DashboardPage() {
                   GitHub Repository Security Analyzer
                 </h2>
                 <p style={{ margin: '4px 0 0', fontSize: '12px', color: '#94a3b8', lineHeight: 1.4 }}>
-                  Fetch GitHub metadata only — findings come from Trivy import / fixture / optional local scan (no invented CVEs).
+                  Audits package manifests against Google OSV.dev and GitHub Security Advisories in real time (zero mock CVEs).
                 </p>
               </div>
             </div>

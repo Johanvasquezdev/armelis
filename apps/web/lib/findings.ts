@@ -40,7 +40,8 @@ export type FindingsDataSource =
   | 'empty'
   | 'trivy-fixture'
   | 'trivy-import'
-  | 'trivy-local-scan';
+  | 'trivy-local-scan'
+  | 'github-scan';
 
 export type NormalizedScanEnvelope = {
   product?: string;
@@ -204,6 +205,8 @@ export function dataSourceLabel(source: FindingsDataSource): string {
       return 'Trivy import';
     case 'trivy-local-scan':
       return 'Trivy local scan';
+    case 'github-scan':
+      return 'GitHub OSV Live Scan';
     default:
       return 'No scan loaded';
   }
@@ -219,6 +222,13 @@ export function dataSourceBadgeColor(source: FindingsDataSource): {
       bg: 'rgba(100, 116, 139, 0.15)',
       border: 'rgba(148, 163, 184, 0.35)',
       color: '#94a3b8'
+    };
+  }
+  if (source === 'github-scan') {
+    return {
+      bg: 'rgba(16, 185, 129, 0.12)',
+      border: 'rgba(16, 185, 129, 0.4)',
+      color: '#34d399'
     };
   }
   return {
